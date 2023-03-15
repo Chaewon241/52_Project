@@ -4,6 +4,44 @@
 
 using namespace std;
 
+bool ck_SBO(int* c_arr, int* p_arr)
+{
+    int out = 0;
+    int ball = 0;
+    int strike = 0;
+
+    for (int i = 0; i < 3; i++)
+    {
+        for (int j = 0; j < 3; j++)
+        {
+            if (c_arr[i] == p_arr[j] && i == j) 
+            {
+                strike++;
+                break;
+            }
+            else if (c_arr[i] == p_arr[j])
+            {
+                ball++;
+                break;
+            }
+            else
+            {
+                if (j == 2)
+                    out++;
+                else
+                    continue;
+            }
+                
+        }
+    }
+    cout << "strike: " << strike << " ball: " << ball << " out: " << out << endl;
+
+    if (strike == 3)
+        return true;
+    else
+        return false;
+}
+
 // 랜덤한 3가지 숫자를 저장하기
 // 세 수가 다르면 true, 한 경우라도 같은 숫자가 있으면 false 리턴해주기
 bool ck_Num(int n1, int n2, int n3)
@@ -24,10 +62,6 @@ bool Victory(int s)
 
 int main()
 {
-    int out;
-    int ball;
-    int strike;
-
     // seed 설정
     srand((unsigned)time(NULL));
 
@@ -57,10 +91,6 @@ int main()
     // 9번 실행할거임
     for (int i = 0; i < 9; i++)
     {
-        // 한 상황에서 out ball strike를 선언해준다
-        out = 0;
-        ball = 0;
-        strike = 0;
 
         // 사용자가 입력한 세 숫자를 담을 배열 초기화
         int b_arr[3] = { 0 };
@@ -76,6 +106,8 @@ int main()
             {
                 cin.clear();
                 cin.ignore(INT_MAX, '\n');
+                cout << "다시 입력하세요." << endl;
+                continue;
             }
 
             // 세 숫자가 다 다르고 10보다 작은 수일 때 빠져나오기
@@ -84,56 +116,15 @@ int main()
             else
                 cout << "다시 입력하세요." << endl;
         }
-        
 
-        // 랜덤한 세 숫자와 사용자가 입력한 세 숫자 비교하기
-        for (int j = 0; j < 3; j++)
+        if (ck_SBO(arr, b_arr))
         {
-            for (int k = 0; k < 3; k++)
-            {
-                // arr[j](랜덤한 세 숫자 중 하나)와 b_arr[k](사용자가 입력한 세 숫자중 하나)
-                // 둘이 같은지 비교하는 함수가 true이고 인덱스(자리)가 같을 때
-                if (arr[j] == b_arr[k] && j == k)
-                {
-                    // strike를 하나 올려줌
-                    strike++;
-                    break;
-                }
-
-                //arr[j](랜덤한 세 숫자 중 하나)와 b_arr[k](사용자가 입력한 세 숫자중 하나)
-                // 둘이 숫자는 똑같은데 자리가 다를 때
-                else if (arr[j] == b_arr[k])
-                {
-                    // ball을 하나 올려줌
-                    ball++;
-                    break;
-                }
-
-                else
-                {
-                    // 마지막까지 ball과 strike를 판단하지 못했을 때
-                    if (k == 2)
-                        // out을 올려줌
-                        out++;
-                    // ball을 찾기 위해 continue
-                    else
-                        continue;
-                }
-            }
-        }
-
-        cout << "strike: " << strike << " ball: " << ball << " out: " << out << endl;
-
-        // for문을 통해 strike ball out이 몇개인지 나오는데
-        // strike가 3이면 승리하고 break
-        if (Victory(strike))
-        {
-            cout << "승리하셨습니다." << endl;
+            cout << "승리했습니다." << endl;
             break;
         }
     }
 
-    if (!Victory(strike))
+    if (!ck_SBO)
     {
         cout << "실패하셨습니다." << endl;
         // 정답 알려주기
