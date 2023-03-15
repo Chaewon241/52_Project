@@ -52,14 +52,6 @@ bool ck_Num(int n1, int n2, int n3)
         return false;
 }
 
-bool Victory(int s)
-{
-    if (s == 3)
-        return true;
-    else
-        return false;
-}
-
 int main()
 {
     // seed 설정
@@ -116,18 +108,19 @@ int main()
             else
                 cout << "다시 입력하세요." << endl;
         }
-
-        if (ck_SBO(arr, b_arr))
+        bool result = ck_SBO(arr, b_arr);
+        if (result)
         {
             cout << "승리했습니다." << endl;
             break;
         }
-    }
 
-    if (!ck_SBO)
-    {
-        cout << "실패하셨습니다." << endl;
-        // 정답 알려주기
-        cout << "정답은 " << arr[0] << " " << arr[1] << " " << arr[2] << endl;
+        if (!result && i == 8)
+        {
+            cout << "실패하셨습니다." << endl;
+            // 정답 알려주기
+            cout << "정답은 " << arr[0] << " " << arr[1] << " " << arr[2] << endl;
+        }
     }
 }
+
