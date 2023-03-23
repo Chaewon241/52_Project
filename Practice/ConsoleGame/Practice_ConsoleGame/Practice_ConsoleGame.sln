@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33424.131
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Practice_ConsoleGame", "Practice_ConsoleGame\Practice_ConsoleGame.vcxproj", "{7DDE97BB-27C9-42C2-B0C6-3C8071FECAD4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7DDE97BB-27C9-42C2-B0C6-3C8071FECAD4}.Debug|x64.ActiveCfg = Debug|x64
+		{7DDE97BB-27C9-42C2-B0C6-3C8071FECAD4}.Debug|x64.Build.0 = Debug|x64
+		{7DDE97BB-27C9-42C2-B0C6-3C8071FECAD4}.Debug|x86.ActiveCfg = Debug|Win32
+		{7DDE97BB-27C9-42C2-B0C6-3C8071FECAD4}.Debug|x86.Build.0 = Debug|Win32
+		{7DDE97BB-27C9-42C2-B0C6-3C8071FECAD4}.Release|x64.ActiveCfg = Release|x64
+		{7DDE97BB-27C9-42C2-B0C6-3C8071FECAD4}.Release|x64.Build.0 = Release|x64
+		{7DDE97BB-27C9-42C2-B0C6-3C8071FECAD4}.Release|x86.ActiveCfg = Release|Win32
+		{7DDE97BB-27C9-42C2-B0C6-3C8071FECAD4}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {93460BFF-D59A-4205-BF96-1AD52EFAEED0}
+	EndGlobalSection
+EndGlobal
