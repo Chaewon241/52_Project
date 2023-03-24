@@ -17,30 +17,63 @@ void titleDraw();
 void gotoxy(int, int);
 int keyControl();
 int menuDraw();
+void infoDraw();
 
 int main()
 {
     init();
-    titleDraw();
-    menuDraw();
+
+    while (1)
+    {
+        titleDraw();
+        int menuCode = menuDraw();
+        if (menuCode == 0)
+        {
+
+        }
+        else if (menuCode == 1)
+        {
+            infoDraw();
+        }
+        else if (menuCode == 2)
+        {
+            return 0;
+        }
+        system("cls");
+    }    
+}
+
+void infoDraw()
+{
+    system("cls");
+    printf("\n\n");
+    printf("조작법\n\n");
+
+    while (1)
+    {
+        if (keyControl() == SUBMIT)
+        {
+            break;
+        }
+    }
 }
 
 int keyControl()
 {
-    if (_kbhit()) {
-        char tmp = _getch();
 
-        if (tmp == 'w' || tmp == 'W')
-            return UP;
-        else if (tmp == 'a' || tmp == 'A')
-            return LEFT;
-        else if (tmp == 's' || tmp == 'S')
-            return DOWN;
-        else if (tmp == 'd' || tmp == 'D')
-            return RIGHT;
-        else if (tmp == ' ') // 스페이스바 선택
-            return SUBMIT;
-    }
+    char tmp = _getch();
+
+    if (tmp == 'w' || tmp == 'W')
+        return UP;
+    else if (tmp == 'a' || tmp == 'A')
+        return LEFT;
+    else if (tmp == 's' || tmp == 'S')
+        return DOWN;
+    else if (tmp == 'd' || tmp == 'D')
+        return RIGHT;
+    else if (tmp == ' ') // 스페이스바 선택
+        return SUBMIT;
+    
 }
 
 int menuDraw()
@@ -88,20 +121,17 @@ int menuDraw()
 
 void init()
 {
-    HWND console = GetConsoleWindow();
-    RECT r;
-    GetWindowRect(console, &r); // 콘솔창 크기 정보를 구조체에 저장
-    MoveWindow(console, r.left, r.top, 800, 600, TRUE); // 콘솔창 크기 조절
+    system("mode con cols=50 lines=30 | title 게임명");
+
+    HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+    CONSOLE_CURSOR_INFO ConsoleCursor;
+    ConsoleCursor.bVisible = 0;
+    ConsoleCursor.dwSize = 1;
+    SetConsoleCursorInfo(consoleHandle, &ConsoleCursor);
 }
 
 void titleDraw()
 {
-    cout << "Hello World!\n" << endl;
-    cout << "Hello World!\n" << endl;
-    cout << "Hello World!\n" << endl;
-    cout << "Hello World!\n" << endl;
-    cout << "Hello World!\n" << endl;
-    cout << "Hello World!\n" << endl;
 
 }
 
