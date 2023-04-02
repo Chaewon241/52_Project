@@ -11,15 +11,16 @@ int main()
     {
         titleDraw();
         int menuCode = menuDraw();
-        if (menuCode == 0)
+        if (menuCode == 30)
         {
-
+            Greeting();
+            drawMap();
         }
-        else if (menuCode == 1)
+        else if (menuCode == 32)
         {
             infoDraw();
         }
-        else if (menuCode == 2)
+        else if (menuCode == 34)
         {
             return 0;
         }
