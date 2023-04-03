@@ -127,16 +127,16 @@ void gLoop(int mapCode)
         switch (keyControl())
         {
         case UP:
-            move(&x, &y, 0, -1);
+            move(&x, &y, 0, -1, &item_light);
             break;
         case DOWN:
-            move(&x, &y, 0, 1);
+            move(&x, &y, 0, 1, &item_light);
             break;
         case RIGHT:
-            move(&x, &y, 1, 0);
+            move(&x, &y, 1, 0, &item_light);
             break;
         case LEFT:
-            move(&x, &y, -1, 0);
+            move(&x, &y, -1, 0, &item_light);
             break;
         case SUBMIT:
             playing = 0;
