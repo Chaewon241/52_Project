@@ -13,8 +13,9 @@ int main()
         int menuCode = menuDraw();
         if (menuCode == 30)
         {
-            Greeting();
-            drawMap();
+            //Greeting();
+            gLoop(0);
+            gLoop(1);
         }
         else if (menuCode == 32)
         {

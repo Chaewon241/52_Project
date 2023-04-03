@@ -34,7 +34,7 @@ char map1[30][100] = {
     {"100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001"},
     {"100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001"},
     {"100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001"},
-    {"1000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000q1"},
+    {"1000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000g1"},
     {"111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111"}
 };
 
@@ -67,12 +67,48 @@ char map2[30][100] = {
     {"100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001"},
     {"100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001"},
     {"100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001"},
-    {"1000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000q1"},
+    {"1000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000g1"},
     {"111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111"}
 };
 
+// UI -> 아이템, 시간 등등
+//void drawUI(int* x, int* y, int* item_light)
+//{
+//    setColor(white, black);
+//    gotoxy(*x, *y); // 이 포인터는 필요 없을지도?
+//    printf("조명 : %02d 개", item_light);
+//}
+
+void move(int* x, int* y, int _x, int _y, int* item_light)
+{
+    char mapObject = tempMap[*y + _y][*x + _x];
+    setColor(white, black);
+
+    if (mapObject == '0')
+    {
+        gotoxy(*x, *y);
+        printf(" ");
+        setColor(cyan, black);
+        gotoxy(*x + _x, *y + _y);
+        printf("@");
+
+        *x += _x;
+        *y += _y; 
+    }
+    else if (mapObject == 'l')
+    {
+        *item_light += 1;
+        tempMap[*y + _y][*x + _x] = '0';
+        gotoxy(*x + _x, *y + _y);
+        printf(" ");
+    }
+
+}
+
 void gLoop(int mapCode)
 {
+    int x, y;
+    int item_light = 0;
     int playing = 1;
 
     if (mapCode == 0)
@@ -83,6 +119,29 @@ void gLoop(int mapCode)
     {
         memcpy(tempMap, map2, sizeof(tempMap));
     }
+    drawMap(&x, &y);
+
+    while (playing)
+    {
+        // drawUI(&x, &y);
+        switch (keyControl())
+        {
+        case UP:
+            move(&x, &y, 0, -1);
+            break;
+        case DOWN:
+            move(&x, &y, 0, 1);
+            break;
+        case RIGHT:
+            move(&x, &y, 1, 0);
+            break;
+        case LEFT:
+            move(&x, &y, -1, 0);
+            break;
+        case SUBMIT:
+            playing = 0;
+        }
+    }
 }
 
 void Greeting()
@@ -92,7 +151,7 @@ void Greeting()
     Sleep(2000);
 }
 
-void drawMap() 
+void drawMap(int* x, int* y)
 {
     system("cls");
     int h, w;
@@ -100,7 +159,7 @@ void drawMap()
     {
         for (w = 0; w < 100; w++)
         {
-            char temp = tempmap[h][w];
+            char temp = tempMap[h][w];
             if (temp == '0')
             {
                 setColor(black, black);
@@ -115,12 +174,20 @@ void drawMap()
                 
             else if (temp == 'p')
             {
+                *x = w;
+                *y = h;
                 setColor(cyan, black);
                 printf("@");
             }
-            else if (temp == 'q') {
+            else if (temp == 'g') {
                 setColor(lightgreen, black);
                 printf("O");
+            }
+            // 아이템들 구현
+            // 조명
+            else if (temp == 'l') {
+                setColor(lightgreen, black);
+                printf("*");
             }
                 
         }
