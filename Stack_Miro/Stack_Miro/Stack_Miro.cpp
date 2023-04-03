@@ -30,6 +30,8 @@ struct MazePosition
         x = initX;
         y = initY;
     }
+    MazePosition* pNextNode = nullptr;
+
 };
 
 MazePosition g_Start(1, 1);
@@ -38,25 +40,24 @@ MazePosition g_Current;
 
 struct MazePositionStack
 {
-    MazePosition arrBackPosition[MAX_STACK_SIZE];
-    int TopIndex = -1;
-
-    bool IsFull()
-    {
-        return TopIndex + 1 >= MAX_STACK_SIZE;
-    }
-
+    MazePosition* pTopNode = nullptr;
+    
     bool IsEmpty()
     {
-        return TopIndex == -1;
+        return pTopNode == nullptr;
     }
 
     bool Push(MazePosition data)
     {
-        if (IsFull())
-            return false;
+        if (pTopNode == nullptr) {
+            pTopNode = new MazePosition(data);
+            return true;
+        }
+        // 기존의 topNode를 잠시 백업
+        MazePosition* tempData = pTopNode;
 
-        arrBackPosition[++TopIndex] = data;
+        pTopNode = new MazePosition(data);
+        pTopNode->pNextNode = tempData;
         return true;
     }
 
@@ -64,11 +65,24 @@ struct MazePositionStack
     {
         if (IsEmpty())
             return false;
+        MazePosition* tempData = pTopNode->pNextNode;
+        delete pTopNode;
+        pTopNode = tempData;
 
         g_Maze[g_Current.x][g_Current.y] = EMAZETYPE::BACK;
-        g_Current = arrBackPosition[--TopIndex];
+        MazePosition tmp(pTopNode->x, pTopNode->y);
+        g_Current = tmp;
         g_Maze[g_Current.x][g_Current.y] = EMAZETYPE::BACK;
         return true;
+    }
+
+    ~MazePositionStack()
+    {
+        cout << "Destruct" << endl;
+        while (Pop() == true)
+        {
+            Pop();
+        }
     }
 };
 
@@ -161,4 +175,5 @@ int main()
     }
 
     ShowMaze();
+    Stack.~MazePositionStack();
 }
