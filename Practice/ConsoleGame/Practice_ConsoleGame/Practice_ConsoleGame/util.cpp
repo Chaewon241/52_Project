@@ -3,7 +3,7 @@
 
 void init()
 {
-    system("mode con cols=50 lines=30 | title 게임명");
+    system("mode con cols=200 lines=50 | title 게임명");
 
     HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
     CONSOLE_CURSOR_INFO ConsoleCursor;
@@ -20,4 +20,11 @@ void gotoxy(int x, int y)
     pos.Y = y;
 
     SetConsoleCursorPosition(consoleHandle, pos);
+}
+
+void setColor(int forground, int background)
+{
+    HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+    int code = forground + background * 16;
+    SetConsoleTextAttribute(consoleHandle, code);
 }
