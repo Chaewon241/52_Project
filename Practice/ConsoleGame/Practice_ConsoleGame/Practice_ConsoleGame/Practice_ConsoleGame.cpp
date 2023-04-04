@@ -1,11 +1,14 @@
 ﻿#include "main.h"
 #include "game.h"
-#include "util.h"
+//#include "util.h"
+#include "InputSystem.h"
+#include "renderSystem.h"
+
 using namespace std;
 
 int main()
 {
-    init();
+    render::InitScreen();
 
     while (1)
     {
