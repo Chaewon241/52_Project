@@ -101,7 +101,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
-      <SDLCheck>true</SDLCheck>
+      <SDLCheck>false</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
@@ -129,6 +129,7 @@
   <ItemGroup>
     <ClCompile Include="game.cpp" />
     <ClCompile Include="InputSystem.cpp" />
+    <ClCompile Include="MiroMap.cpp" />
     <ClCompile Include="Practice_ConsoleGame.cpp" />
     <ClCompile Include="rendeSystem.cpp" />
     <ClCompile Include="util.cpp" />
@@ -137,8 +138,12 @@
     <ClInclude Include="game.h" />
     <ClInclude Include="InputSystem.h" />
     <ClInclude Include="main.h" />
+    <ClInclude Include="MiroMap.h" />
     <ClInclude Include="renderSystem.h" />
     <ClInclude Include="util.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Miro1.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

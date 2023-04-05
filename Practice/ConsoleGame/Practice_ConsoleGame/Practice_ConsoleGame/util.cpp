@@ -12,14 +12,11 @@ void init()
     SetConsoleCursorInfo(consoleHandle, &ConsoleCursor);
 }
 
-void gotoxy(int x, int y)
+void GotoXY(int x, int y)
 {
-    HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
-    COORD pos;
-    pos.X = x;
-    pos.Y = y;
+    COORD Cur = { x, y };
 
-    SetConsoleCursorPosition(consoleHandle, pos);
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), Cur);
 }
 
 void setColor(int forground, int background)

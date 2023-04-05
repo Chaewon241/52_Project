@@ -1,5 +1,6 @@
 #pragma once
-#include "main.h"
+#include "RenderSystem.h"
+#include "InputSystem.h"
 
 enum {
 	black,
@@ -20,6 +21,8 @@ enum {
 	white
 };
 
-void init();
-void GotoXY(int, int);
-void setColor(int, int);
+void MainMenu();
+void titleDraw();
+void infoDraw();
+int menuDraw();
+void setColor(int forground, int background);

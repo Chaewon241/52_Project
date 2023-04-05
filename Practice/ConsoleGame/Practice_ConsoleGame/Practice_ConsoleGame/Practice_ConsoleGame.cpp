@@ -1,14 +1,12 @@
 ﻿#include "main.h"
 #include "game.h"
-//#include "util.h"
-#include "InputSystem.h"
-#include "renderSystem.h"
+#include "util.h"
 
 using namespace std;
 
 int main()
 {
-    render::InitScreen();
+    init();
 
     while (1)
     {
@@ -17,8 +15,7 @@ int main()
         if (menuCode == 30)
         {
             //Greeting();
-            gLoop(0);
-            gLoop(1);
+            gLoop();
         }
         else if (menuCode == 32)
         {

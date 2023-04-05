@@ -1,5 +1,8 @@
 #pragma once
-#include <Windows.h>
+#include <windows.h>
+#include <stdio.h>
+#include "Game.h"
+#include "util.h"
 
 namespace render
 {
@@ -8,13 +11,13 @@ namespace render
 
     void ScreenFlipping();
     void ScreenClear();
+    void GotoXY(int x, int y);
 
-    //  함수 오버로딩에 대해 알아 봅시다.
-    void ScreenDraw(int x, int y, const char c);
+    void ScreenDraw(int x, int y, char c);
     void ScreenDraw2(int x, int y, const char* pStr);
 
-
     SMALL_RECT GetPlayerMovableRect();
-
     void DrawBorder();
 };
+void Render();
+void drawMap(int* x, int* y);
