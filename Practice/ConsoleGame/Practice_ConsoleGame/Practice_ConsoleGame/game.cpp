@@ -1,7 +1,8 @@
 #include "game.h"
 #include <cassert>
-
-
+#include <queue>
+#include <functional>
+#include <utility>
 
 ULONGLONG previousTime;
 ULONGLONG currentTime;
@@ -9,14 +10,20 @@ ULONGLONG deltaTime;
 //▲▼◀▶
 int tmpMap[ROWS][COLS];
 int maze[ROWS][COLS];
-int playing = 1;
+int playing;
 std::string map1[61] = {};
 std::string map2[61] = {};
 std::string map3[61] = {};
+int bfsMap[61][152] = { 0 };
+bool visited[61][152] = { 0 };
+
+int x_dir[4] = { -1, 1, 0, 0 }; 
+int y_dir[4] = { 0, 0, -1, 1 };
 
 COORD curPlayerPos;
 
 int updateCount;
+int fixedUpdateCount;
 int item_light = 0;
 
 const int MAX_KEY = 4;
@@ -29,6 +36,44 @@ bool inputKeyTable[MAX_KEY];
 //    gotoxy(*x, *y); // 이 포인터는 필요 없을지도?
 //    printf("조명 : %02d 개", item_light);
 //}
+
+std::queue<std::pair<int, int>> q;
+
+void bfs(int start_x, int start_y) {
+
+    visited[start_x][start_y] = 1;          // 입력 받은 시작 좌표를 방문
+    q.push(std::make_pair(start_x, start_y));     // queue 에 삽입
+    bfsMap[start_x][start_y]++;               // 시작 좌표까지 이동한 칸을 1로 지정
+
+    // 모든 좌표를 탐색할 때까지 반복
+    while (!q.empty()) {
+
+        // queue 의 front 좌표를, 현재 좌표로 지정
+        int x = q.front().first;
+        int y = q.front().second;
+
+        // qeueu 의 front 좌표 제거
+        q.pop();
+
+        // 현재 좌표와 상하좌우로 인접한 좌표 확인
+        for (int i = 0; i < 4; ++i) {
+
+            // 현재 좌표와 상하좌우로 인접한 좌표
+            int x_new = x + x_dir[i];
+            int y_new = y + y_dir[i];
+
+            // 인접한 좌표가, 미로 내에 존재하는지, 방문한 적이 없는지, 이동이 가능한지 확인
+            if ((0 <= x_new && x_new < 61) && (0 <= y_new && y_new < 152)
+                && !visited[x_new][y_new] && maze[x_new][y_new] == 1) {
+
+                visited[x_new][y_new] = 1;              // 인접 좌표는 방문한 것으로 저장
+                q.push(std::make_pair(x_new, y_new));        // 인접 좌표를 queue 에 삽입
+                bfsMap[x_new][y_new] = bfsMap[x][y] + 1;    // 인접 좌표까지 이동한 거리 저장
+            }
+        }
+    }
+}
+
 void InitTime()
 {
     currentTime = previousTime = GetTickCount64();
@@ -99,6 +144,18 @@ void UpdateInput()
     {
         Set(USER_CMD_DOWN, true);
     }
+    if (GetAsyncKeyState(VK_ESCAPE) & 0x0001) //'ESC'
+    {
+        Set(VK_ESCAPE, true);
+    }
+    if (GetAsyncKeyState('Y') & 0x0001) //예 'Y'
+    {
+        Set(USER_CMD_YES, true);
+    }
+    if (GetAsyncKeyState('N') & 0x0001) //ㄴ 'N'
+    {
+        Set(USER_CMD_NO, true);
+    }
 }
 
 void move(int x, int y)
@@ -135,12 +192,12 @@ void Update()
     updateCount += 1;
 
     UpdatePlayer();
+    //bfs(curPlayerPos.X, curPlayerPos.Y);
 
 }
 
 void UpdatePlayer()
 {
-    // 키 입력과 화면 출력과 게임 로직 갱신을 분리해서 생각해 봅시다.
     static ULONGLONG elapsedTime;
 
     elapsedTime += GetDeltaTime();
@@ -150,6 +207,28 @@ void UpdatePlayer()
         UpdatePlayerPosition();
 
         elapsedTime -= playerMoveSpeed;
+    }
+}
+
+void UpdatedelapsedTime()
+{
+    static ULONGLONG elapsedTime = 0;
+    
+    elapsedTime += GetDeltaTime();
+    int playTime;
+    while (elapsedTime >= 10)
+    {
+        playTime = 5 - (fixedUpdateCount / 100);
+        if (playTime == 0)
+        {
+            playing = 0;
+            break;
+        }
+        fixedUpdateCount += 1;
+        GotoXY(170, 5);
+        
+        printf("%02d", playTime);
+        elapsedTime -= 10;
     }
 }
 
@@ -181,20 +260,29 @@ void UpdatePlayerPosition()
     }
 }
 
+//void Render()
+//{
+//    ScreenClear();
+//}
+
 void gLoop()
 {
     int x, y;
-    
+    InitTime();
     generate_maze();
     drawMap(&x, &y);
+    playing = 1;
+    fixedUpdateCount = 0;
     while (playing)
     {
-        
         //drawUI(&x, &y);
         UpdateTime();
-        
         ProcessInput();
+        UpdatedelapsedTime();
+
         Update();
+        //bfs(curPlayerPos.X, curPlayerPos.Y);
+        //Render();
     }
 }
 
@@ -254,23 +342,6 @@ void drawMap(int* x, int* y)
     // Sleep(3000);
 }
 
-int keyControl()
-{
-
-    char tmp = _getch();
-
-    if (tmp == 'w' || tmp == 'W')
-        return UP;
-    else if (tmp == 'a' || tmp == 'A')
-        return LEFT;
-    else if (tmp == 's' || tmp == 'S')
-        return DOWN;
-    else if (tmp == 'd' || tmp == 'D')
-        return RIGHT;
-    else if (tmp == '\r')
-        return SUBMIT;
-}
-
 void infoDraw()
 {
     system("cls");
@@ -296,9 +367,9 @@ int menuDraw()
     GotoXY(x - 2, y);
     printf("▶ 게임시작");
     GotoXY(x, y + 2);
-    printf(" 게임정보");
+    printf("게임정보");
     GotoXY(x, y + 4);
-    printf(" 게임종료");
+    printf("게임종료");
 
     while (1)
     {
@@ -359,5 +430,22 @@ void generate_maze() {
         i++;
     }
     fclose(fp1);
+}
+
+int keyControl()
+{
+
+    char tmp = _getch();
+
+    if (tmp == 'w' || tmp == 'W')
+        return UP;
+    else if (tmp == 'a' || tmp == 'A')
+        return LEFT;
+    else if (tmp == 's' || tmp == 'S')
+        return DOWN;
+    else if (tmp == 'd' || tmp == 'D')
+        return RIGHT;
+    else if (tmp == '\r')
+        return SUBMIT;
 }
 

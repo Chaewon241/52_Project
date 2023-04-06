@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include <time.h>
 
+
 #define UP 0
 #define DOWN 1
 #define LEFT 2
@@ -22,10 +23,12 @@ const int USER_CMD_LEFT = 0;
 const int USER_CMD_RIGHT = 1;
 const int USER_CMD_UP = 2;
 const int USER_CMD_DOWN = 3;
-const int ENTER_KEY_INDEX = 4;
+const int USER_CMD_YES = 4;
+const int USER_CMD_NO = 5;
 
 const int playerMoveSpeed = 200;
 
+//void dfs();
 void Set(const int, bool);
 bool IsLeftCmdOn();
 bool IsRightCmdOn();
@@ -37,6 +40,8 @@ void UpdatePlayerPosition();
 void UpdateInput();
 void ProcessInput();
 int keyControl();
+void UpdatedelapsedTime();
+//void Render();
 
 void generate_maze();
 
