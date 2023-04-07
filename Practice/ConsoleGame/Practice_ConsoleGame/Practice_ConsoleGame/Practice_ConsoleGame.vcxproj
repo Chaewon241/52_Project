@@ -144,6 +144,7 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="Miro1.txt" />
+    <Text Include="Miro2.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
