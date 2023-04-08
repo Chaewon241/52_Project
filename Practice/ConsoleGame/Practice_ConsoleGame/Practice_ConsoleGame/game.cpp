@@ -36,7 +36,7 @@ int item = 0;
 const int MAX_KEY = 6;
 bool inputKeyTable[MAX_KEY];
 
-const int showPath = 5000;
+const int showPath = 5000; 
 bool isPath = false;
 
 // UI -> 아이템, 시간 등등
@@ -46,8 +46,6 @@ bool isPath = false;
 //    gotoxy(*x, *y); // 이 포인터는 필요 없을지도?
 //    printf("조명 : %02d 개", item_light);
 //}
-
-
 
 std::vector<std::pair<int, int>> bfs(int start_y, int start_x)
 {
