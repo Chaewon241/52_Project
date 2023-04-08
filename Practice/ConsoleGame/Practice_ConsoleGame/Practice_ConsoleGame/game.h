@@ -54,5 +54,6 @@ int menuDraw();
 void infoDraw();
 void Greeting();
 void drawMap(int*, int*);
+void ErasePath();
 
 //void drawUI(int*, int*, int*); 아이템같은거 UI
