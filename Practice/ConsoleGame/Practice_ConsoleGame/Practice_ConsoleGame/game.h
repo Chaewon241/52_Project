@@ -3,7 +3,6 @@
 #include "MiroMap.h"
 #include "game.h"
 #include "util.h"
-#define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -42,7 +41,6 @@ void UpdateInput();
 void ProcessInput();
 int keyControl();
 void UpdatedelapsedTime();
-//void Render();
 
 void generate_maze();
 
@@ -52,8 +50,5 @@ void init();
 void titleDraw();
 int menuDraw();
 void infoDraw();
-void Greeting();
-void drawMap(int*, int*);
+void drawMap();
 void ErasePath();
-
-//void drawUI(int*, int*, int*); 아이템같은거 UI

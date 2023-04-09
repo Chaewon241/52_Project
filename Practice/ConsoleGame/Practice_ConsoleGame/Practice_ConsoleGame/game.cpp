@@ -6,6 +6,8 @@
 #include <vector>
 #include <cstdlib>
 #include <ctime>
+#include <string>
+#define _CRT_SECURE_NO_WARNINGS
 
 ULONGLONG previousTime;
 ULONGLONG currentTime;
@@ -29,8 +31,6 @@ COORD curPlayerPos;
 
 int updateCount;
 int fixedUpdateCount;
-int fixedUpdateCount1;
-int itemTimer;
 int item = 0;
 
 const int MAX_KEY = 6;
@@ -38,14 +38,19 @@ bool inputKeyTable[MAX_KEY];
 
 const int showPath = 5000; 
 bool isPath = false;
+bool isPass = false;
 
-// UI -> 아이템, 시간 등등
-//void drawUI(int* x, int* y, int* item_light)
-//{
-//    setColor(white, black);
-//    gotoxy(*x, *y); // 이 포인터는 필요 없을지도?
-//    printf("조명 : %02d 개", item_light);
-//}
+std::vector<std::pair<int, int>> pathXY;
+
+ // UI -> 아이템, 시간 등등
+void drawUI()
+{
+    setColor(yellow, black);
+    GotoXY(125, 8);
+    printf("아이템(Q) : %d 개", item);
+	GotoXY(125, 12);
+	printf("종료를 원한다면 ESC를 누르세요");
+}
 
 std::vector<std::pair<int, int>> bfs(int start_y, int start_x)
 {
@@ -206,7 +211,7 @@ void move(int x, int y)
 	{
 		GotoXY(curPlayerPos.X, curPlayerPos.Y);
 		printf(" ");
-		setColor(cyan, black);
+		setColor(white, black);
 		GotoXY(x, y);
 		printf("@");
 
@@ -221,7 +226,27 @@ void move(int x, int y)
 		printf(" ");
 	}
 	else if (mapObject == 'g')
-	{
+	{	
+		int x = 60, y = 15;
+		system("cls");
+		setColor(green, black);
+		GotoXY(x, y++);
+		printf("#######  ##        ######      ##   ######");
+		GotoXY(x, y++);
+		printf("##   ##  ##       #######    #####  #######");
+		GotoXY(x, y++);
+		printf("##       ##       ##         ## ##  ##   ##");
+		GotoXY(x, y++);
+		printf("###      ##       #######   ##  ##  ######");
+		GotoXY(x, y++);
+		printf("###      ##       ##        ######  ##   ##");
+		GotoXY(x, y++);
+		printf("###  ##  #######  #######  ##   ##  ##   ##");
+		GotoXY(x, y++);
+		printf("#######   ######   ######  ##   ##  ##   ##");
+		GotoXY(x, y++);
+		Sleep(3000);
+
 		playing = 0;
 	}
 }
@@ -232,6 +257,8 @@ void Update()
 
 	UpdatePlayer();
 	ErasePath();
+	drawUI();
+	
 }
 
 void UpdatePlayer()
@@ -245,14 +272,12 @@ void UpdatePlayer()
 	{
 		UpdatePlayerPosition();
 
-
 		elapsedTime -= playerMoveSpeed;
 	}
 }
 
 void UpdatePlayerPosition()
 {
-	char mapObject = map1[curPlayerPos.X][curPlayerPos.Y];
 	if (IsLeftCmdOn())
 	{
 		Set(USER_CMD_LEFT, false);
@@ -281,54 +306,25 @@ void UpdatePlayerPosition()
 	{
 		Set(USER_CMD_ITEM, false);
 		
-
 		if (item > 0)
 		{
 			item--;
 			isPath = true;
-			std::vector<std::pair<int, int>> pathXY;
 			pathXY = bfs(curPlayerPos.X, curPlayerPos.Y);
 
 			for (int i = 0; i < pathXY.size(); i++)
 			{
+				setColor(lightblue, black);
 				GotoXY(pathXY[i].second, pathXY[i].first);
 				printf("o");
 			}
-
-			
 		}
 	}
 
 	if (IsESCCmdOn())
 	{
 		Set(USER_CMD_ESCAPE, false);
-		// 다시 시작하는 화면 출력하는 함수, 시간 멈춰야함
-		// 거기서 예 아니오 누르기
-
-		/*GotoXY(170, 7);
-		setColor(white, black);
-		printf("다시 시작하시겠습니까?");
-		GotoXY(170, 8);
-		setColor(white, black);
-		printf("예(y) / 아니오(n)");
-		while (1)
-		{
-			int k = keyControl();
-			if (k == YES)
-			{
-
-			}
-			else if (k == NO)
-			{
-				GotoXY(170, 7);
-				setColor(black, black);
-				printf("다시 시작하시겠습니까?");
-				GotoXY(170, 8);
-				setColor(black, black);
-				printf("예(y) / 아니오(n)");
-				break;
-			}
-		}*/
+		playing = 0;
 	}
 }
 
@@ -339,17 +335,26 @@ void ErasePath()
 	if (isPath) 
 	{
 		elapsedTime += GetDeltaTime();
-		std::vector<std::pair<int, int>> pathXY;
-		pathXY = bfs(curPlayerPos.X, curPlayerPos.Y);
-
+		
 		while (elapsedTime >= showPath)
 		{
 			for (int i = 0; i < pathXY.size(); i++)
 			{
 				GotoXY(pathXY[i].second, pathXY[i].first);
-				printf(" ");
-			}
+				if (map1[pathXY[i].first][pathXY[i].second] == 'l') 
+				{
+					setColor(yellow, black);
+					printf("*");
+				}
 
+				else 
+				{
+					printf(" ");
+				}	
+			}
+			setColor(white, black);
+			GotoXY(curPlayerPos.X, curPlayerPos.Y);
+			printf("@");
 			elapsedTime -= showPath;
 			isPath = false;
 		}
@@ -363,57 +368,73 @@ void UpdatedelapsedTime()
 	elapsedTime += GetDeltaTime();
 	while (elapsedTime >= 10)
 	{
-		playTime = 120 - (fixedUpdateCount / 100);
+		playTime = 60 - (fixedUpdateCount / 100);
 		if (playTime == 0)
 		{
+			setColor(red, black);
+			int x = 60, y = 15;
+			system("cls");
+			GotoXY(x, y++);
+			printf("######      ##    ######  ##");
+			GotoXY(x, y++);
+			printf("##        #####   ######  ##");
+			GotoXY(x, y++);
+			printf("##        ## ##     ##    ##");
+			GotoXY(x, y++);
+			printf("#####    ##  ##     ##    ##");
+			GotoXY(x, y++);
+			printf("###      ######     ##    ##");
+			GotoXY(x, y++);
+			printf("###     ##   ##   ######  #######");
+			GotoXY(x, y++);
+			printf("###     ##   ##   ######  #######");
+			GotoXY(x, y++);
+			Sleep(3000);
+
 			playing = 0;
 			break;
 		}
 		fixedUpdateCount += 1;
-		GotoXY(170, 5);
-
-		printf("%03d", playTime);
+		GotoXY(130, 5);
+		setColor(red, black);
+		printf("%02d초", playTime);
 		elapsedTime = 0;
 	}
 }
 
-//void Render()
-//{
-//    ScreenClear();
-//}
+void startGame()
+{
+	int x = 0, y = 0;
+	generate_maze();
+	drawMap();
+}
 
 void gLoop()
 {
-	int x, y;
 	InitTime();
-	generate_maze();
-	drawMap(&x, &y);
+	startGame();
+
 	playing = 1;
 	fixedUpdateCount = 0;
-	fixedUpdateCount1 = 0;
-	itemTimer = 0;
+	item = 0;
+	curPlayerPos.X = 0;
+	curPlayerPos.Y = 0;
+
+	GotoXY(curPlayerPos.X, curPlayerPos.Y);
+	setColor(white, black);
+	printf("@");
 
 	while (playing)
 	{
-		//drawUI(&x, &y);
 		UpdateTime();
 		ProcessInput();
 		UpdatedelapsedTime();
 
 		Update();
-		//bfs(curPlayerPos.X, curPlayerPos.Y);
-		//Render();
 	}
 }
 
-void Greeting()
-{
-	system("cls");
-	printf("잘 탈출해보세요~");
-	Sleep(2000);
-}
-
-void drawMap(int* x, int* y)
+void drawMap()
 {
 	system("cls");
 
@@ -429,21 +450,13 @@ void drawMap(int* x, int* y)
 
 			else if (map1[i][j] == '#')
 			{
-				setColor(white, white);
+				setColor(green, green);
 				printf("#");
-			}
-
-			else if (map1[i][j] == 'p')
-			{
-				curPlayerPos.X = j;
-				curPlayerPos.Y = i;
-				setColor(cyan, black);
-				printf("@");
 			}
 
 			else if (map1[i][j] == 'g')
 			{
-				setColor(lightgreen, black);
+				setColor(red, black);
 				printf("O");
 			}
 
@@ -462,34 +475,17 @@ void drawMap(int* x, int* y)
 	// Sleep(3000);
 }
 
-void infoDraw()
-{
-	system("cls");
-	printf("\n\n");
-	printf("조작법\n\n");
-	printf("으아아아아\n\n");
-	printf("으아아아아아아\n\n");
-
-	while (1)
-	{
-		if (keyControl() == SUBMIT)
-		{
-			break;
-		}
-	}
-}
-
 int menuDraw()
 {
-	int x = 80;
+	int x = 70;
 	int y = 30;
 
 	GotoXY(x - 2, y);
 	printf("▶ 게임시작");
 	GotoXY(x, y + 2);
-	printf("게임정보");
+	printf(" 게임방법");
 	GotoXY(x, y + 4);
-	printf("게임종료");
+	printf(" 게임종료");
 
 	while (1)
 	{
@@ -524,20 +520,51 @@ int menuDraw()
 	}
 }
 
+void infoDraw()
+{
+	system("cls");
+	int x = 70, y = 15;
+	GotoXY(x, y++);
+	setColor(green, black);
+	printf("★★게임 방법★★");
+	GotoXY(x - 10, y+2);
+	setColor(white, black);
+	printf("1. 10가지의 랜덤한 미로가 생성됩니다.");
+	GotoXY(x - 10, y + 4);
+	printf("2. w a s d로 조작할 수 있습니다.");
+	GotoXY(x - 10, y + 6);
+	printf("3. 120초 안에 미로를 탈출하세요.");
+	GotoXY(x - 10, y + 8);
+	printf("4. 아이템을 먹으면 5초동안 길을 보여줍니다.");
+
+	while (1)
+	{
+		if (keyControl() == SUBMIT)
+		{
+			break;
+		}
+	}
+}
+
 void titleDraw()
 {
-	GotoXY(50, 10);
-	printf("           ##\n");
-	GotoXY(50, 11);
-	printf("##  ##    ###     #####     ####              #####    #####   ##  ##    ####\n");
-	GotoXY(50, 12);
-	printf("######     ##     ##  ##   ##  ##            ##  ##       ##   ######   ######\n");
-	GotoXY(50, 13);
-	printf("##  ##     ##     ##       ##  ##             #####   ######   ##  ##   ##\n");
-	GotoXY(50, 14);
-	printf("##  ##   ######   ##        ####                 ##    #####   ##  ##    ####\n");
-	GotoXY(50, 15);
+	int x = 40, y = 15;
+	setColor(blue, black);
+	GotoXY(x, y++);
+	printf("           ##");
+	GotoXY(x, y++);
+	printf("##  ##    ###     #####     ####              #####    #####   ##  ##    ####");
+	GotoXY(x, y++);
+	printf("######     ##     ##  ##   ##  ##            ##  ##     ####   ######   ######");
+	GotoXY(x, y++);
+	printf("##  ##     ##     ##       ##  ##             #####    #   #   ##  ##   ##");
+	GotoXY(x, y++);
+	printf("##  ##   ######   ##        ####                 ##    #####   ##  ##    ####");
+	GotoXY(x, y++);
 	printf("                                              #####                              ");
+	setColor(white, black);
+	GotoXY(x + 15, y + 5);
+	printf("w a로 메뉴를 선택 하고 엔터를 눌러 실행하세요.");
 }
 
 // 맵 텍스트 파일 마니마니 생성하고 랜덤으로 하기
@@ -547,13 +574,14 @@ void generate_maze() {
 	const int max = 1024;
 	char line[max];
 	char* pLine;
-	int randnum = rand() % 2;
-	FILE* fp1;
+	int randnum = rand() % 10;
+	FILE* fp1 = NULL;
 
-	if (randnum == 0)
-		fp1 = fopen("Miro1.txt", "r");
-	else if (randnum == 1)
-		fp1 = fopen("Miro2.txt", "r");
+	std::string str = "Miro";
+	str += std::to_string(randnum);
+	std::string filename = str + ".txt";
+	
+	fopen_s(&fp1, filename.c_str(), "r");
 
 	if (fp1 == NULL)
 		exit(1);
@@ -572,7 +600,6 @@ void generate_maze() {
 
 int keyControl()
 {
-
 	char tmp = _getch();
 
 	if (tmp == 'w' || tmp == 'W')

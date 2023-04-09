@@ -61,5 +61,32 @@
     <Text Include="Miro2.txt">
       <Filter>리소스 파일</Filter>
     </Text>
+    <Text Include="Miro3.txt">
+      <Filter>리소스 파일</Filter>
+    </Text>
+    <Text Include="Miro0.txt">
+      <Filter>리소스 파일</Filter>
+    </Text>
+    <Text Include="Miro4.txt">
+      <Filter>리소스 파일</Filter>
+    </Text>
+    <Text Include="Miro5.txt">
+      <Filter>리소스 파일</Filter>
+    </Text>
+    <Text Include="Miro6.txt">
+      <Filter>리소스 파일</Filter>
+    </Text>
+    <Text Include="Miro7.txt">
+      <Filter>리소스 파일</Filter>
+    </Text>
+    <Text Include="Miro8.txt">
+      <Filter>리소스 파일</Filter>
+    </Text>
+    <Text Include="Miro9.txt">
+      <Filter>리소스 파일</Filter>
+    </Text>
+    <Text Include="Miro10.txt">
+      <Filter>리소스 파일</Filter>
+    </Text>
   </ItemGroup>
 </Project>

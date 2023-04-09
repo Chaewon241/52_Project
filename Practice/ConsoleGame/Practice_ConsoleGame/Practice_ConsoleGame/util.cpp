@@ -3,7 +3,7 @@
 
 void init()
 {
-    system("mode con cols=200 lines=50 | title 게임명");
+    system("mode con cols=165 lines=50 | title 게임명");
 
     HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
     CONSOLE_CURSOR_INFO ConsoleCursor;
