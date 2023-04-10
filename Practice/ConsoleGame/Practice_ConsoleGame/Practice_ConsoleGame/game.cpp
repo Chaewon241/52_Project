@@ -36,7 +36,7 @@ int item = 0;
 const int MAX_KEY = 6;
 bool inputKeyTable[MAX_KEY];
 
-const int showPath = 5000; 
+const int showPath = 3000;    
 bool isPath = false;
 bool isPass = false;
 
@@ -533,7 +533,7 @@ void infoDraw()
 	GotoXY(x - 10, y + 4);
 	printf("2. w a s d로 조작할 수 있습니다.");
 	GotoXY(x - 10, y + 6);
-	printf("3. 120초 안에 미로를 탈출하세요.");
+	printf("3. 100초 안에 미로를 탈출하세요.");
 	GotoXY(x - 10, y + 8);
 	printf("4. 아이템을 먹으면 5초동안 길을 보여줍니다.");
 

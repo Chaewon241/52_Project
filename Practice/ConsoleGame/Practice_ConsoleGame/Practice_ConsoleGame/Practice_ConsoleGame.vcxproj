@@ -143,17 +143,17 @@
     <ClInclude Include="util.h" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="Miro0.txt" />
-    <Text Include="Miro1.txt" />
-    <Text Include="Miro10.txt" />
-    <Text Include="Miro2.txt" />
-    <Text Include="Miro3.txt" />
-    <Text Include="Miro4.txt" />
-    <Text Include="Miro5.txt" />
-    <Text Include="Miro6.txt" />
-    <Text Include="Miro7.txt" />
-    <Text Include="Miro8.txt" />
-    <Text Include="Miro9.txt" />
+    <CopyFileToFolders Include="Miro0.txt" />
+    <CopyFileToFolders Include="Miro1.txt" />
+    <CopyFileToFolders Include="Miro10.txt" />
+    <CopyFileToFolders Include="Miro2.txt" />
+    <CopyFileToFolders Include="Miro3.txt" />
+    <CopyFileToFolders Include="Miro4.txt" />
+    <CopyFileToFolders Include="Miro5.txt" />
+    <CopyFileToFolders Include="Miro6.txt" />
+    <CopyFileToFolders Include="Miro7.txt" />
+    <CopyFileToFolders Include="Miro8.txt" />
+    <CopyFileToFolders Include="Miro9.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

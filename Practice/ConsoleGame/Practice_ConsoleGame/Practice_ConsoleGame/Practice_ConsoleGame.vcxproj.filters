@@ -55,38 +55,38 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="Miro1.txt">
+    <CopyFileToFolders Include="Miro10.txt">
       <Filter>리소스 파일</Filter>
-    </Text>
-    <Text Include="Miro2.txt">
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Miro0.txt">
       <Filter>리소스 파일</Filter>
-    </Text>
-    <Text Include="Miro3.txt">
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Miro1.txt">
       <Filter>리소스 파일</Filter>
-    </Text>
-    <Text Include="Miro0.txt">
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Miro2.txt">
       <Filter>리소스 파일</Filter>
-    </Text>
-    <Text Include="Miro4.txt">
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Miro3.txt">
       <Filter>리소스 파일</Filter>
-    </Text>
-    <Text Include="Miro5.txt">
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Miro4.txt">
       <Filter>리소스 파일</Filter>
-    </Text>
-    <Text Include="Miro6.txt">
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Miro5.txt">
       <Filter>리소스 파일</Filter>
-    </Text>
-    <Text Include="Miro7.txt">
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Miro6.txt">
       <Filter>리소스 파일</Filter>
-    </Text>
-    <Text Include="Miro8.txt">
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Miro7.txt">
       <Filter>리소스 파일</Filter>
-    </Text>
-    <Text Include="Miro9.txt">
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Miro8.txt">
       <Filter>리소스 파일</Filter>
-    </Text>
-    <Text Include="Miro10.txt">
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Miro9.txt">
       <Filter>리소스 파일</Filter>
-    </Text>
+    </CopyFileToFolders>
   </ItemGroup>
 </Project>
