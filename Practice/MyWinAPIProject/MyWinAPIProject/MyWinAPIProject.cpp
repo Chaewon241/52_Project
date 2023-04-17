@@ -128,6 +128,47 @@ void PaintGrid(HWND hWnd, LPARAM lParam)
 
 }
 
+void Marker(LONG x, LONG y, HWND hwnd)
+{
+    HDC hdc;
+
+    hdc = GetDC(hwnd);
+    MoveToEx(hdc, (int)x - 10, (int)y, (LPPOINT)NULL);
+    LineTo(hdc, (int)x + 10, (int)y);
+    MoveToEx(hdc, (int)x, (int)y - 10, (LPPOINT)NULL);
+    LineTo(hdc, (int)x, (int)y + 10);
+
+    ReleaseDC(hwnd, hdc);
+}
+
+void DrawMarker(HWND hWnd, LPARAM lParam)
+{
+    RECT rc;
+    HRGN hrgn;
+    POINTS ptTmp;
+
+    if (index >= 32) return;
+
+    GetClientRect(hWnd, &rc);
+    hrgn = CreateRectRgn(rc.left, rc.top,
+        rc.right, rc.bottom);
+
+    ptTmp = MAKEPOINTS(lParam);
+    ptMouseDown[index].x = (LONG)ptTmp.x;
+    ptMouseDown[index].y = (LONG)ptTmp.y;
+
+    // Test for a hit in the client rectangle.  
+
+    if (PtInRegion(hrgn, ptMouseDown[index].x, ptMouseDown[index].y))
+    {
+        // If a hit occurs, record the mouse coords.  
+
+        Marker(ptMouseDown[index].x, ptMouseDown[index].y, hWnd);
+        index++;
+    }
+
+}
+
 // hWnd는 핸들, HDC는 디바이스
 void DrawGrid(HWND hWnd, HDC hdc)
 {
@@ -222,9 +263,17 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
             DrawGrid(hWnd, hdc);
             EndPaint(hWnd, &ps);
+
+            for (int i = 0; i < index; i++)
+            {
+                Marker(ptMouseDown[i].x, ptMouseDown[i].y, hWnd);
+            }
+
         }
         break;
     case WM_LBUTTONDOWN:
+        // Create the region from the client area.  
+        DrawMarker(hWnd, lParam);
         break;
     case WM_DESTROY:
         PostQuitMessage(0);
