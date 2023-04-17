@@ -108,7 +108,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    hInst = hInstance; // 인스턴스 핸들을 전역 변수에 저장합니다.
 
    HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
-      CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, hInstance, nullptr);
+      CW_USEDEFAULT, 0, 1600, 900, nullptr, nullptr, hInstance, nullptr);
 
    if (!hWnd)
    {
@@ -121,50 +121,60 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    return TRUE;
 }
 
-void PaintGrid(HWND hWnd, LPARAM lParam)
+void PaintGrid(LONG x, LONG y, HWND hwnd)
 {
-    POINTS ptTmp;
-    
-
-}
-
-void Marker(LONG x, LONG y, HWND hwnd)
-{
+    RECT rc;
+    GetClientRect(hwnd, &rc);
     HDC hdc;
 
     hdc = GetDC(hwnd);
-    MoveToEx(hdc, (int)x - 10, (int)y, (LPPOINT)NULL);
-    LineTo(hdc, (int)x + 10, (int)y);
-    MoveToEx(hdc, (int)x, (int)y - 10, (LPPOINT)NULL);
-    LineTo(hdc, (int)x, (int)y + 10);
+    float pix_x = (float)x / rc.right;
+    float pix_y = (float)y / rc.bottom;
+
+    // x좌표 어딨는지
+    float tmp1 = 0;
+    for (int i = 0; i < 7; i++)
+    {
+        if (tmp1 <= pix_x && pix_x < tmp1 + 0.125)
+            break;
+        tmp1 += 0.125;
+    }
+
+    // y좌표 어딨는지
+    float tmp2 = 0;
+    for (int i = 0; i < 3; i++)
+    {
+        if (tmp2 <= pix_y && pix_y < tmp2 + 0.25)
+            break;
+        tmp2 += 0.25;
+    }
+
+    HBRUSH myBrush = (HBRUSH)CreateSolidBrush(RGB(255, 0, 0));
+    HBRUSH oldBrush = (HBRUSH)SelectObject(hdc, myBrush);
+    Rectangle(hdc, tmp1 * 1600, tmp2 * 900, (tmp1 + 0.125) * 1600, (tmp2 + 0.25) * 900);
+    
+    SelectObject(hdc, oldBrush);
+    DeleteObject(myBrush);
 
     ReleaseDC(hwnd, hdc);
 }
 
-void DrawMarker(HWND hWnd, LPARAM lParam)
+void SelectGrid(HWND hWnd, LPARAM lParam)
 {
     RECT rc;
     HRGN hrgn;
     POINTS ptTmp;
 
-    if (index >= 32) return;
-
     GetClientRect(hWnd, &rc);
-    hrgn = CreateRectRgn(rc.left, rc.top,
-        rc.right, rc.bottom);
+    hrgn = CreateRectRgn(rc.left, rc.top, rc.right, rc.bottom);
 
     ptTmp = MAKEPOINTS(lParam);
     ptMouseDown[index].x = (LONG)ptTmp.x;
     ptMouseDown[index].y = (LONG)ptTmp.y;
 
-    // Test for a hit in the client rectangle.  
-
     if (PtInRegion(hrgn, ptMouseDown[index].x, ptMouseDown[index].y))
     {
-        // If a hit occurs, record the mouse coords.  
-
-        Marker(ptMouseDown[index].x, ptMouseDown[index].y, hWnd);
-        index++;
+        PaintGrid(ptMouseDown[index].x, ptMouseDown[index].y, hWnd);
     }
 
 }
@@ -179,10 +189,6 @@ void DrawGrid(HWND hWnd, HDC hdc)
     // 그릴 펜
     HPEN hNewPen, hPrevPen;
 
-    double a = -0.01;
-    double b = 0;
-    double c = 0;
-
     // 새로운 펜
     hNewPen = CreatePen(PS_DOT, 2, RGB(0, 0, 0)); //hNewPen 펜 생성 -> 옵션(도트), 굵기2, 색상 R:255 G:0 B:0
     // 이전 펜
@@ -192,29 +198,22 @@ void DrawGrid(HWND hWnd, HDC hdc)
     GetClientRect(hWnd, &rect);
 
     // 가로
-    MoveToEx(hdc, rect.left, rect.bottom / 2, NULL);
-    LineTo(hdc, rect.right, rect.bottom / 2);
-    MoveToEx(hdc, rect.left, rect.bottom / 4, NULL);
-    LineTo(hdc, rect.right, rect.bottom / 4);
-    MoveToEx(hdc, rect.left, rect.bottom * 0.75, NULL);
-    LineTo(hdc, rect.right, rect.bottom * 0.75);
+    float div1 = 1;
+    while (div1 > 0)
+    {
+        div1 -= 0.25;
+        MoveToEx(hdc, rect.left, rect.bottom * div1, NULL);
+        LineTo(hdc, rect.right, rect.bottom * div1);
+    }
     
     // 세로
-    //for(int i = 0; i < )
-    MoveToEx(hdc, rect.right / 2, rect.top, NULL);
-    LineTo(hdc, rect.right / 2, rect.bottom);
-    MoveToEx(hdc, rect.right / 4, rect.top, NULL);
-    LineTo(hdc, rect.right / 4, rect.bottom);
-    MoveToEx(hdc, rect.right * 0.75, rect.top, NULL);
-    LineTo(hdc, rect.right * 0.75, rect.bottom);
-    MoveToEx(hdc, rect.right * 0.125, rect.top, NULL);
-    LineTo(hdc, rect.right * 0.125, rect.bottom);
-    MoveToEx(hdc, rect.right * 0.375, rect.top, NULL);
-    LineTo(hdc, rect.right * 0.375, rect.bottom);
-    MoveToEx(hdc, rect.right * 0.625, rect.top, NULL);
-    LineTo(hdc, rect.right * 0.625, rect.bottom);
-    MoveToEx(hdc, rect.right * 0.875, rect.top, NULL);
-    LineTo(hdc, rect.right * 0.875, rect.bottom);
+    float div2 = 1;
+    while (div2 > 0)
+    {
+        div2 -= 0.125;
+        MoveToEx(hdc, rect.right * div2, rect.top, NULL);
+        LineTo(hdc, rect.right * div2, rect.bottom);
+    }
 
     //펜 정보 원상태로 바꾸기
     SelectObject(hdc, hPrevPen); //현재영역에 대한 펜을 원래 있던 펜으로 다시 적용
@@ -259,21 +258,19 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             HDC hdc = BeginPaint(hWnd, &ps);
             // TODO: 여기에 hdc를 사용하는 그리기 코드를 추가합니다...
 
-            RECT rt4Text = { 100, 100, 500, 300 };
-
             DrawGrid(hWnd, hdc);
             EndPaint(hWnd, &ps);
 
-            for (int i = 0; i < index; i++)
+            /*for (int i = 0; i < index; i++)
             {
                 Marker(ptMouseDown[i].x, ptMouseDown[i].y, hWnd);
-            }
+            }*/
 
         }
         break;
     case WM_LBUTTONDOWN:
         // Create the region from the client area.  
-        DrawMarker(hWnd, lParam);
+        SelectGrid(hWnd, lParam);
         break;
     case WM_DESTROY:
         PostQuitMessage(0);
