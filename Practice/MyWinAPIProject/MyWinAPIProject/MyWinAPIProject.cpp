@@ -14,6 +14,10 @@ WCHAR szWindowClass[MAX_LOADSTRING];            // 기본 창 클래스 이름�
 // 이 코드 모듈에 포함된 함수의 선언을 전달합니다:
 ATOM                MyRegisterClass(HINSTANCE hInstance);
 BOOL                InitInstance(HINSTANCE, int);
+// 윈도우 프로시저가 메시지 처리를 끝냈다고 운영체제에게 알려주는 값
+//0을 반환한다는 것은 운영체제는 이 메세지에 관여하지 않고 프로그래머가 직접 처리한다는 의미를 갖습니다. -1을 반환하게 되면 운영체제가 진행하는 작업을 취소한다는 의미를 갖습니다.
+// CALLBACK 함수는 사용자가 호출하는 함수가 아닌, 특정 트리거(이벤트)에 의해 운영체제가 자동으로 실행하는 함수
+// 핸들이란 운영체제 내부에 있는 어떤 리소스의 주소를 정수(32bit 혹은 64bit)로 치환한 값, 즉 HANDLE이란 자료형은 오브젝트의 주소를 나타내는 자료형
 LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
 
@@ -66,6 +70,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,         // 실행된 프로세�
 //
 //  용도: 창 클래스를 등록합니다.
 //
+// 윈도우 클래스를 커널에 등록하는 과정을 거칠 차례
 ATOM MyRegisterClass(HINSTANCE hInstance)
 {
     WNDCLASSEXW wcex;
@@ -81,6 +86,7 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
     wcex.hCursor        = LoadCursor(nullptr, IDC_ARROW);
     wcex.hbrBackground  = (HBRUSH)(COLOR_WINDOW+2);
     wcex.lpszMenuName   = MAKEINTRESOURCEW(IDC_MYWINAPIPROJECT);
+    // lpszClass : 윈도우를 생성하는 클래스를 관리하는 변수
     wcex.lpszClassName  = szWindowClass;
     wcex.hIconSm        = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_SMALL));
 
@@ -115,51 +121,17 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    return TRUE;
 }
 
-void Marker(LONG x, LONG y, HWND hwnd)
+void PaintGrid(HWND hWnd, LPARAM lParam)
 {
-    HDC hdc;
-
-    hdc = GetDC(hwnd);
-    MoveToEx(hdc, (int)x - 10, (int)y, (LPPOINT)NULL);
-    LineTo(hdc, (int)x + 10, (int)y);
-    MoveToEx(hdc, (int)x, (int)y - 10, (LPPOINT)NULL);
-    LineTo(hdc, (int)x, (int)y + 10);
-
-    ReleaseDC(hwnd, hdc);
-}
-
-void DrawMarker(HWND hWnd, LPARAM lParam)
-{
-    RECT rc;
-    HRGN hrgn;
     POINTS ptTmp;
-
-    if (index >= 32) return;
-
-    GetClientRect(hWnd, &rc);
-    hrgn = CreateRectRgn(rc.left, rc.top,
-        rc.right, rc.bottom);
-
-    ptTmp = MAKEPOINTS(lParam);
-    ptMouseDown[index].x = (LONG)ptTmp.x;
-    ptMouseDown[index].y = (LONG)ptTmp.y;
-
-    // Test for a hit in the client rectangle.  
-
-    if (PtInRegion(hrgn, ptMouseDown[index].x, ptMouseDown[index].y))
-    {
-        // If a hit occurs, record the mouse coords.  
-
-        Marker(ptMouseDown[index].x, ptMouseDown[index].y, hWnd);
-        index++;
-    }
+    
 
 }
 
 // hWnd는 핸들, HDC는 디바이스
-void DrawParabola(HWND hWnd, HDC hdc)
+void DrawGrid(HWND hWnd, HDC hdc)
 {
-    // 포물선 만들 공간
+    // 그리드 만들 공간
     RECT rect;
     // 그림을 그려주는거
     PAINTSTRUCT ps;
@@ -171,32 +143,37 @@ void DrawParabola(HWND hWnd, HDC hdc)
     double c = 0;
 
     // 새로운 펜
-    hNewPen = CreatePen(PS_DOT, 2, RGB(255, 255, 0)); //hNewPen 펜 생성 -> 옵션(도트), 굵기2, 색상 R:255 G:0 B:0
+    hNewPen = CreatePen(PS_DOT, 2, RGB(0, 0, 0)); //hNewPen 펜 생성 -> 옵션(도트), 굵기2, 색상 R:255 G:0 B:0
     // 이전 펜
     hPrevPen = (HPEN)SelectObject(hdc, hNewPen); //hdc 영역에 새로운 펜을 적용후 이전에 있던 펜의 정보를 hPrevPen에 저장
 
-    // 포물선을 그릴 공간 받아오기
+    // 그리드 그릴 공간 받아오기
     GetClientRect(hWnd, &rect);
 
-    // Draw the axes -> 데카르트 좌표계
-    // x축 y축
-    // 좌표이동하고
+    // 가로
     MoveToEx(hdc, rect.left, rect.bottom / 2, NULL);
-    // 선그리기
     LineTo(hdc, rect.right, rect.bottom / 2);
-    // 좌표 이동하고
+    MoveToEx(hdc, rect.left, rect.bottom / 4, NULL);
+    LineTo(hdc, rect.right, rect.bottom / 4);
+    MoveToEx(hdc, rect.left, rect.bottom * 0.75, NULL);
+    LineTo(hdc, rect.right, rect.bottom * 0.75);
+    
+    // 세로
+    //for(int i = 0; i < )
     MoveToEx(hdc, rect.right / 2, rect.top, NULL);
-    // 선그리기
     LineTo(hdc, rect.right / 2, rect.bottom);
-
-    // Draw the parabola -> 2차 함수
-    // 포물선 그리기
-    MoveToEx(hdc, rect.left, rect.bottom / 2, NULL);
-    // x축의 가장 왼쪽에서부터 가장 오른쪽까지
-    for (int x = rect.left; x <= rect.right; x++) {
-        double y = a * pow(x - rect.right / 2, 2) + b * (x - rect.right / 2) + c + rect.bottom / 2;
-        LineTo(hdc, x, y);
-    }
+    MoveToEx(hdc, rect.right / 4, rect.top, NULL);
+    LineTo(hdc, rect.right / 4, rect.bottom);
+    MoveToEx(hdc, rect.right * 0.75, rect.top, NULL);
+    LineTo(hdc, rect.right * 0.75, rect.bottom);
+    MoveToEx(hdc, rect.right * 0.125, rect.top, NULL);
+    LineTo(hdc, rect.right * 0.125, rect.bottom);
+    MoveToEx(hdc, rect.right * 0.375, rect.top, NULL);
+    LineTo(hdc, rect.right * 0.375, rect.bottom);
+    MoveToEx(hdc, rect.right * 0.625, rect.top, NULL);
+    LineTo(hdc, rect.right * 0.625, rect.bottom);
+    MoveToEx(hdc, rect.right * 0.875, rect.top, NULL);
+    LineTo(hdc, rect.right * 0.875, rect.bottom);
 
     //펜 정보 원상태로 바꾸기
     SelectObject(hdc, hPrevPen); //현재영역에 대한 펜을 원래 있던 펜으로 다시 적용
@@ -243,21 +220,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
             RECT rt4Text = { 100, 100, 500, 300 };
 
-            // 텍스트를 가운데 정렬하고 한 줄이 꽉찰 경우 개행한다
-            DrawText(hdc, L"Hello World", -1, &rt4Text, DT_CENTER | DT_WORDBREAK);
-            DrawParabola(hWnd, hdc);
+            DrawGrid(hWnd, hdc);
             EndPaint(hWnd, &ps);
-
-            for (int i = 0; i < index; i++)
-            {
-                Marker(ptMouseDown[i].x, ptMouseDown[i].y, hWnd);
-            }
-
         }
         break;
     case WM_LBUTTONDOWN:
-        // Create the region from the client area.  
-        DrawMarker(hWnd, lParam);
         break;
     case WM_DESTROY:
         PostQuitMessage(0);
