@@ -15,15 +15,16 @@ WCHAR szWindowClass[MAX_LOADSTRING];            // 기본 창 클래스 이름�
 ATOM                MyRegisterClass(HINSTANCE hInstance);
 BOOL                InitInstance(HINSTANCE, int);
 // 윈도우 프로시저가 메시지 처리를 끝냈다고 운영체제에게 알려주는 값
-//0을 반환한다는 것은 운영체제는 이 메세지에 관여하지 않고 프로그래머가 직접 처리한다는 의미를 갖습니다. -1을 반환하게 되면 운영체제가 진행하는 작업을 취소한다는 의미를 갖습니다.
+// 0을 반환한다는 것은 운영체제는 이 메세지에 관여하지 않고 프로그래머가 직접 처리한다는 의미를 갖습니다. -1을 반환하게 되면 운영체제가 진행하는 작업을 취소한다는 의미를 갖습니다.
 // CALLBACK 함수는 사용자가 호출하는 함수가 아닌, 특정 트리거(이벤트)에 의해 운영체제가 자동으로 실행하는 함수
 // 핸들이란 운영체제 내부에 있는 어떤 리소스의 주소를 정수(32bit 혹은 64bit)로 치환한 값, 즉 HANDLE이란 자료형은 오브젝트의 주소를 나타내는 자료형
 LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
 
 // 클릭한거 안 없어지게 전역변수로 둠.(원래는 DrawMarker 함수에 있었음)
-static POINT ptMouseDown[32];
-static int index;
+static POINT ptMouseDown;
+
+RECT prevrc;
 
 // SAL 주석: _In_(데이터가 입력된다는 주석), _In_opt_(옵션이 존재함)
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,         // 실행된 프로세스의 시작주소
@@ -84,7 +85,7 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
     wcex.hInstance      = hInstance;
     wcex.hIcon          = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_MYWINAPIPROJECT));
     wcex.hCursor        = LoadCursor(nullptr, IDC_ARROW);
-    wcex.hbrBackground  = (HBRUSH)(COLOR_WINDOW+2);
+    wcex.hbrBackground  = (HBRUSH)(COLOR_WINDOW + 1);
     wcex.lpszMenuName   = MAKEINTRESOURCEW(IDC_MYWINAPIPROJECT);
     // lpszClass : 윈도우를 생성하는 클래스를 관리하는 변수
     wcex.lpszClassName  = szWindowClass;
@@ -124,6 +125,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 void PaintGrid(LONG x, LONG y, HWND hwnd)
 {
     RECT rc;
+    
     GetClientRect(hwnd, &rc);
     HDC hdc;
 
@@ -149,12 +151,27 @@ void PaintGrid(LONG x, LONG y, HWND hwnd)
         tmp2 += 0.25;
     }
 
-    HBRUSH myBrush = (HBRUSH)CreateSolidBrush(RGB(255, 0, 0));
-    HBRUSH oldBrush = (HBRUSH)SelectObject(hdc, myBrush);
-    Rectangle(hdc, tmp1 * 1600, tmp2 * 900, (tmp1 + 0.125) * 1600, (tmp2 + 0.25) * 900);
-    
-    SelectObject(hdc, oldBrush);
-    DeleteObject(myBrush);
+    /*HBRUSH myBrush = (HBRUSH)CreateSolidBrush(RGB(255, 0, 0));
+    HBRUSH oldBrush = (HBRUSH)SelectObject(hdc, myBrush);*/
+
+    RECT tmprc = { tmp1 * rc.right + 1, tmp2 * rc.bottom + 1, (tmp1 + 0.125) * rc.right - 1, (tmp2 + 0.25) * rc.bottom - 1};
+
+    FillRect(hdc, &tmprc, CreateSolidBrush(RGB(255, 0, 0)));
+    InvalidateRect(hwnd, &prevrc, TRUE);
+    prevrc = tmprc;
+    /*if (GetPixel(hdc, x, y) == RGB(255, 0, 0))
+    {
+        FillRect(hdc, &tmprc, CreateSolidBrush(RGB(255, 255, 255)));
+    }
+    else
+    {
+        FillRect(hdc, &tmprc, CreateSolidBrush(RGB(255, 0, 0)));
+        
+    }*/
+        
+
+    //SelectObject(hdc, oldBrush);
+    //DeleteObject(myBrush);
 
     ReleaseDC(hwnd, hdc);
 }
@@ -169,12 +186,12 @@ void SelectGrid(HWND hWnd, LPARAM lParam)
     hrgn = CreateRectRgn(rc.left, rc.top, rc.right, rc.bottom);
 
     ptTmp = MAKEPOINTS(lParam);
-    ptMouseDown[index].x = (LONG)ptTmp.x;
-    ptMouseDown[index].y = (LONG)ptTmp.y;
+    ptMouseDown.x = (LONG)ptTmp.x;
+    ptMouseDown.y = (LONG)ptTmp.y;
 
-    if (PtInRegion(hrgn, ptMouseDown[index].x, ptMouseDown[index].y))
+    if (PtInRegion(hrgn, ptMouseDown.x, ptMouseDown.y))
     {
-        PaintGrid(ptMouseDown[index].x, ptMouseDown[index].y, hWnd);
+        PaintGrid(ptMouseDown.x, ptMouseDown.y, hWnd);
     }
 
 }
