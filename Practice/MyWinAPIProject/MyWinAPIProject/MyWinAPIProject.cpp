@@ -24,7 +24,12 @@ INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
 // 클릭한거 안 없어지게 전역변수로 둠.(원래는 DrawMarker 함수에 있었음)
 static POINT ptMouseDown;
 
-RECT prevrc;
+RECT prevrc = {0,0,0,0};
+float tmp1 = 0;
+float tmp2 = 0;
+
+bool clicked = FALSE;
+bool green = FALSE;
 
 // SAL 주석: _In_(데이터가 입력된다는 주석), _In_opt_(옵션이 존재함)
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,         // 실행된 프로세스의 시작주소
@@ -122,6 +127,27 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    return TRUE;
 }
 
+void RemainPaint(HWND hwnd)
+{
+    RECT rc;
+    HDC hdc;
+    hdc = GetDC(hwnd);
+    GetClientRect(hwnd, &rc);
+
+    RECT tmprc = { tmp1 * rc.right + 1, tmp2 * rc.bottom + 1, (tmp1 + 0.125) * rc.right - 1, (tmp2 + 0.25) * rc.bottom - 1 };
+    
+    /*if (green == TRUE)
+    {
+        InvalidateRect(hwnd, &tmprc, TRUE);
+        return;
+    }*/
+
+    FillRect(hdc, &tmprc, CreateSolidBrush(RGB(0, 255, 0)));
+    //FillRect(hdc, &prevrc, CreateSolidBrush(RGB(255, 255, 255)));
+    //InvalidateRect(hwnd, &prevrc, TRUE);
+    prevrc = tmprc;
+}
+
 void PaintGrid(LONG x, LONG y, HWND hwnd)
 {
     RECT rc;
@@ -134,7 +160,7 @@ void PaintGrid(LONG x, LONG y, HWND hwnd)
     float pix_y = (float)y / rc.bottom;
 
     // x좌표 어딨는지
-    float tmp1 = 0;
+    tmp1 = 0;
     for (int i = 0; i < 7; i++)
     {
         if (tmp1 <= pix_x && pix_x < tmp1 + 0.125)
@@ -143,7 +169,7 @@ void PaintGrid(LONG x, LONG y, HWND hwnd)
     }
 
     // y좌표 어딨는지
-    float tmp2 = 0;
+    tmp2 = 0;
     for (int i = 0; i < 3; i++)
     {
         if (tmp2 <= pix_y && pix_y < tmp2 + 0.25)
@@ -155,10 +181,21 @@ void PaintGrid(LONG x, LONG y, HWND hwnd)
     HBRUSH oldBrush = (HBRUSH)SelectObject(hdc, myBrush);*/
 
     RECT tmprc = { tmp1 * rc.right + 1, tmp2 * rc.bottom + 1, (tmp1 + 0.125) * rc.right - 1, (tmp2 + 0.25) * rc.bottom - 1};
-
-    FillRect(hdc, &tmprc, CreateSolidBrush(RGB(255, 0, 0)));
-    InvalidateRect(hwnd, &prevrc, TRUE);
+    
+    FillRect(hdc, &tmprc, CreateSolidBrush(RGB(0, 255, 0)));
+    FillRect(hdc, &prevrc, CreateSolidBrush(RGB(255, 255, 255)));
+    //InvalidateRect(hwnd, &prevrc, TRUE);
     prevrc = tmprc;
+
+    if (GetPixel(hdc, x, y) == RGB(0, 255, 0))
+    {
+        green = TRUE;
+    }
+    /*else if (GetPixel(hdc, x, y) == RGB(255, 255, 255))
+    {
+        green = FALSE;
+    }*/
+
     /*if (GetPixel(hdc, x, y) == RGB(255, 0, 0))
     {
         FillRect(hdc, &tmprc, CreateSolidBrush(RGB(255, 255, 255)));
@@ -274,20 +311,19 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             PAINTSTRUCT ps;
             HDC hdc = BeginPaint(hWnd, &ps);
             // TODO: 여기에 hdc를 사용하는 그리기 코드를 추가합니다...
-
             DrawGrid(hWnd, hdc);
+            if(clicked == TRUE)
+                RemainPaint(hWnd);
+            
             EndPaint(hWnd, &ps);
-
-            /*for (int i = 0; i < index; i++)
-            {
-                Marker(ptMouseDown[i].x, ptMouseDown[i].y, hWnd);
-            }*/
-
         }
         break;
     case WM_LBUTTONDOWN:
-        // Create the region from the client area.  
+        // Create the region from the client area.
+        clicked = TRUE;
+
         SelectGrid(hWnd, lParam);
+        //InvalidateRect(hWnd, &prevrc, TRUE);
         break;
     case WM_DESTROY:
         PostQuitMessage(0);
