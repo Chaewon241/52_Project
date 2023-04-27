@@ -1,11 +1,12 @@
 ﻿#include <iostream>
+#include <stack>
 
 #define MAX 10
-#define MAX_STACK_SIZE 50
 
 enum EMAZETYPE { PATH, WALL, VISIT, BACK };
 
 using namespace std;
+
 
 // 아쉬운 점: 전역변수 사용, 깔끔하게 Back 처리
 
@@ -34,60 +35,13 @@ struct MazePosition
 
 };
 
+stack<MazePosition> s;
+
 MazePosition g_Start(1, 1);
 MazePosition g_Goal(8, 8);
 MazePosition g_Current;
 
-struct MazePositionStack
-{
-    MazePosition* pTopNode = nullptr;
-    
-    bool IsEmpty()
-    {
-        return pTopNode == nullptr;
-    }
-
-    bool Push(MazePosition data)
-    {
-        if (pTopNode == nullptr) {
-            pTopNode = new MazePosition(data);
-            return true;
-        }
-        // 기존의 topNode를 잠시 백업
-        MazePosition* tempData = pTopNode;
-
-        pTopNode = new MazePosition(data);
-        pTopNode->pNextNode = tempData;
-        return true;
-    }
-
-    bool Pop() // 메모리 주소값 전달
-    {
-        if (IsEmpty())
-            return false;
-        MazePosition* tempData = pTopNode->pNextNode;
-        delete pTopNode;
-        pTopNode = tempData;
-
-        g_Maze[g_Current.x][g_Current.y] = EMAZETYPE::BACK;
-        MazePosition tmp(pTopNode->x, pTopNode->y);
-        g_Current = tmp;
-        g_Maze[g_Current.x][g_Current.y] = EMAZETYPE::BACK;
-        return true;
-    }
-
-    ~MazePositionStack()
-    {
-        cout << "Destruct" << endl;
-        while (Pop() == true)
-        {
-            Pop();
-        }
-    }
-};
-
 MazePosition position;
-MazePositionStack Stack;
 
 bool CheckMazeType(MazePosition position, int Type)
 {
@@ -115,22 +69,29 @@ bool FindNextPosition(MazePosition input)
             MazePosition position = MazePosition(nx, ny);
 
             g_Current = position;
-            return 1;
+            return true;
         }
     }
-    return 0;
+    return false;
 }
 
 void MoveInMaze(MazePosition NewPosition)
 {
     g_Maze[NewPosition.x][NewPosition.y] = EMAZETYPE::VISIT;
 
-    Stack.Push(NewPosition);
+    s.push(NewPosition);
 }
 
 void BackInMaze()
 {
-    Stack.Pop();
+    if (s.empty())
+    {
+        return;
+    }
+    g_Maze[g_Current.x][g_Current.y] = EMAZETYPE::BACK;
+    s.pop();
+    g_Current = s.top();
+    g_Maze[g_Current.x][g_Current.y] = EMAZETYPE::BACK;
 
 }
 
@@ -158,7 +119,7 @@ int main()
     // 첫 이동
     g_Current = g_Start;
     g_Maze[g_Current.x][g_Current.y] = EMAZETYPE::VISIT;
-    Stack.Push(g_Current);
+    s.push(g_Current);
 
     while ((g_Goal.x != g_Current.x) || (g_Goal.y != g_Current.y))
     {
@@ -175,5 +136,4 @@ int main()
     }
 
     ShowMaze();
-    Stack.~MazePositionStack();
 }
