@@ -14,10 +14,6 @@ WCHAR szWindowClass[MAX_LOADSTRING];            // 기본 창 클래스 이름�
 // 이 코드 모듈에 포함된 함수의 선언을 전달합니다:
 ATOM                MyRegisterClass(HINSTANCE hInstance);
 BOOL                InitInstance(HINSTANCE, int);
-// 윈도우 프로시저가 메시지 처리를 끝냈다고 운영체제에게 알려주는 값
-// 0을 반환한다는 것은 운영체제는 이 메세지에 관여하지 않고 프로그래머가 직접 처리한다는 의미를 갖습니다. -1을 반환하게 되면 운영체제가 진행하는 작업을 취소한다는 의미를 갖습니다.
-// CALLBACK 함수는 사용자가 호출하는 함수가 아닌, 특정 트리거(이벤트)에 의해 운영체제가 자동으로 실행하는 함수
-// 핸들이란 운영체제 내부에 있는 어떤 리소스의 주소를 정수(32bit 혹은 64bit)로 치환한 값, 즉 HANDLE이란 자료형은 오브젝트의 주소를 나타내는 자료형
 LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
 
