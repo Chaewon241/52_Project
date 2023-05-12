@@ -2,6 +2,7 @@
 #include "GameManager.h"
 #include "InputSystem.h"
 #include "TimeSystem.h"
+#include "RenderSystem.h"
 
 #include <string>
 
@@ -15,7 +16,7 @@ namespace game
 	{
 		input::InitInput();
 		time::InitTime();
-		//render::InitRender();
+		render::InitRender();
 	}
 
 	void GameManager::Run()
@@ -30,7 +31,7 @@ namespace game
 
 				if (msg.message == WM_KEYDOWN)
 				{
-					
+					input::IsKeyDown
 				}
 				else if (msg.message == WM_KEYUP)
 				{
