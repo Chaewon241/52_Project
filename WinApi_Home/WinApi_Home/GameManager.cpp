@@ -15,7 +15,7 @@ namespace game
 	{
 		input::InitInput();
 		time::InitTime();
-		render::InitRender();
+		//render::InitRender();
 	}
 
 	void GameManager::Run()
@@ -38,7 +38,7 @@ namespace game
 				}
 
 				else
-				{
+				{ 
 					DispatchMessage(&msg);
 				}
 			}

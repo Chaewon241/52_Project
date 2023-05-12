@@ -38,11 +38,6 @@ namespace input
 		return isKeyUp[key];
 	}
 
-	bool IsKey(unsigned int key)
-	{
-		return isKey[key];
-	}
-
 	void InitInput()
 	{
 		for (int i = 0; i < 256; i++)

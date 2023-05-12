@@ -31,8 +31,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 void PlaceInCenterOfScreen(HWND window, DWORD style, DWORD exStyle)
 {
-	int screenWidth = GetSystemMetrics(SM_CXSCREEN);
-	int screenHeight = GetSystemMetrics(SM_CYSCREEN);
+	int screenWidth = global::winApp.GetWidth();
+	int screenHeight = global::winApp.GetHeight();
+	/*int screenWidth = GetSystemMetrics(SM_CXSCREEN);
+	int screenHeight = GetSystemMetrics(SM_CYSCREEN);*/
 
 	RECT clientRect;
 	GetClientRect(window, &clientRect);
