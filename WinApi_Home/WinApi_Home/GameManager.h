@@ -9,13 +9,23 @@ namespace game
 
 		~GameManager();
 
-		void Run();
-
-		void Initialize();
-
 		static GameManager* GetInstance();
 
 		static void DestroyInstance();
+
+		void Initialize();
+
+		void Run();
+
+		void Update();
+
+		void FixedUpdate();
+
+		void UpdatePlayer();
+
+		void Render();
+
+		void DrawPlayer();
 
 	private:
 		static GameManager* instance;

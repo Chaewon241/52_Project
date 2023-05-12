@@ -31,10 +31,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 void PlaceInCenterOfScreen(HWND window, DWORD style, DWORD exStyle)
 {
-	int screenWidth = global::winApp.GetWidth();
-	int screenHeight = global::winApp.GetHeight();
-	/*int screenWidth = GetSystemMetrics(SM_CXSCREEN);
-	int screenHeight = GetSystemMetrics(SM_CYSCREEN);*/
+	/*int screenWidth = global::winApp.GetWidth();
+	int screenHeight = global::winApp.GetHeight();*/
+	int screenWidth = GetSystemMetrics(SM_CXSCREEN);
+	int screenHeight = GetSystemMetrics(SM_CYSCREEN);
 
 	RECT clientRect;
 	GetClientRect(window, &clientRect);
@@ -74,7 +74,7 @@ void WinApp::Initialize(HINSTANCE hInstance)
 {
 	m_hInstance = hInstance;
 
-	const TCHAR* appName = TEXT("Test Game Framework");
+	const TCHAR* appName = TEXT("Framework Test");
 
 	WNDCLASS wndClass;
 
