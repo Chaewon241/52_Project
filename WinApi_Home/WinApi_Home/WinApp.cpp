@@ -1,14 +1,30 @@
-#include <cstdlib>
+#include "GameCore.h"
+#include "InputManager.h"
+#include "SceneManager.h"
 #include "WinApp.h"
-#include "GameManager.h"
 
-namespace global
+#include <cstdlib>
+
+namespace catInWonderland
 {
-	WinApp winApp;
+	WinApp* WinApp::instance = nullptr;
 
-	const WinApp& GetWinApp()
+	WinApp* WinApp::GetInstance()
 	{
-		return winApp;
+		if (instance == nullptr)
+		{
+			instance = new WinApp();
+		}
+		return instance;
+	}
+
+	void WinApp::DestroyInstance()
+	{
+		if (instance != nullptr)
+		{
+			delete instance;
+			instance = nullptr;
+		}
 	}
 }
 
@@ -21,18 +37,12 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	UNREFERENCED_PARAMETER(hPrevInstance);
 	UNREFERENCED_PARAMETER(lpCmdLine);
 
-	global::winApp.Initialize(hInstance);
-	global::winApp.Run();
-	global::winApp.Finalize();
-
-	return EXIT_SUCCESS;
+	return catInWonderland::WinApp::GetInstance()->Run(hInstance);
 }
 
 
 void PlaceInCenterOfScreen(HWND window, DWORD style, DWORD exStyle)
 {
-	/*int screenWidth = global::winApp.GetWidth();
-	int screenHeight = global::winApp.GetHeight();*/
 	int screenWidth = GetSystemMetrics(SM_CXSCREEN);
 	int screenHeight = GetSystemMetrics(SM_CYSCREEN);
 
@@ -49,7 +59,7 @@ void PlaceInCenterOfScreen(HWND window, DWORD style, DWORD exStyle)
 	);
 }
 
-LRESULT CALLBACK WinApp::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+LRESULT CALLBACK catInWonderland::WinApp::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	switch (message)
 	{
@@ -62,15 +72,14 @@ LRESULT CALLBACK WinApp::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM 
 	case WM_DESTROY:
 		PostQuitMessage(0);
 		break;
-
 	default:
 		return DefWindowProc(hWnd, message, wParam, lParam);
 	}
 	return 0;
 }
 
-
-void WinApp::Initialize(HINSTANCE hInstance)
+// ÀÌ°Å ¹Ù²Þ
+int catInWonderland::WinApp::Run(HINSTANCE hInstance)
 {
 	m_hInstance = hInstance;
 
@@ -79,7 +88,7 @@ void WinApp::Initialize(HINSTANCE hInstance)
 	WNDCLASS wndClass;
 
 	wndClass.style = CS_HREDRAW | CS_VREDRAW;
-	wndClass.lpfnWndProc = WndProc;
+	wndClass.lpfnWndProc = WinApp::WndProc;
 	wndClass.cbClsExtra = 0;
 	wndClass.cbWndExtra = 0;
 	wndClass.hInstance = hInstance;
@@ -104,16 +113,40 @@ void WinApp::Initialize(HINSTANCE hInstance)
 
 	ShowWindow(m_hWnd, SW_SHOWNORMAL);
 	UpdateWindow(m_hWnd);
+	
+	MSG msg = {};
 
-	game::GameManager::GetInstance()->Initialize();
+	catInWonderland::GameCore::GetInstance()->Init();
+
+	while (msg.message != WM_QUIT)
+	{
+		if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
+		{
+
+			if (msg.message == WM_KEYDOWN)
+			{
+				catInWonderland::InputManager::GetInstance()->KeyDown(msg.wParam);
+			}
+			else if (msg.message == WM_KEYUP)
+			{
+				catInWonderland::InputManager::GetInstance()->KeyUp(msg.wParam);
+			}
+
+			DispatchMessage(&msg);
+		}
+
+		else
+		{
+			catInWonderland::GameCore::GetInstance()->Frame();
+		}
+	}
+
+	// destroy or release
+
+	return static_cast<char>(msg.wParam);
 }
 
-void WinApp::Run()
-{
-	game::GameManager::GetInstance()->Run();
-}
-
-void WinApp::Finalize()
+void catInWonderland::WinApp::Finalize()
 {
 	
 }

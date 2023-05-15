@@ -1,21 +1,21 @@
 #pragma once
 
-namespace game
+namespace catInWonderland
 {
-	class GameManager
+	class GameCore
 	{
 	public:
-		GameManager();
+		GameCore();
 
-		~GameManager();
+		~GameCore();
 
-		static GameManager* GetInstance();
+		static GameCore* GetInstance();
 
 		static void DestroyInstance();
 
-		void Initialize();
+		void Init();
 
-		void Run();
+		void Frame();
 
 		void Update();
 
@@ -28,7 +28,7 @@ namespace game
 		void DrawPlayer();
 
 	private:
-		static GameManager* instance;
+		static GameCore* instance;
 
 		int m_UpdateCount = { 0 };
 		int m_FixedUpdateCount = { 0 };
