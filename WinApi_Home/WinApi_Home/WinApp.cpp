@@ -1,5 +1,6 @@
 #include "GameCore.h"
 #include "InputManager.h"
+#include "RenderManager.h"
 #include "SceneManager.h"
 #include "WinApp.h"
 
@@ -39,7 +40,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	return catInWonderland::WinApp::GetInstance()->Run(hInstance);
 }
-
 
 void PlaceInCenterOfScreen(HWND window, DWORD style, DWORD exStyle)
 {
@@ -141,7 +141,8 @@ int catInWonderland::WinApp::Run(HINSTANCE hInstance)
 		}
 	}
 
-	// destroy or release
+	// release or destroy
+	catInWonderland::RenderManager::GetInstance()->ReleaseRender();
 
 	return static_cast<char>(msg.wParam);
 }

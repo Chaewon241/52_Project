@@ -1,7 +1,6 @@
 #pragma once
 
-#include <vector>
-#include <string>
+#include <Windows.h>
 #include "define.h"
 
 namespace catInWonderland
@@ -15,15 +14,14 @@ namespace catInWonderland
 		~SceneManager();
 
 		static SceneManager* GetInstance();
-
 		static void DestroyInstance();
 
 		void Init();
 
 	private:
-		Scene* m_arrScene[(unsigned int)SCENE_TYPE::END];	// ¸ðµç ¾À ¸ñ·Ï
-		Scene* m_pCurScene;									// ÇöÀç ¾À
-
 		static SceneManager* instance;
+
+		Scene* m_arrScene[(UINT)(SCENE_TYPE::END)];	// ¸ðµç ¾À ¸ñ·Ï
+		Scene* m_pCurScene;							// ÇöÀç ¾À
 	};
 }

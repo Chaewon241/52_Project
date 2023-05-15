@@ -51,5 +51,16 @@ namespace catInWonderland
 
 		// ÇöÀç ¾À ÁöÁ¤
 		m_pCurScene = m_arrScene[(UINT)SCENE_TYPE::TITLESCENE];
+		//m_pCurScene->
 	}
+
+	//void SceneManager::Update()
+	//{
+	//	//m_pCurScene->Update();
+	//}
+
+	//void SceneManager::Render(HDC _dc)
+	//{
+	//	//m_pCurScene->Render();
+	//}
 }

@@ -25,8 +25,6 @@ namespace catInWonderland
 
 		void Render();
 
-		void DrawPlayer();
-
 	private:
 		static GameCore* instance;
 

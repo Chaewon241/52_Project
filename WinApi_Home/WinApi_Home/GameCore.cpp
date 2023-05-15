@@ -70,7 +70,6 @@ namespace catInWonderland
 
 	void GameCore::UpdatePlayer()
 	{
-		// ±³¼ö´Ô ÄÚµå¶û ´Ù¸¥ ºÎºÐ
 		if (catInWonderland::InputManager::GetInstance()->IsKeyDown('A'))
 			player.Move(-player.speed, 0);
 		else if (catInWonderland::InputManager::GetInstance()->IsKeyDown('D'))
@@ -110,13 +109,8 @@ namespace catInWonderland
 	{
 		catInWonderland::RenderManager::GetInstance()->BeginDraw();
 
-		DrawPlayer();
+		catInWonderland::RenderManager::GetInstance()->DrawPlayer(player.x, player.y, player.size);
 
 		catInWonderland::RenderManager::GetInstance()->EndDraw();
 	}
-
-	void GameCore::DrawPlayer()
-	{
-		catInWonderland::RenderManager::GetInstance()->CreatePlayer(player.x, player.y, player.size);
-	}	
 }

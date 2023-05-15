@@ -1,4 +1,5 @@
 #include "RenderManager.h"
+#include "SceneManager.h"
 #include "WinApp.h"
 
 #pragma comment(lib, "msimg32.lib")
@@ -67,7 +68,7 @@ namespace catInWonderland
 	}
 
 	// °©ÀÚ±â COLORREF°¡ ¾È ¸Ô¾î¼­ RGB·Î ÁáÀ½
-	void RenderManager::CreatePlayer(int x, int y, int radius)
+	void RenderManager::DrawPlayer(int x, int y, int radius)
 	{
 		HPEN hPen = CreatePen(PS_SOLID, 1, RGB(0,0,0));
 
@@ -90,12 +91,16 @@ namespace catInWonderland
 	{
 		::BitBlt(frontMemDC, 0, 0, catInWonderland::WinApp::GetInstance()->GetWidth(), 
 			catInWonderland::WinApp::GetInstance()->GetHeight(), backMemDC, 0, 0, SRCCOPY);
+		//catInWonderland::SceneManager::GetInstance()->Render(backMemDC);
 	}
 
 	void RenderManager::ReleaseRender()
 	{
-		// ¾ê·Î release ¸øÇÏ³ª?
-		// ::ReleaseDC(hWnd, frontMemDC);
+		DeleteObject(backBitmap);
+
+		DeleteDC(backMemDC);
+
+		ReleaseDC(hWnd, frontMemDC);
 
 	}
 }

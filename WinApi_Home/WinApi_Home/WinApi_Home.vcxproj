@@ -131,6 +131,7 @@
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="RenderManager.cpp" />
     <ClCompile Include="SceneManager.cpp" />
+    <ClCompile Include="SpriteManager.cpp" />
     <ClCompile Include="TimeManager.cpp" />
     <ClCompile Include="WinApp.cpp" />
   </ItemGroup>
@@ -140,6 +141,7 @@
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="RenderManager.h" />
     <ClInclude Include="SceneManager.h" />
+    <ClInclude Include="SpriteManager.h" />
     <ClInclude Include="TimeManager.h" />
     <ClInclude Include="WinApp.h" />
   </ItemGroup>

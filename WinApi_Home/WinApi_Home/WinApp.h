@@ -6,8 +6,8 @@
 
 constexpr int SCREEN_START_LEFT = 10;
 constexpr int SCREEN_START_TOP = 10;
-constexpr int SCREEN_WIDTH = 1024;
-constexpr int SCREEN_HEIGHT = 768;
+constexpr int SCREEN_WIDTH = 1920;
+constexpr int SCREEN_HEIGHT = 1080;
 
 namespace catInWonderland
 {
@@ -39,11 +39,7 @@ namespace catInWonderland
 		HINSTANCE m_hInstance = { 0 };
 		HWND m_hWnd = { 0 };
 
-		int width = 1024;
-		int height = 768;
+		int width = 1920;
+		int height = 1080;
 	};
 }
-
-
-
-

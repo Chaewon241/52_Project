@@ -2,6 +2,7 @@
 
 namespace catInWonderland
 {
+	// 여기 좀 더 보완하기
 	class RenderManager
 	{
 	public:
@@ -19,7 +20,7 @@ namespace catInWonderland
 
 		void BeginDraw();
 
-		void CreatePlayer(int x, int y, int radius);
+		void DrawPlayer(int x, int y, int radius);
 
 		void EndDraw();
 
