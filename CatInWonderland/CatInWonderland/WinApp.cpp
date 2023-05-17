@@ -51,41 +51,8 @@ namespace catInWonderland
 		GameCore::GetInstance();
 
 		// ¿©±â¿¡ path
-		LPCSTR a = "../CatInWonderland.exe";
-		OutputDebugStringA(a);
-
-		/*if (GetCurrentDirectoryA(MAX_PATH, mPath) > 0)
-		{
-			OutputDebugStringA();
-			int len = 0;
-
-			while (mPath[len] != '\0')
-			{
-				len++;
-			}
-			OutputDebugStringA(("\nnum = " + std::to_string(len) + "\n").c_str());
-
-			int i = len;
-			for (i; i >= 0; i--)
-			{
-				if (mPath[i] == '\\')
-				{
-					break;
-				}
-			}
-
-			char tmpPath[260];
-			for (int j = 0; j < i; j++)
-			{
-				tmpPath[j] = mPath[j];
-				if (j == i - 1)
-				{
-					tmpPath[i] = '\0';
-				}
-			}  
-			OutputDebugStringA(tmpPath);
-
-		}*/
+		WinApp::GetPath();
+		
 
 		while (msg.message != WM_QUIT)
 		{
@@ -158,6 +125,39 @@ namespace catInWonderland
 
 	const char* WinApp::GetPath()
 	{
+		/*char highFolder[50] = "../../CatInWonderland/resources/";
+		LPCSTR Filename = "";
+		strcat(highFolder, Filename);
+		OutputDebugStringA(highFolder);*/
+
+
+		if (GetCurrentDirectoryA(MAX_PATH, mPath) > 0)
+		{
+			int str_len = strlen(mPath);
+			
+			OutputDebugStringA(("\nnum = " + std::to_string(str_len) + "\n").c_str());
+
+			int highFolderIdx = str_len;
+			for (highFolderIdx; highFolderIdx >= 0; highFolderIdx--)
+			{
+				if (mPath[highFolderIdx] == '\\')
+				{
+					break;
+				}
+			}
+
+			char tmpPath[260];
+			for (int i = 0; i < highFolderIdx; i++)
+			{
+				tmpPath[i] = mPath[i];
+				if (i == highFolderIdx - 1)
+				{
+					tmpPath[i] = '\0';
+				}
+			}
+			OutputDebugStringA(tmpPath);
+
+		}
 		return mPath;
 	}
 }

@@ -33,13 +33,13 @@ namespace catInWonderland
 
 	GameCore::GameCore()
 	{
-		EnumLoader::LoadSprtie();
+		//EnumLoader::LoadSprtie();
 
 		InputManager::GetInstance();
 		TimeManager::GetInstance();
 		RenderManager::GetInstance();
 		SceneManager::GetInstance();
-		SpriteManager::GetInstance();
+		//SpriteManager::GetInstance();
 
 	}
 
