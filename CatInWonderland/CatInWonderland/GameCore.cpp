@@ -5,32 +5,13 @@
 #include "RenderManager.h"
 #include "SceneManager.h"
 #include "TimeManager.h"
+#include "SpriteManager.h"
+#include "EnumLoader.h"
 #include "WinApp.h"
 
 namespace catInWonderland
 {
-	struct Object
-	{
-		float x;
-		float y;
-		float size = 10;
-		float speed;
-
-		COLORREF color;
-
-		void Move(float x, float y)
-		{
-			this->x += x;
-			this->y += y;
-		}
-	};
-
-	Object player = { catInWonderland::WinApp::GetInstance()->GetWidth() / 2 , catInWonderland::WinApp::GetInstance()->GetHeight() / 2,
-		20, 20, RGB(0, 0, 0) };
-
 	GameCore* GameCore::instance = nullptr;
-	GameCore::GameCore()	{}
-	GameCore::~GameCore()	{}
 
 	GameCore* GameCore::GetInstance()
 	{
@@ -50,67 +31,33 @@ namespace catInWonderland
 		}
 	}
 
-	void GameCore::Init()
+	GameCore::GameCore()
 	{
-		catInWonderland::InputManager::GetInstance()->Init();
-		catInWonderland::TimeManager::GetInstance()->Init();
-		catInWonderland::RenderManager::GetInstance()->Init();
-		catInWonderland::SceneManager::GetInstance()->Init();
+		EnumLoader::LoadSprtie();
+
+		InputManager::GetInstance();
+		TimeManager::GetInstance();
+		RenderManager::GetInstance();
+		SceneManager::GetInstance();
+		SpriteManager::GetInstance();
+
 	}
 
-	// 이거 추가
+	GameCore::~GameCore()
+	{
+		InputManager::DestroyInstance();
+		TimeManager::DestroyInstance();
+		RenderManager::DestroyInstance();
+		SceneManager::DestroyInstance();
+		SpriteManager::DestroyInstance();
+	}
+
 	void GameCore::Frame()
 	{
-		GameCore::FixedUpdate();
+		InputManager::GetInstance()->Update();
+		TimeManager::GetInstance()->Update();
+		SceneManager::GetInstance()->Update();
 
-		GameCore::Update();
-
-		GameCore::Render();
-	}
-
-	void GameCore::UpdatePlayer()
-	{
-		if (catInWonderland::InputManager::GetInstance()->IsKeyDown('A'))
-			player.Move(-player.speed, 0);
-		else if (catInWonderland::InputManager::GetInstance()->IsKeyDown('D'))
-			player.Move(player.speed, 0);
-		else if(catInWonderland::InputManager::GetInstance()->IsKeyDown('S'))
-			player.Move(0, player.speed);
-		else if (catInWonderland::InputManager::GetInstance()->IsKeyDown('W'))
-			player.Move(0, -player.speed);
-	}
-
-	void GameCore::Update()
-	{
-		m_UpdateCount++;
-
-		catInWonderland::TimeManager::GetInstance()->UpdateTime();
-
-		UpdatePlayer();
-
-		catInWonderland::InputManager::GetInstance()->ResetInput();
-	}
-
-	void GameCore::FixedUpdate()
-	{
-		static ULONGLONG elapsedTime;
-
-		elapsedTime += catInWonderland::TimeManager::GetInstance()->GetDeltaTime();
-
-		while (elapsedTime >= 20)			// 0.02초
-		{
-			m_FixedUpdateCount++;
-
-			elapsedTime -= 20;
-		}
-	}
-
-	void GameCore::Render()
-	{
-		catInWonderland::RenderManager::GetInstance()->BeginDraw();
-
-		catInWonderland::RenderManager::GetInstance()->DrawPlayer(player.x, player.y, player.size);
-
-		catInWonderland::RenderManager::GetInstance()->EndDraw();
+		RenderManager::GetInstance()->Render();
 	}
 }

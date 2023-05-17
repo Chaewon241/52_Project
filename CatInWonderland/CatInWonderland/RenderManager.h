@@ -1,34 +1,41 @@
 #pragma once
 
+#include <Windows.h>
+
 namespace catInWonderland
 {
-	// 여기 좀 더 보완하기
+	class hRectangle;
+	class Sprite;
+
 	class RenderManager
 	{
 	public:
-		RenderManager();
-
-		~RenderManager();
-
 		static RenderManager* GetInstance();
-
 		static void DestroyInstance();
 
-		void Init();
+		void Render();
 
-		void ClearScreen();
+		void Draw(const hRectangle& worldRectangle, const hRectangle& spriteRectangle, const Sprite& sprite);
 
-		void BeginDraw();
-
-		void DrawPlayer(int x, int y, int radius);
-
-		void EndDraw();
-
-		void ReleaseRender();
+		inline HDC GetFrontDC() const;
 
 	private:
-		static RenderManager* instance;
+		RenderManager();
+		~RenderManager();
+
+	private:
+		static RenderManager* mInstance;
+
+		HDC mFrontMemDC;
+		HDC mBackMemDC;
+		HDC mRotateMemDC;
+
+		HBITMAP mBackBitmap;
+		HBITMAP mRotateBitmap;
 	};
 
-	
+	HDC RenderManager::GetFrontDC() const
+	{
+		return mFrontMemDC;
+	}
 }

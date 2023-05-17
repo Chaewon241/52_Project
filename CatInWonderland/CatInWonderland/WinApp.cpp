@@ -1,153 +1,163 @@
-#include "GameCore.h"
-#include "InputManager.h"
-#include "RenderManager.h"
-#include "SceneManager.h"
-#include "WinApp.h"
+#define WIN32_LEAN_AND_MEAN
 
+#include <cassert>
 #include <cstdlib>
+#include <string>
+#include <SDKDDKVer.h>
+
+#include "WinApp.h"
+#include "GameCore.h"
 
 namespace catInWonderland
 {
-	WinApp* WinApp::instance = nullptr;
+	HWND WinApp::mHWnd;
+	UINT WinApp::mWidth;
+	UINT WinApp::mHeight;
+	char WinApp::mPath[260];
 
-	WinApp* WinApp::GetInstance()
+	int WinApp::Run(HINSTANCE hInstance, const TCHAR* appName, UINT width, UINT height)
 	{
-		if (instance == nullptr)
+		mWidth = width;
+		mHeight = height;
+
+		WNDCLASS wndClass;
+		ZeroMemory(&wndClass, sizeof(WNDCLASS));
+
+		wndClass.style = CS_HREDRAW | CS_VREDRAW;
+		wndClass.hInstance = hInstance;
+		wndClass.hbrBackground = static_cast<HBRUSH>(GetStockObject(WHITE_BRUSH));
+		wndClass.lpszClassName = appName;
+		wndClass.lpfnWndProc = WinApp::WndProc;
+		wndClass.hCursor = LoadCursor(NULL, IDC_ARROW);
+		wndClass.hIcon = LoadIcon(hInstance, IDI_APPLICATION);
+
+		RegisterClass(&wndClass);
+
+		RECT rect{ 0, 0, mWidth, mHeight };
+		AdjustWindowRect(&rect, WS_OVERLAPPEDWINDOW, FALSE);
+		
+		mHWnd = CreateWindow(
+			appName, appName, 
+			WS_OVERLAPPED | WS_SYSMENU,
+			rect.top, rect.left,
+			rect.right - rect.left, rect.bottom - rect.top,
+			NULL, NULL,
+			hInstance, NULL);
+
+		ShowWindow(mHWnd, SW_SHOWNORMAL);
+		UpdateWindow(mHWnd);
+
+		MSG msg = { 0, };
+		GameCore::GetInstance();
+
+		// 여기에 path
+		LPCSTR a = "../CatInWonderland.exe";
+		OutputDebugStringA(a);
+
+		/*if (GetCurrentDirectoryA(MAX_PATH, mPath) > 0)
 		{
-			instance = new WinApp();
-		}
-		return instance;
-	}
+			OutputDebugStringA();
+			int len = 0;
 
-	void WinApp::DestroyInstance()
-	{
-		if (instance != nullptr)
+			while (mPath[len] != '\0')
+			{
+				len++;
+			}
+			OutputDebugStringA(("\nnum = " + std::to_string(len) + "\n").c_str());
+
+			int i = len;
+			for (i; i >= 0; i--)
+			{
+				if (mPath[i] == '\\')
+				{
+					break;
+				}
+			}
+
+			char tmpPath[260];
+			for (int j = 0; j < i; j++)
+			{
+				tmpPath[j] = mPath[j];
+				if (j == i - 1)
+				{
+					tmpPath[i] = '\0';
+				}
+			}  
+			OutputDebugStringA(tmpPath);
+
+		}*/
+
+		while (msg.message != WM_QUIT)
 		{
-			delete instance;
-			instance = nullptr;
+			if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
+			{
+				DispatchMessage(&msg);
+			}
+			else
+			{
+				GameCore::GetInstance()->Frame();
+			}
 		}
+
+		GameCore::DestroyInstance();
+
+		return static_cast<int>(msg.wParam);
 	}
-}
 
-int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
-	_In_opt_ HINSTANCE hPrevInstance,
-	_In_ LPWSTR    lpCmdLine,
-	_In_ int       nCmdShow)
-{
-
-	UNREFERENCED_PARAMETER(hPrevInstance);
-	UNREFERENCED_PARAMETER(lpCmdLine);
-
-	return catInWonderland::WinApp::GetInstance()->Run(hInstance);
-}
-
-void PlaceInCenterOfScreen(HWND window, DWORD style, DWORD exStyle)
-{
-	int screenWidth = GetSystemMetrics(SM_CXSCREEN);
-	int screenHeight = GetSystemMetrics(SM_CYSCREEN);
-
-	RECT clientRect;
-	GetClientRect(window, &clientRect);
-
-	int clientWidth = clientRect.right - clientRect.left;
-	int clientHeight = clientRect.bottom - clientRect.top;
-
-	SetWindowPos(window, NULL,
-		screenWidth / 2 - clientWidth / 2,
-		screenHeight / 2 - clientHeight / 2,
-		clientWidth, clientHeight, 0
-	);
-}
-
-LRESULT CALLBACK catInWonderland::WinApp::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
-{
-	switch (message)
+	LRESULT CALLBACK WinApp::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	{
-	case WM_CREATE:
-	{
-		PlaceInCenterOfScreen(hWnd, WS_OVERLAPPEDWINDOW, WS_EX_APPWINDOW | WS_EX_WINDOWEDGE);
-	}
-	break;
-
-	case WM_DESTROY:
-		PostQuitMessage(0);
+		switch (message)
+		{
+		case WM_CREATE:
+		{
+			placeInCenterOfScreen(hWnd, WS_OVERLAPPEDWINDOW, WS_EX_APPWINDOW | WS_EX_WINDOWEDGE);
+		}
 		break;
-	default:
-		return DefWindowProc(hWnd, message, wParam, lParam);
+
+		case WM_DESTROY:
+			PostQuitMessage(0);
+			break;
+		default:
+			return DefWindowProc(hWnd, message, wParam, lParam);
+		}
+		return 0;
 	}
-	return 0;
-}
 
-// 이거 바꿈
-int catInWonderland::WinApp::Run(HINSTANCE hInstance)
-{
-	m_hInstance = hInstance;
-
-	const TCHAR* appName = TEXT("Framework Test");
-
-	WNDCLASS wndClass;
-
-	wndClass.style = CS_HREDRAW | CS_VREDRAW;
-	wndClass.lpfnWndProc = WinApp::WndProc;
-	wndClass.cbClsExtra = 0;
-	wndClass.cbWndExtra = 0;
-	wndClass.hInstance = hInstance;
-	wndClass.hIcon = LoadIcon(hInstance, IDI_APPLICATION);
-	wndClass.hCursor = LoadCursor(NULL, IDC_ARROW);
-	wndClass.hbrBackground = static_cast<HBRUSH>(GetStockObject(WHITE_BRUSH));
-	wndClass.lpszMenuName = NULL;
-	wndClass.lpszClassName = appName;
-
-	RegisterClass(&wndClass);
-
-	RECT rect{ SCREEN_START_LEFT, SCREEN_START_TOP,
-	SCREEN_START_LEFT + SCREEN_WIDTH, SCREEN_START_TOP + SCREEN_HEIGHT };
-
-	::AdjustWindowRect(&rect, WS_OVERLAPPEDWINDOW, FALSE);
-
-	int width = rect.right - rect.left;
-	int height = rect.bottom - rect.top;
-
-	m_hWnd = CreateWindow(appName, appName, WS_OVERLAPPED | WS_SYSMENU,
-		SCREEN_START_LEFT, SCREEN_START_TOP, width, height, NULL, NULL, hInstance, NULL);
-
-	ShowWindow(m_hWnd, SW_SHOWNORMAL);
-	UpdateWindow(m_hWnd);
-	
-	MSG msg = {};
-
-	catInWonderland::GameCore::GetInstance()->Init();
-
-	while (msg.message != WM_QUIT)
+	void WinApp::placeInCenterOfScreen(HWND window, DWORD style, DWORD exStyle)
 	{
-		if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
-		{
+		int screenWidth = GetSystemMetrics(SM_CXSCREEN);
+		int screenHeight = GetSystemMetrics(SM_CYSCREEN);
 
-			if (msg.message == WM_KEYDOWN)
-			{
-				catInWonderland::InputManager::GetInstance()->KeyDown(msg.wParam);
-			}
-			else if (msg.message == WM_KEYUP)
-			{
-				catInWonderland::InputManager::GetInstance()->KeyUp(msg.wParam);
-			}
+		RECT clientRect;
+		GetClientRect(window, &clientRect);
 
-			DispatchMessage(&msg);
-		}
+		int clientWidth = clientRect.right - clientRect.left;
+		int clientHeight = clientRect.bottom - clientRect.top;
 
-		else
-		{
-			catInWonderland::GameCore::GetInstance()->Frame();
-		}
+		SetWindowPos(window, NULL,
+			screenWidth / 2 - clientWidth / 2,
+			screenHeight / 2 - clientHeight / 2,
+			clientWidth, clientHeight, 0
+		);
 	}
 
-	// release or destroy
-	catInWonderland::RenderManager::GetInstance()->ReleaseRender();
+	HWND WinApp::GetWindow()
+	{
+		return mHWnd;
+	}
 
-	return static_cast<char>(msg.wParam);
-}
+	UINT WinApp::GetWidth()
+	{
+		return mWidth;
+	}
 
-void catInWonderland::WinApp::Finalize()
-{
-	
+	UINT WinApp::GetHeight()
+	{
+		return mHeight;
+	}
+
+	const char* WinApp::GetPath()
+	{
+		return mPath;
+	}
 }

@@ -5,25 +5,14 @@ namespace catInWonderland
 	class GameCore
 	{
 	public:
-		GameCore();
-
-		~GameCore();
-
 		static GameCore* GetInstance();
-
 		static void DestroyInstance();
-
-		void Init();
 
 		void Frame();
 
-		void Update();
-
-		void FixedUpdate();
-
-		void UpdatePlayer();
-
-		void Render();
+	private:
+		GameCore();
+		~GameCore();
 
 	private:
 		static GameCore* instance;

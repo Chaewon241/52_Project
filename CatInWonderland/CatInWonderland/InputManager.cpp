@@ -1,72 +1,99 @@
+#define _CRT_SECURE_NO_WARNINGS
+
+#include <cassert>
+#include <stdio.h>
+
 #include "InputManager.h"
 #include "WinApp.h"
 
 namespace catInWonderland
 {
-	bool isKeyDown[256];
-	bool isKeyUp[256];
-	bool isKey[256];
+	InputManager* InputManager::mInstance = nullptr;
 
-	InputManager* InputManager::instance = nullptr;
-	InputManager::InputManager() {}
-	InputManager::~InputManager() {}
+	InputManager::InputManager()
+		: mMousePos{ 0, }
+		, mKeyState{ eKeyState::NONE, }
+	{
+	}
 
 	InputManager* InputManager::GetInstance()
 	{
-		if (instance == nullptr)
+		if (mInstance == nullptr)
 		{
-			instance = new InputManager();
+			mInstance = new InputManager();
 		}
-		return instance;
+
+		return mInstance;
 	}
 
 	void InputManager::DestroyInstance()
 	{
-		if (instance != nullptr)
-		{
-			delete instance;
-			instance = nullptr;
-		}
+		delete mInstance;
+		mInstance = nullptr;
 	}
-
-	void InputManager::ResetInput()
-	{
-		for (int i = 0; i < 256; i++)
-		{
-			isKeyDown[i] = false;
-			isKeyUp[i] = false;
-		}
-	}
-
-	void InputManager::KeyDown(unsigned int key)
-	{
-		isKeyDown[key] = true;
-		isKey[key] = true;
-	}
-
-	void InputManager::KeyUp(unsigned int key)
-	{
-		isKeyUp[key] = true;
-		isKey[key] = false;
-	}
-
-	bool InputManager::IsKeyDown(unsigned int key)
-	{
-		return isKeyDown[key];
-	}
-
-	bool InputManager::IsKeyUp(unsigned int key)
-	{
-		return isKeyUp[key];
-	}
-
+	
 	void InputManager::Init()
 	{
-		for (int i = 0; i < 256; i++)
+		mMousePos = { 0, 0 };
+		memset(mKeyState, static_cast<int>(eKeyState::NONE), KEY_SIZE * sizeof(eKeyState));
+	}
+
+	void InputManager::Update()
+	{
+		POINT curMousePos;
+		GetCursorPos(&curMousePos); // temp
+		if (ScreenToClient(WinApp::GetWindow(), &curMousePos) != false)
 		{
-			isKeyDown[i] = false;
-			isKeyUp[i] = false;
-			isKey[i] = false;
+			mMousePos = curMousePos;
+		}
+
+		if (mKeyState[VK_LBUTTON] != eKeyState::NONE)
+		{
+			char buffer[64];
+			sprintf(buffer, "x : %d / y : %d\n", mMousePos.x, mMousePos.y);
+			// OutputDebugStringA(buffer);
+		}
+
+		for (int i = 0; i < KEY_SIZE; ++i)
+		{
+			if (GetAsyncKeyState(i) & 0x8000)
+			{
+				switch (mKeyState[i])
+				{
+				case eKeyState::NONE:
+					/* intentional fall-through */
+				case eKeyState::POP:
+					mKeyState[i] = eKeyState::PUSH;
+					break;
+				case eKeyState::PUSH:
+					/* intentional fall-through */
+				case eKeyState::HOLD:
+					mKeyState[i] = eKeyState::HOLD;
+					break;
+				default:
+					assert(false);
+					break;
+				}
+			}
+			else
+			{
+				switch (mKeyState[i])
+				{
+				case eKeyState::NONE:
+					/* intentional fall-through */
+				case eKeyState::POP:
+					mKeyState[i] = eKeyState::NONE;
+					break;
+				case eKeyState::PUSH:
+					/* intentional fall-through */
+				case eKeyState::HOLD:
+					mKeyState[i] = eKeyState::POP;
+					break;
+				default:
+					assert(false);
+					break;
+				}
+			}
 		}
 	}
 }

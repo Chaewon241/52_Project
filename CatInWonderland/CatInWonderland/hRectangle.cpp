@@ -1,12 +1,10 @@
 #include <cassert>
 #include <cmath>
-// 메모리 헤더
 #include "hRectangle.h"
 
 namespace catInWonderland
 {
 	hRectangle::hRectangle(Vector2 topLeft, Vector2 bottomRight)
-		: hRectangle(topLeft.GetX(), topLeft.GetY(), bottomRight.GetX(), bottomRight.GetY())
 	{
 		Vector2& memTopLeft = getVertex(eRectangleIndex::TopLeft);
 		Vector2& memBottomRight = getVertex(eRectangleIndex::BottomRight);

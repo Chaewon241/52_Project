@@ -13,54 +13,207 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="헤더 파일\Manager">
+      <UniqueIdentifier>{310c95df-70e0-46a0-ba9d-19dd8efb7bca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\Component">
+      <UniqueIdentifier>{6bf25816-d8a7-4326-b150-1e95bed2ead2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Manager">
+      <UniqueIdentifier>{1ebb8d8b-3547-49a1-8bf9-9e2af31932e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Component">
+      <UniqueIdentifier>{17bfa127-4ae1-4bb1-9587-22b206ebc3f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\EnumClass">
+      <UniqueIdentifier>{2586f5b4-6290-43ac-a0e2-91bc7c6683a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\Component\Object">
+      <UniqueIdentifier>{4731ddc0-74fe-41a5-8582-17c9a2c40c77}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\Math">
+      <UniqueIdentifier>{f5ba3f03-db4b-45f4-9e5b-cb674992d88e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\FSM">
+      <UniqueIdentifier>{5d6f80f0-5b40-44f2-84bb-32c5c31c7d06}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\Component\Scene">
+      <UniqueIdentifier>{2b101fc7-c502-45c8-9a4b-c73248e8a5f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\FSM">
+      <UniqueIdentifier>{7c483893-e4b3-49b7-b1a9-d4eb96e7cee2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\FSM\Player">
+      <UniqueIdentifier>{8fb6fe17-78e7-411c-97cc-ebfb3adb8f80}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Math">
+      <UniqueIdentifier>{372978ac-6e52-4c5d-813e-0fccb23f6d23}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Component\Scene">
+      <UniqueIdentifier>{6bf5dbe8-7bb6-4e49-9415-05db48ed3a62}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Component\Object">
+      <UniqueIdentifier>{4297cf70-e25a-450c-8a77-c12b5afee2a2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="define.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="GameCore.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="InputManager.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="RenderManager.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="SceneManager.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="SpriteManager.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="TimeManager.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="WinApp.h">
       <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="InputManager.h">
+      <Filter>헤더 파일\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderManager.h">
+      <Filter>헤더 파일\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneManager.h">
+      <Filter>헤더 파일\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="SpriteManager.h">
+      <Filter>헤더 파일\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="TimeManager.h">
+      <Filter>헤더 파일\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="eSceneType.h">
+      <Filter>헤더 파일\EnumClass</Filter>
+    </ClInclude>
+    <ClInclude Include="eSpriteType.h">
+      <Filter>헤더 파일\EnumClass</Filter>
+    </ClInclude>
+    <ClInclude Include="eAnimaitonType.h">
+      <Filter>헤더 파일\EnumClass</Filter>
+    </ClInclude>
+    <ClInclude Include="Sprite.h">
+      <Filter>헤더 파일\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="BoardManager.h">
+      <Filter>헤더 파일\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Object.h">
+      <Filter>헤더 파일\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Butterfly.h">
+      <Filter>헤더 파일\Component\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="hRectangle.h">
+      <Filter>헤더 파일\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector2.h">
+      <Filter>헤더 파일\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Magent.h">
+      <Filter>헤더 파일\Component\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>헤더 파일\Component\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerIdle.h">
+      <Filter>헤더 파일\FSM</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerMove.h">
+      <Filter>헤더 파일\FSM</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerState.h">
+      <Filter>헤더 파일\FSM</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerAction.h">
+      <Filter>헤더 파일\FSM</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>헤더 파일\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneStart.h">
+      <Filter>헤더 파일\Component\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage01.h">
+      <Filter>헤더 파일\Component\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="ePlayerState.h">
+      <Filter>헤더 파일\EnumClass</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundManager.h">
+      <Filter>헤더 파일\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="GameScene.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="BoardObject.h">
+      <Filter>헤더 파일\Component\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Tile.h">
+      <Filter>헤더 파일\Component\Object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameCore.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="InputManager.cpp">
+    <ClCompile Include="WinApp.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="RenderManager.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="SceneManager.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="SpriteManager.cpp">
+    <ClCompile Include="WinMain.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="TimeManager.cpp">
+      <Filter>소스 파일\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteManager.cpp">
+      <Filter>소스 파일\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneManager.cpp">
+      <Filter>소스 파일\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderManager.cpp">
+      <Filter>소스 파일\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="InputManager.cpp">
+      <Filter>소스 파일\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Sprite.cpp">
+      <Filter>소스 파일\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerMove.cpp">
+      <Filter>소스 파일\FSM\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="hRectangle.cpp">
+      <Filter>소스 파일\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Vector2.cpp">
+      <Filter>소스 파일\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Object.cpp">
+      <Filter>소스 파일\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>소스 파일\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneStart.cpp">
+      <Filter>소스 파일\Component\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage01.cpp">
+      <Filter>소스 파일\Component\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>소스 파일\Component\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="BoardManager.cpp">
+      <Filter>소스 파일\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundManager.cpp">
+      <Filter>소스 파일\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="GameScene.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="WinApp.cpp">
-      <Filter>소스 파일</Filter>
+    <ClCompile Include="Tile.cpp">
+      <Filter>소스 파일\Component\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="BoardObject.cpp">
+      <Filter>소스 파일\Component\Object</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

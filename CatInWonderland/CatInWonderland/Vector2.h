@@ -12,16 +12,17 @@ namespace catInWonderland
 
 		Vector2(float x, float y);
 
-		inline void Move(float x, float y);
-
 		bool operator==(const Vector2& other) const;
 		bool operator!=(const Vector2& other) const;
+
+		inline void Move(float x, float y);
+		inline void SetX(float x);
+		inline void SetY(float y);
 
 		inline const float& GetX() const;
 		inline const float& GetY() const;
 
-		inline void SetX(float x);
-		inline void SetY(float y);
+		static float GetDistance(const Vector2& vector, const Vector2& otherVector);
 
 	private:
 		float mX;

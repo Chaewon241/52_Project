@@ -1,106 +1,92 @@
 #include "RenderManager.h"
-#include "SceneManager.h"
+#include "SpriteManager.h"
+#include "Sprite.h"
 #include "WinApp.h"
+#include "Vector2.h"
 
 #pragma comment(lib, "msimg32.lib")
 
 namespace catInWonderland
 {
-	HWND hWnd;
-
-	HDC frontMemDC;
-	HDC backMemDC;
-
-	HBITMAP backBitmap = nullptr;
-
-	RenderManager* RenderManager::instance = nullptr;
-	RenderManager::RenderManager() 	{}
-	RenderManager::~RenderManager() {}
+	RenderManager* RenderManager::mInstance = nullptr;
 
 	RenderManager* RenderManager::GetInstance()
 	{
-		if (instance == nullptr)
+		if (mInstance == nullptr)
 		{
-			instance = new RenderManager();
+			mInstance = new RenderManager();
 		}
-		return instance;
+
+		return mInstance;
 	}
 
 	void RenderManager::DestroyInstance()
 	{
-		if (instance != nullptr)
-		{
-			delete instance;
-			instance = nullptr;
-		}
+		delete mInstance;
+		mInstance = nullptr;
 	}
 
-	void RenderManager::Init()
+	RenderManager::RenderManager()
 	{
-		hWnd = catInWonderland::WinApp::GetInstance()->GetWindow();
+		mFrontMemDC = GetDC(WinApp::GetWindow());	// 윈도우에 그림을 그리는 DC 얻기
+		mBackMemDC = CreateCompatibleDC(mFrontMemDC);	// frontMemDC와 호환되는 DC를 생성
+		mRotateMemDC = CreateCompatibleDC(mRotateMemDC);	// frontMemDC와 호환되는 DC를 생성
 
-		frontMemDC = GetDC(hWnd);					// 윈도우에 그림을 그리는 DC 얻기
-		backMemDC = CreateCompatibleDC(frontMemDC);	// frontMemDC와 호환되는 DC를 생성
+		mBackBitmap = CreateCompatibleBitmap(mFrontMemDC, WinApp::GetWidth(), WinApp::GetHeight());
+		mRotateBitmap = CreateCompatibleBitmap(mFrontMemDC, WinApp::GetWidth(), WinApp::GetHeight());
 
-		int width = WinApp::GetInstance()->GetWidth();
-		int height = WinApp::GetInstance()->GetHeight();
-
-		backBitmap = CreateCompatibleBitmap(frontMemDC, catInWonderland::WinApp::GetInstance()->GetWidth(),
-			catInWonderland::WinApp::GetInstance()->GetHeight());
+		SelectObject(mBackMemDC, mBackBitmap);
+		SelectObject(mRotateMemDC, mRotateBitmap);
 	}
 
-	void RenderManager::ClearScreen()
+	RenderManager::~RenderManager()
 	{
-		// 지정된 장치 컨텍스트에 현재 선택된 브러시를 사용하여 지정된 사각형을 그립니다.
-		// 브러시 색상과 표면 색상은 지정된 래스터 작업을 사용하여 결합됩니다.
-		::PatBlt(backMemDC, 0, 0, catInWonderland::WinApp::GetInstance()->GetWidth(),
-			catInWonderland::WinApp::GetInstance()->GetHeight(), WHITENESS);
-
-		// 이거로 스크린 클리어 못하나?
-		// DeleteDC(backMemDC);
+		DeleteObject(mBackBitmap);
+		DeleteObject(mRotateBitmap);
+		DeleteDC(mBackMemDC);
+		DeleteDC(mRotateMemDC);
+		ReleaseDC(WinApp::GetWindow(), mFrontMemDC);
 	}
 
-	void RenderManager::BeginDraw()
+	void RenderManager::Render()
 	{
-		RenderManager::GetInstance()->ClearScreen();
-
-		::SelectObject(backMemDC, backBitmap);
+		BitBlt(mFrontMemDC, 0, 0, WinApp::GetWidth(), WinApp::GetHeight(), mBackMemDC, 0, 0, SRCCOPY);
+		PatBlt(mBackMemDC, 0, 0, WinApp::GetWidth(), WinApp::GetHeight(), WHITENESS);
 	}
 
-	// 갑자기 COLORREF가 안 먹어서 RGB로 줬음
-	void RenderManager::DrawPlayer(int x, int y, int radius)
+	void RenderManager::Draw(const hRectangle& worldRectangle, const hRectangle& spriteRectangle, const Sprite& sprite)
 	{
-		HPEN hPen = CreatePen(PS_SOLID, 1, RGB(0,0,0));
+		const Vector2& topLeft = worldRectangle.GetTopLeft();
+		const Vector2& topRight = worldRectangle.GetTopRight();
+		const Vector2& bottomLeft = worldRectangle.GetBottomLeft();
 
-		HPEN hOldPen = (HPEN)SelectObject(backMemDC, hPen);
+		POINT points[3] = { 0, };
 
-		HBRUSH hBrush = CreateSolidBrush(RGB(0, 0, 0));
+		points[0] = { static_cast<long>(topLeft.GetX()), static_cast<long>(topLeft.GetY()) };
+		points[1] = { static_cast<long>(topRight.GetX()), static_cast<long>(topRight.GetY()) };
+		points[2] = { static_cast<long>(bottomLeft.GetX()), static_cast<long>(bottomLeft.GetY()) };
 
-		HBRUSH hOldBrush = (HBRUSH)SelectObject(backMemDC, hBrush);
+		const Vector2& spritePosition = spriteRectangle.GetTopLeft();
+		const Vector2& spriteSize = spriteRectangle.GetSize();
 
-		SelectObject(backMemDC, hOldPen);
-		SelectObject(backMemDC, hOldBrush);
+		PlgBlt(mRotateMemDC, points, sprite.Hdc, spritePosition.GetX(), spritePosition.GetY(), spriteSize.GetX(), spriteSize.GetY(), 0, 0, 0);
 
-		Ellipse(backMemDC, x - radius, y - radius, x + radius, y + radius);
+		const hRectangle boundingRectangle = hRectangle::GetBoundingRectangle(worldRectangle);
+		const Vector2& boundingTopLeft = boundingRectangle.GetTopLeft();
+		const Vector2& boundingBottomRight = boundingRectangle.GetBottomRight();
 
-		DeleteObject(hPen);
-		DeleteObject(hBrush);
-	}
+		TransparentBlt(mBackMemDC,
+			static_cast<int>(boundingTopLeft.GetX()),
+			static_cast<int>(boundingTopLeft.GetY()),
+			static_cast<int>(boundingBottomRight.GetX() - boundingTopLeft.GetX()),
+			static_cast<int>(boundingBottomRight.GetX() - boundingTopLeft.GetX()),
+			mRotateMemDC,
+			static_cast<int>(boundingTopLeft.GetX()),
+			static_cast<int>(boundingTopLeft.GetY()),
+			static_cast<int>(boundingBottomRight.GetY() - boundingTopLeft.GetY()),
+			static_cast<int>(boundingBottomRight.GetY() - boundingTopLeft.GetY()),
+			RGB(255, 0, 255));
 
-	void RenderManager::EndDraw()
-	{
-		::BitBlt(frontMemDC, 0, 0, catInWonderland::WinApp::GetInstance()->GetWidth(), 
-			catInWonderland::WinApp::GetInstance()->GetHeight(), backMemDC, 0, 0, SRCCOPY);
-		//catInWonderland::SceneManager::GetInstance()->Render(backMemDC);
-	}
-
-	void RenderManager::ReleaseRender()
-	{
-		DeleteObject(backBitmap);
-
-		DeleteDC(backMemDC);
-
-		ReleaseDC(hWnd, frontMemDC);
-
+		PatBlt(mRotateMemDC, 0, 0, WinApp::GetWidth(), WinApp::GetHeight(), WHITENESS);
 	}
 }

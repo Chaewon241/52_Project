@@ -1,45 +1,31 @@
 #pragma once
-#include <SDKDDKVer.h>
 
-#define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
-
-constexpr int SCREEN_START_LEFT = 10;
-constexpr int SCREEN_START_TOP = 10;
-constexpr int SCREEN_WIDTH = 1920;
-constexpr int SCREEN_HEIGHT = 1080;
 
 namespace catInWonderland
 {
 	class WinApp
 	{
 	public:
-		WinApp() = default;
-		~WinApp() = default;
+		WinApp() = delete;
+		~WinApp() = delete;
 
-		int Run(HINSTANCE hInstance);
+		static int Run(HINSTANCE hInstance, const TCHAR* appName, UINT width, UINT height);
 
-		void Finalize();
-
-		static WinApp* GetInstance();
-
-		static void DestroyInstance();
-
-		HINSTANCE GetHInstance() const { return m_hInstance; }
-
-		HWND GetWindow() const { return m_hWnd; }
-
-		const int GetWidth() const { return width; }
-		const int GetHeight() const { return height; }
+		static HWND GetWindow();
+		static UINT GetWidth();
+		static UINT GetHeight();
+		static const char* GetPath();
 
 		static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
-	private:
-		static WinApp* instance;
-		HINSTANCE m_hInstance = { 0 };
-		HWND m_hWnd = { 0 };
+	private: 
+		static void placeInCenterOfScreen(HWND window, DWORD style, DWORD exStyle);
 
-		int width = 1920;
-		int height = 1080;
+	private:
+		static HWND mHWnd;
+		static UINT mWidth;
+		static UINT mHeight;
+		static char mPath[260];
 	};
 }

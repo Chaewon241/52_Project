@@ -1,31 +1,49 @@
 #pragma once
+#pragma once
+
+#include <Windows.h>
 
 namespace catInWonderland
 {
+	enum class eKeyState
+	{
+		NONE,
+		PUSH,
+		HOLD,
+		POP
+	};
+
 	class InputManager
 	{
 	public:
-		InputManager();
-
-		~InputManager();
-
 		static InputManager* GetInstance();
-
 		static void DestroyInstance();
 
 		void Init();
+		void Update();
 
-		void ResetInput();
-
-		void KeyDown(unsigned int key);
-
-		void KeyUp(unsigned int key);
-
-		bool IsKeyDown(unsigned int key);
-
-		bool IsKeyUp(unsigned int key);
+		inline eKeyState GetKeyState(WORD keyCode);
+		inline const POINT& GetMousePos() const;
 
 	private:
-		static InputManager* instance;
+		InputManager();
+		~InputManager() = default;
+
+	private:
+		enum { KEY_SIZE = 255 };
+		static InputManager* mInstance;
+
+		POINT mMousePos;
+		eKeyState mKeyState[KEY_SIZE];
 	};
+
+	eKeyState InputManager::GetKeyState(WORD keyCode)
+	{
+		return mKeyState[keyCode];
+	}
+
+	const POINT& InputManager::GetMousePos() const
+	{
+		return mMousePos;
+	}
 }

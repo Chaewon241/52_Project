@@ -26,9 +26,9 @@ namespace catInWonderland
 		hRectangle(Vector2 topLeft, Vector2 bottomRight);
 		hRectangle(float x1, float y1, float x2, float y2);
 
-		inline void Move(float x, float y);
 		void Rotate(int originX, int originY, float radian);
 
+		inline void Move(float x, float y);
 		inline void SetTopLeft(const Vector2& topLeft);
 		inline void SetTopRight(const Vector2& bottomRight);
 		inline void SetBottomLeft(const Vector2& bottomRight);
@@ -42,10 +42,10 @@ namespace catInWonderland
 		inline const Vector2& GetBottomRight() const;
 		inline Vector2 GetCenter() const;
 		inline Vector2 GetSize() const;
+
 		// 똑바로 된 사각형만 사용할 수 있다.
 		inline float GetWidth() const;
 		inline float GetHeight() const;
-
 		static bool IsCollision(const hRectangle& rect, const hRectangle& otherRect);
 		static bool IsContained(const hRectangle& rect, const hRectangle& otherRect);
 		static hRectangle GetIntersection(const hRectangle& rect, const hRectangle& otherRect);
@@ -120,19 +120,19 @@ namespace catInWonderland
 		return Vector2((topLeft.GetX() + bottomRight.GetX()) * 0.5f, (topLeft.GetY() + bottomRight.GetY()) * 0.5f);
 	}
 
-	Vector2 hRectangle::GetSize() const 
+	Vector2 hRectangle::GetSize() const
 	{
 		return Vector2(GetWidth(), GetHeight());
 	}
 	// 이대로 둬도 되는지
 	float hRectangle::GetWidth() const
 	{
-		return GetVertex(eRectangleIndex::TopLeft).GetX() - GetVertex(eRectangleIndex::TopRight).GetX();
+		return GetVertex(eRectangleIndex::TopRight).GetX() - GetVertex(eRectangleIndex::TopLeft).GetX();
 	}
 
 	float hRectangle::GetHeight() const
 	{
-		return GetVertex(eRectangleIndex::TopLeft).GetY() - GetVertex(eRectangleIndex::TopRight).GetY();
+		return GetVertex(eRectangleIndex::BottomLeft).GetY() - GetVertex(eRectangleIndex::TopLeft).GetY();
 	}
 
 	Vector2& hRectangle::getVertex(eRectangleIndex rectangleIndex)

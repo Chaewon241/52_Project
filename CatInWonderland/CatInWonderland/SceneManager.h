@@ -1,7 +1,9 @@
 #pragma once
 
-#include <Windows.h>
-#include "define.h"
+#include <cassert>
+#include <map>
+
+#include "eSceneType.h"
 
 namespace catInWonderland
 {
@@ -10,18 +12,28 @@ namespace catInWonderland
 	class SceneManager
 	{
 	public:
-		SceneManager();
-		~SceneManager();
-
 		static SceneManager* GetInstance();
 		static void DestroyInstance();
 
-		void Init();
+		void Update();
+
+		inline void RegisterScene(eSceneType sceneType, Scene* scene);
+
+	private:
+		SceneManager();
+		~SceneManager();
 
 	private:
 		static SceneManager* instance;
 
-		Scene* m_arrScene[(UINT)(SCENE_TYPE::END)];	// ¸ðµç ¾À ¸ñ·Ï
-		Scene* m_pCurScene;							// ÇöÀç ¾À
+		std::map<eSceneType, Scene*> mSceneMap;
+		Scene* mCurrentScene;
 	};
+
+	void SceneManager::RegisterScene(eSceneType sceneType, Scene* scene)
+	{
+		assert(mSceneMap.find(sceneType) == mSceneMap.end());
+
+		mSceneMap.emplace(sceneType, scene);
+	}
 }

@@ -1,25 +1,34 @@
 #pragma once
 
+#include <Windows.h>
+
 namespace catInWonderland
 {
-	class TimeManager 
+	class TimeManager
 	{
 	public:
-		TimeManager();
-		
-		~TimeManager();
-
 		static TimeManager* GetInstance();
-
 		static void DestroyInstance();
 
 		void Init();
+		void Update();
 
-		void UpdateTime();
+		inline float GetDeltaTime();
 
-		const float GetDeltaTime();		
+	private:
+		TimeManager();
+		~TimeManager() = default;
 
 	private:
 		static TimeManager* instance;
+
+		ULONGLONG mPreviousTime;
+		ULONGLONG mCurrentTime;
+		float mDeltaTime;
 	};
+
+	float TimeManager::GetDeltaTime()
+	{
+		return mDeltaTime;
+	}
 }

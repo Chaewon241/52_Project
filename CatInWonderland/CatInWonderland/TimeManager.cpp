@@ -1,18 +1,9 @@
-#include <cmath>
-
 #include "TimeManager.h"
 #include "WinApp.h"
 
 namespace catInWonderland
 {
-	ULONGLONG previousTime;
-	ULONGLONG currentTime;
-	float deltaTime;
-
-
 	TimeManager* TimeManager::instance = nullptr;
-	TimeManager::TimeManager() {}
-	TimeManager::~TimeManager() {}	
 
 	TimeManager* TimeManager::GetInstance()
 	{
@@ -20,6 +11,7 @@ namespace catInWonderland
 		{
 			instance = new TimeManager();
 		}
+
 		return instance;
 	}
 
@@ -32,19 +24,23 @@ namespace catInWonderland
 		}
 	}
 
+	TimeManager::TimeManager()
+		: mCurrentTime(GetTickCount64())
+		, mPreviousTime(mCurrentTime)
+		, mDeltaTime(0.f)
+	{
+	}
+
 	void TimeManager::Init()
 	{
-		previousTime = currentTime = GetTickCount64();
+		mPreviousTime = mCurrentTime = GetTickCount64();
+		mDeltaTime = 0.f;
 	}
 
-	void TimeManager::UpdateTime()
+	void TimeManager::Update()
 	{
-		previousTime = currentTime;
-
-		currentTime = GetTickCount64();
-
-		deltaTime = currentTime - previousTime;
+		mPreviousTime = mCurrentTime;
+		mCurrentTime = GetTickCount64();
+		mDeltaTime = (mCurrentTime - mPreviousTime) * 0.001f;
 	}
-
-	const float TimeManager::GetDeltaTime() { return deltaTime; }
 }
