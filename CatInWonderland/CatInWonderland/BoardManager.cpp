@@ -32,10 +32,15 @@ namespace catInWonderland
 		mWorldRectangles.reserve(RESERVE_SIZE);
 	}
 
-	void BoardManager::Apply()
+	void BoardManager::CreateBoard(size_t boardSize, size_t boardPadding, size_t cellPadding)
 	{
 		const size_t WND_WIDTH = WinApp::GetWidth();
 		const size_t WND_HEIGHT = WinApp::GetHeight();
+
+		mBoardSize = boardSize;
+		mBoardPadding = boardPadding;
+		mCellPadding = cellPadding;
+
 		const float CELL_WIDTH = (WND_WIDTH - mBoardPadding * 2) / static_cast<float>(mBoardSize);
 		const float CELL_HEIGHT = (WND_HEIGHT - mBoardPadding * 2) / static_cast<float>(mBoardSize);
 		const float CELL_SIDE = CELL_WIDTH < CELL_HEIGHT ? CELL_WIDTH : CELL_HEIGHT;

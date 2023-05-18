@@ -6,8 +6,13 @@ namespace catInWonderland
 	Object::Object(hRectangle worldRectangle, hRectangle spriteRectangle, Sprite* sprite)
 		: mWorldRectangle(worldRectangle)
 		, mSpriteRectangle(spriteRectangle)
-		, mSprite (sprite)
+		, mSprite(sprite)
 	{
+	}
+
+	Object::~Object()
+	{
+		// haha
 	}
 
 	void Object::Render()

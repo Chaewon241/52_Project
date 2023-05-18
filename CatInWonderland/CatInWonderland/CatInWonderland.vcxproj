@@ -22,10 +22,12 @@
     <ClInclude Include="BoardManager.h" />
     <ClInclude Include="BoardObject.h" />
     <ClInclude Include="Butterfly.h" />
+    <ClInclude Include="Button.h" />
     <ClInclude Include="eAnimaitonType.h" />
     <ClInclude Include="EnumLoader.h" />
     <ClInclude Include="ePlayerState.h" />
     <ClInclude Include="eSceneType.h" />
+    <ClInclude Include="eSoundType.h" />
     <ClInclude Include="eSpriteType.h" />
     <ClInclude Include="GameCore.h" />
     <ClInclude Include="GameScene.h" />
@@ -37,6 +39,7 @@
     <ClInclude Include="PlayerAction.h" />
     <ClInclude Include="PlayerIdle.h" />
     <ClInclude Include="PlayerMove.h" />
+    <ClInclude Include="PlayerPlummet.h" />
     <ClInclude Include="PlayerState.h" />
     <ClInclude Include="RenderManager.h" />
     <ClInclude Include="Scene.h" />
@@ -48,20 +51,26 @@
     <ClInclude Include="Stage01.h" />
     <ClInclude Include="Tile.h" />
     <ClInclude Include="TimeManager.h" />
+    <ClInclude Include="UnitTest.h" />
     <ClInclude Include="Vector2.h" />
     <ClInclude Include="WinApp.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BoardManager.cpp" />
     <ClCompile Include="BoardObject.cpp" />
+    <ClCompile Include="Button.cpp" />
     <ClCompile Include="EnumLoader.cpp" />
     <ClCompile Include="GameCore.cpp" />
     <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="hRectangle.cpp" />
     <ClCompile Include="InputManager.cpp" />
+    <ClCompile Include="Magent.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PlayerIdle.cpp" />
     <ClCompile Include="PlayerMove.cpp" />
+    <ClCompile Include="PlayerPlummet.cpp" />
+    <ClCompile Include="PlayerState.cpp" />
     <ClCompile Include="RenderManager.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneManager.cpp" />
@@ -72,14 +81,10 @@
     <ClCompile Include="Stage01.cpp" />
     <ClCompile Include="Tile.cpp" />
     <ClCompile Include="TimeManager.cpp" />
+    <ClCompile Include="UnitTest.cpp" />
     <ClCompile Include="Vector2.cpp" />
     <ClCompile Include="WinApp.cpp" />
     <ClCompile Include="WinMain.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Sample-Test1\Sample-Test1.vcxproj">
-      <Project>{2c499475-c89e-474a-8c4e-2f87b11c1bca}</Project>
-    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -133,6 +138,7 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>

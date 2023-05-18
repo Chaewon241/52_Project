@@ -1,10 +1,16 @@
 #pragma once
+
 #include "PlayerState.h"
 
-class PlayerAction : public PlayerState
+namespace catInWonderland
 {
 	class Player;
-public:
-	PlayerState* HandleState(const Player& player) {};
-	void Update(Player* player) {};
-};
+
+	class PlayerAction : public PlayerState
+	{
+
+	public:
+		PlayerState* HandleState(const Player& player) {};
+		void Update(Player* player) {};
+	};
+}

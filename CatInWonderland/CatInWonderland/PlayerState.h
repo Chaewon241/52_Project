@@ -9,10 +9,20 @@ namespace catInWonderland
 	class PlayerState
 	{
 	public:
-		virtual PlayerState* HandleStateOrNull(const Player& player) = 0;
+		PlayerState(ePlayerState playerState);
+		virtual	~PlayerState() = default;
+
+		virtual PlayerState* HandleStateOrNull(Player* outPlayer) = 0;
 		virtual void Update(Player* outPlayer) = 0;
+
+		inline ePlayerState GetPlayerState() const;
 
 	protected:
 		ePlayerState mPlayerState;
 	};
+
+	ePlayerState PlayerState::GetPlayerState() const
+	{
+		return mPlayerState;
+	}
 }

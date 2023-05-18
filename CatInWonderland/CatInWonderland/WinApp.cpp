@@ -5,8 +5,10 @@
 #include <string>
 #include <SDKDDKVer.h>
 
-#include "WinApp.h"
 #include "GameCore.h"
+#include "SoundManager.h"
+#include "WinApp.h"
+
 
 namespace catInWonderland
 {
@@ -49,10 +51,14 @@ namespace catInWonderland
 
 		MSG msg = { 0, };
 		GameCore::GetInstance();
+		
+		// sound test
+		SoundManager::GetInstance()->Init();
+		SoundManager::GetInstance()->PlayMusic(SOUND_LIST::SOUND_LIST_BGM1, SOUND_CHANNEL::SOUND_CHANNEL_BGM, 0.5f);
+		SoundManager::GetInstance()->PlayMusic(SOUND_LIST::SOUND_LIST_BGM2, SOUND_CHANNEL::SOUND_CHANNEL_BGM, 0.5f);
 
 		// ¿©±â¿¡ path
 		WinApp::GetPath();
-		
 
 		while (msg.message != WM_QUIT)
 		{
@@ -130,11 +136,10 @@ namespace catInWonderland
 		strcat(highFolder, Filename);
 		OutputDebugStringA(highFolder);*/
 
-
 		if (GetCurrentDirectoryA(MAX_PATH, mPath) > 0)
 		{
 			int str_len = strlen(mPath);
-			
+
 			OutputDebugStringA(("\nnum = " + std::to_string(str_len) + "\n").c_str());
 
 			int highFolderIdx = str_len;
@@ -142,22 +147,13 @@ namespace catInWonderland
 			{
 				if (mPath[highFolderIdx] == '\\')
 				{
+					mPath[highFolderIdx] = '\0';
+					OutputDebugStringA(mPath);
 					break;
 				}
 			}
-
-			char tmpPath[260];
-			for (int i = 0; i < highFolderIdx; i++)
-			{
-				tmpPath[i] = mPath[i];
-				if (i == highFolderIdx - 1)
-				{
-					tmpPath[i] = '\0';
-				}
-			}
-			OutputDebugStringA(tmpPath);
-
 		}
+
 		return mPath;
 	}
 }

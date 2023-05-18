@@ -21,10 +21,12 @@ namespace catInWonderland
 		static void DestroyInstance();
 
 		inline Sprite& GetSprite(eSpriteType spriteType);
+		inline const std::vector<hRectangle>& GetSpriteRectangles(eAnimationType animationType);
 		inline const hRectangle& GetSpriteRectangle(eAnimationType animationType, bool bLoop, size_t index = 0u);
 
 		void LoadSpriteImage(eSpriteType spriteType, const WCHAR* fileName);
 		void LoadSpriteImage(eSpriteType spriteType, const char* fileName);
+		void LoadAnimationRectangle(eAnimationType animationType, const WCHAR* fileName);
 		void LoadAnimationRectangle(eAnimationType animationType, const char* fileName);
 
 	private:
@@ -44,6 +46,14 @@ namespace catInWonderland
 		assert(finded != mSpriteMap.end());
 
 		return *(finded->second);
+	}
+
+	const std::vector<hRectangle>& SpriteManager::GetSpriteRectangles(eAnimationType animationType)
+	{
+		auto finded = mSpriteRectMap.find(animationType);
+		assert(finded != mSpriteRectMap.end());
+
+		return finded->second;
 	}
 
 	const hRectangle& SpriteManager::GetSpriteRectangle(eAnimationType animationType, bool bLoop, size_t index)

@@ -23,6 +23,9 @@ namespace catInWonderland
 
 	private:
 		Player* mPlayer;
+		float mElapsedTime;
+		bool mbLeft;
+		bool mbRotate;
 		std::vector <BoardObject*> mBoardObjects;
 	};
 

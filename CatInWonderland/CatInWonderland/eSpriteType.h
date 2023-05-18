@@ -4,7 +4,8 @@ namespace catInWonderland
 {
 	enum class eSpriteType
 	{
-		Player,
+		PlayerIdle,
+		PlayerMove,
 		Tile
 	};
 }

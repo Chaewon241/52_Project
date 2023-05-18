@@ -61,28 +61,79 @@ namespace catInWonderland
 		mSpriteMap.emplace(spriteType, sprite);
 	}
 
-	void SpriteManager::LoadAnimationRectangle(eAnimationType animationType, const char* fileName)
+	void SpriteManager::LoadAnimationRectangle(eAnimationType animationType, const WCHAR* fileName)
 	{
-		std::fstream fin;
+		std::ifstream fin;
 		fin.open(fileName, std::ios_base::in);
 
-		/*hRect
-		std::string garbage;
+		assert(fin.is_open());
 
+		float x1;
+		float y1;
+		float x2;
+		float y2;
 
-		fin >> sp->Width;
-		getline(fin, garbage);
+		mSpriteRectMap.emplace(animationType, std::vector<hRectangle>());
+		std::string trash;
 
-		int curPoint = fin.tellg();
-		fileSize -= curPoint;
+		while (true)
+		{
+			fin >> x1;
+			fin >> y1;
+			fin >> x2;
+			fin >> y2;
 
-		sp->Height = fileSize / sp->Width;
-		char* img = new char[fileSize];
-		fin.read(img, fileSize);
+			if (!fin.fail())
+			{
+				mSpriteRectMap[animationType].push_back(hRectangle(x1, y1, x2, y2));
+				continue;
+			}
 
-		sp->Img = img;
-		mSpriteMap.insert({ spriteType, sp });
+			if (fin.eof())
+			{
+				break;
+			}
 
-		fin.close();*/
+			fin.clear();
+			fin >> trash;
+		}
+	}
+
+	void SpriteManager::LoadAnimationRectangle(eAnimationType animationType, const char* fileName)
+	{
+		std::ifstream fin;
+		fin.open(fileName, std::ios_base::in);
+
+		assert(fin.is_open());
+
+		float x1;
+		float y1;
+		float x2;
+		float y2;
+
+		mSpriteRectMap.emplace(animationType, std::vector<hRectangle>());
+		std::string trash;
+
+		while (true)
+		{
+			fin >> x1;
+			fin >> y1;
+			fin >> x2;
+			fin >> y2;
+
+			if (!fin.fail())
+			{
+				mSpriteRectMap[animationType].push_back(hRectangle(x1, y1, x2, y2));
+				continue;
+			}
+
+			if (fin.eof())
+			{
+				break;
+			}
+
+			fin.clear();
+			fin >> trash;
+		}
 	}
 }

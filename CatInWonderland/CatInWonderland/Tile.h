@@ -7,7 +7,7 @@ namespace catInWonderland	//배경 그리기
 	{
 	public:
 		Tile(hRectangle worldRectangle, hRectangle spriteRectangle, Sprite* sprite, size_t boardX, size_t boardY);
-		~Tile() = default;
+		virtual ~Tile() = default;
 
 		virtual void Update();
 	};

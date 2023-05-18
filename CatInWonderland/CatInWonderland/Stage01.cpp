@@ -7,17 +7,19 @@
 #include "SpriteManager.h"
 #include "WinApp.h"
 #include "Tile.h"
+#include "TimeManager.h"
 
 namespace catInWonderland
 {
-
 	void Stage01::Enter()
 	{
-		const int BOARD_SIZE = 3;
+		mElapsedTime = 0.f;
+		mbLeft = true;
+		mbRotate = false;
+		const int BOARD_SIZE = 10;
+		
 
-		BoardManager::GetInstance()->SetBoardSize(BOARD_SIZE);
-		BoardManager::GetInstance()->Apply();
-
+		BoardManager::GetInstance()->CreateBoard(BOARD_SIZE, 100, 0);
 		size_t boardX = 0;
 		size_t boardY = 2;
 
@@ -35,40 +37,64 @@ namespace catInWonderland
 		}
 
 		worldRect = BoardManager::GetInstance()->GetWorldRectangle(boardX, boardY);
-		boardObject = new Player(worldRect, hRectangle(0, 0, 360, 360), &SpriteManager::GetInstance()->GetSprite(eSpriteType::Player), boardX, boardY);
-		RegisterBoardObject(boardObject);
+		mPlayer = new Player(worldRect, hRectangle(0, 0, 360, 360), &SpriteManager::GetInstance()->GetSprite(eSpriteType::PlayerIdle), boardX, boardY);
+		RegisterBoardObject(mPlayer);
 	}
 
 	eSceneType Stage01::HandleScene()
 	{
+
 		return mSceneType;
 	}
 
 	void Stage01::Update()
 	{
-		Scene::Update();
-
-		const UINT CENTER_X = WinApp::GetWidth() / 2;
-		const UINT CENTER_Y = WinApp::GetHeight() / 2;
-		const float RADIAN = 1.57079f;
-
-		if (InputManager::GetInstance()->GetKeyState('Q') == eKeyState::PUSH)
+		if (mbRotate && mPlayer->GetPlayerState() == ePlayerState::Idle)
 		{
+			const UINT CENTER_X = WinApp::GetWidth() / 2;
+			const UINT CENTER_Y = WinApp::GetHeight() / 2;
+			const float RADIAN = 1.57079f;
+
+			const float DELTA_TIME = TimeManager::GetInstance()->GetDeltaTime();
+			const float WEIGHT = DELTA_TIME * RADIAN * (mbLeft ? -1 : 1);
+			mElapsedTime += fabs(WEIGHT);
+
 			for (auto iter = mBoardObjects.begin(); iter != mBoardObjects.end(); ++iter)
 			{
-				(*iter)->Rotate(CENTER_X, CENTER_Y, -RADIAN);
-				(*iter)->RotateBoardIndex(true);
-				(*iter)->AlignWorldRectagle();
+				(*iter)->Rotate(CENTER_X, CENTER_Y, WEIGHT);
 			}
+
+			// 이 영역은 매프레임 델타타임으로 인한 가중치로 처리되는 공간
+
+			if (mElapsedTime >= RADIAN)
+			{
+				// 이 영역은 회전이 끝나고 남은 변수를 초기화하고 정렬해주는 공간
+				mbRotate = false;
+				const float REMAINDER = (mElapsedTime - RADIAN) * (mbLeft ? 1 : -1);
+				mElapsedTime = 0;
+
+				for (auto iter = mBoardObjects.begin(); iter != mBoardObjects.end(); ++iter)
+				{
+					(*iter)->Rotate(CENTER_X, CENTER_Y, REMAINDER);
+					(*iter)->RotateBoardIndex(mbLeft);
+					(*iter)->AlignWorldRectagle();
+				}
+			}
+
+			return;
+
+		}
+
+		Scene::Update();
+		if (InputManager::GetInstance()->GetKeyState('Q') == eKeyState::PUSH)
+		{
+			mbRotate = true;
+			mbLeft = true;
 		}
 		else if (InputManager::GetInstance()->GetKeyState('E') == eKeyState::PUSH)
 		{
-			for (auto iter = mBoardObjects.begin(); iter != mBoardObjects.end(); ++iter)
-			{
-				(*iter)->Rotate(CENTER_X, CENTER_Y, RADIAN);
-				(*iter)->RotateBoardIndex(false);
-				(*iter)->AlignWorldRectagle();
-			}
+			mbRotate = true;
+			mbLeft = false;
 		}
 	}
 

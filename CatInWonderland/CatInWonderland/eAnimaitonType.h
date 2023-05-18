@@ -4,6 +4,7 @@ namespace catInWonderland
 {
 	enum class eAnimationType
 	{
-		None
+		PlayerIdle,
+		PlayerMove
 	};
 }

@@ -1,5 +1,5 @@
 #pragma once
-#include "Object.h"
+#include "BoardObject.h"
 
 namespace catInWonderland
 {
@@ -9,16 +9,16 @@ namespace catInWonderland
 		Bule
 	};
 
-	class Butterfly : public Object
+	class Butterfly : public BoardObject
 	{
 	public:
-		virtual void Render() {};
 		virtual void Update();
-		virtual void Magent() {};
-		virtual void Move() {};
+		void Magent() {};
+		void Move() {};
 
-		void Red();
-		void Blue();
+		void Red() {};
+		void Blue() {};
+
 	private:
 		size_t mBoardX;
 		size_t mBoardY;

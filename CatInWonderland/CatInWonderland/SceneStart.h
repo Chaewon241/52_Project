@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Scene.h"
+#include "SceneManager.h"
 
 namespace catInWonderland
 {
@@ -10,7 +11,7 @@ namespace catInWonderland
 	{
 	public:
 		virtual void Enter();
-		virtual eSceneType HandleScene();
+		virtual eSceneType HandleScene(); 
 		virtual void Exit();
 
 	public:

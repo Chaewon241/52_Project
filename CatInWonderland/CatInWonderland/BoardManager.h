@@ -13,16 +13,13 @@ namespace catInWonderland
 		static BoardManager* GetInstance();
 		static void DeleteInstance();
 
-		void Apply();
+		void CreateBoard(size_t boardSize, size_t boardPadding, size_t cellPadding);
 
 		void AlignRectangle(size_t indexX, size_t indexY, hRectangle* outRectangle);
 		void RotateRight(size_t* outIndexX, size_t* outIndexY) const;
 		void RotateLeft(size_t* outIndexX, size_t* outIndexY) const;
 
-		inline void SetBoardSize(size_t boardSize);
-		inline void SetBoardPadding(size_t boardPadding);
-		inline void SetCellPadding(size_t cellPadding);
-
+		inline size_t GetCellSize() const;
 		inline size_t GetBoardSize() const;
 		inline const hRectangle& GetWorldRectangle(size_t objectX, size_t ObjectY) const;
 
@@ -41,6 +38,13 @@ namespace catInWonderland
 		std::vector<hRectangle> mWorldRectangles;
 	};
 
+	size_t BoardManager::GetCellSize() const
+	{
+		assert(!mWorldRectangles.empty());
+
+		return mWorldRectangles.at(0).GetWidth();
+	}
+
 	size_t BoardManager::GetBoardSize() const
 	{
 		return mBoardSize;
@@ -51,20 +55,5 @@ namespace catInWonderland
 		assert(objectX < mBoardSize || objectY < mBoardSize);
 
 		return mWorldRectangles.at(objectX + objectY * mBoardSize);
-	}
-
-	void BoardManager::SetBoardSize(size_t boardSize)
-	{
-		mBoardSize = boardSize;
-	}
-
-	void BoardManager::SetBoardPadding(size_t boardPadding)
-	{
-		mBoardPadding = boardPadding;
-	}
-
-	void BoardManager::SetCellPadding(size_t cellPadding)
-	{
-		mCellPadding = cellPadding;
 	}
 }

@@ -28,7 +28,7 @@ namespace catInWonderland
 
 		getVertex(eRectangleIndex::TopRight) = Vector2(memBottomRight.GetX(), memTopLeft.GetY());
 		getVertex(eRectangleIndex::BottomLeft) = Vector2(memTopLeft.GetX(), memBottomRight.GetY());
-	} 
+	}
 
 	hRectangle::hRectangle(float x1, float y1, float x2, float y2)
 		:hRectangle(Vector2(x1, y1), Vector2(x2, y2))
@@ -41,7 +41,7 @@ namespace catInWonderland
 	}
 
 	void hRectangle::Rotate(int originX, int originY, float radian)
-	{ 
+	{
 		// 원점 옮기기
 		for (size_t i = 0; i < static_cast<size_t>(eRectangleIndex::Size); ++i)
 		{
@@ -82,6 +82,14 @@ namespace catInWonderland
 			&& rect.GetTopLeft().GetY() < otherRect.GetTopLeft().GetY()
 			&& rect.GetBottomRight().GetX() > otherRect.GetBottomRight().GetX()
 			&& rect.GetBottomRight().GetY() > otherRect.GetBottomRight().GetY();
+	}
+
+	bool hRectangle::IsContainVertex(const hRectangle& rect, float x, float y)
+	{
+		return rect.GetTopLeft().GetX() < x
+			&& rect.GetTopLeft().GetY() < y
+			&& rect.GetBottomRight().GetX() > x
+			&& rect.GetBottomRight().GetY() > y;
 	}
 
 	hRectangle hRectangle::GetIntersection(const hRectangle& rect, const hRectangle& otherRect)

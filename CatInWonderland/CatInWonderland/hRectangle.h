@@ -48,6 +48,7 @@ namespace catInWonderland
 		inline float GetHeight() const;
 		static bool IsCollision(const hRectangle& rect, const hRectangle& otherRect);
 		static bool IsContained(const hRectangle& rect, const hRectangle& otherRect);
+		static bool IsContainVertex(const hRectangle& rect, float x, float y);
 		static hRectangle GetIntersection(const hRectangle& rect, const hRectangle& otherRect);
 
 		static hRectangle GetBoundingRectangle(const hRectangle& rectangle);

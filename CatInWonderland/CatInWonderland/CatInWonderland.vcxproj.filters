@@ -43,9 +43,6 @@
     <Filter Include="소스 파일\FSM">
       <UniqueIdentifier>{7c483893-e4b3-49b7-b1a9-d4eb96e7cee2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\FSM\Player">
-      <UniqueIdentifier>{8fb6fe17-78e7-411c-97cc-ebfb3adb8f80}</UniqueIdentifier>
-    </Filter>
     <Filter Include="소스 파일\Math">
       <UniqueIdentifier>{372978ac-6e52-4c5d-813e-0fccb23f6d23}</UniqueIdentifier>
     </Filter>
@@ -54,6 +51,18 @@
     </Filter>
     <Filter Include="소스 파일\Component\Object">
       <UniqueIdentifier>{4297cf70-e25a-450c-8a77-c12b5afee2a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Component\Object\BoardObject">
+      <UniqueIdentifier>{d255b90d-c19e-43e1-a9e8-3bfe053d8c53}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\FSM\PlayerState">
+      <UniqueIdentifier>{8fb6fe17-78e7-411c-97cc-ebfb3adb8f80}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\Component\Object\BoardObject">
+      <UniqueIdentifier>{e8a34947-757a-4eaf-b70c-c0a7e2832dbd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\FSM\PlayerState">
+      <UniqueIdentifier>{df2fd364-9cab-4f57-9c82-149c0eb15eec}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -105,22 +114,7 @@
     <ClInclude Include="Vector2.h">
       <Filter>헤더 파일\Math</Filter>
     </ClInclude>
-    <ClInclude Include="Magent.h">
-      <Filter>헤더 파일\Component\Object</Filter>
-    </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>헤더 파일\Component\Object</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayerIdle.h">
-      <Filter>헤더 파일\FSM</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayerMove.h">
-      <Filter>헤더 파일\FSM</Filter>
-    </ClInclude>
     <ClInclude Include="PlayerState.h">
-      <Filter>헤더 파일\FSM</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayerAction.h">
       <Filter>헤더 파일\FSM</Filter>
     </ClInclude>
     <ClInclude Include="Scene.h">
@@ -138,14 +132,41 @@
     <ClInclude Include="SoundManager.h">
       <Filter>헤더 파일\Manager</Filter>
     </ClInclude>
-    <ClInclude Include="GameScene.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="BoardObject.h">
       <Filter>헤더 파일\Component\Object</Filter>
     </ClInclude>
+    <ClInclude Include="EnumLoader.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Magent.h">
+      <Filter>헤더 파일\Component\Object\BoardObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>헤더 파일\Component\Object\BoardObject</Filter>
+    </ClInclude>
     <ClInclude Include="Tile.h">
+      <Filter>헤더 파일\Component\Object\BoardObject</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerMove.h">
+      <Filter>헤더 파일\FSM\PlayerState</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerAction.h">
+      <Filter>헤더 파일\FSM\PlayerState</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerIdle.h">
+      <Filter>헤더 파일\FSM\PlayerState</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitTest.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Button.h">
       <Filter>헤더 파일\Component\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerPlummet.h">
+      <Filter>헤더 파일\FSM\PlayerState</Filter>
+    </ClInclude>
+    <ClInclude Include="GameScene.h">
+      <Filter>헤더 파일\Component\Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -177,7 +198,7 @@
       <Filter>소스 파일\Component</Filter>
     </ClCompile>
     <ClCompile Include="PlayerMove.cpp">
-      <Filter>소스 파일\FSM\Player</Filter>
+      <Filter>소스 파일\FSM\PlayerState</Filter>
     </ClCompile>
     <ClCompile Include="hRectangle.cpp">
       <Filter>소스 파일\Math</Filter>
@@ -197,23 +218,44 @@
     <ClCompile Include="Stage01.cpp">
       <Filter>소스 파일\Component\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>소스 파일\Component\Object</Filter>
-    </ClCompile>
     <ClCompile Include="BoardManager.cpp">
       <Filter>소스 파일\Manager</Filter>
     </ClCompile>
     <ClCompile Include="SoundManager.cpp">
       <Filter>소스 파일\Manager</Filter>
     </ClCompile>
-    <ClCompile Include="GameScene.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Tile.cpp">
-      <Filter>소스 파일\Component\Object</Filter>
-    </ClCompile>
     <ClCompile Include="BoardObject.cpp">
       <Filter>소스 파일\Component\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="EnumLoader.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerIdle.cpp">
+      <Filter>소스 파일\FSM\PlayerState</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>소스 파일\Component\Object\BoardObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Tile.cpp">
+      <Filter>소스 파일\Component\Object\BoardObject</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerState.cpp">
+      <Filter>소스 파일\FSM</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitTest.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Button.cpp">
+      <Filter>소스 파일\Component\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Magent.cpp">
+      <Filter>소스 파일\Component\Object\BoardObject</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerPlummet.cpp">
+      <Filter>소스 파일\FSM\PlayerState</Filter>
+    </ClCompile>
+    <ClCompile Include="GameScene.cpp">
+      <Filter>소스 파일\Component\Scene</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

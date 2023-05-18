@@ -1,3 +1,5 @@
+#include <cassert>
+
 #include "SceneManager.h"
 #include "Scene.h"
 #include "WinApp.h"
@@ -42,5 +44,18 @@ namespace catInWonderland
 	{
 		mCurrentScene->Update();
 		mCurrentScene->Render();
+
+		eSceneType nextSceneType = mCurrentScene->HandleScene();
+
+		if (nextSceneType != mCurrentScene->GetSceneType())
+		{
+			mCurrentScene->Exit();
+			
+			auto iter = mSceneMap.find(nextSceneType);
+			assert(iter != mSceneMap.end());
+			 
+			mCurrentScene = iter->second;
+			mCurrentScene->Enter();
+		}
 	}
 }

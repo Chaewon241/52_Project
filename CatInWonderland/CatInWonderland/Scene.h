@@ -19,6 +19,7 @@ namespace catInWonderland
 		virtual void Exit();
 
 		inline void RegisterObject(Object* object);
+		inline eSceneType GetSceneType() const;
 
 	public:
 		Scene();
@@ -36,5 +37,10 @@ namespace catInWonderland
 	void Scene::RegisterObject(Object* object)
 	{
 		mObjects.push_back(object);
+	}
+
+	eSceneType Scene::GetSceneType() const
+	{
+		return mSceneType;
 	}
 }

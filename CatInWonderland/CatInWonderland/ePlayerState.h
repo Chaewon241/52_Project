@@ -6,6 +6,7 @@ namespace catInWonderland
 	{
 		Idle,
 		Move,
-		Action
+		Action,
+		Plummet
 	};
 }

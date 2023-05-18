@@ -34,7 +34,8 @@ namespace catInWonderland
 	{
 		for (auto iter = mObjects.begin(); iter != mObjects.end(); ++iter)
 		{
-			delete (*iter);
+			Object* object = (*iter);
+			delete object;
 		}
 	}
 }
