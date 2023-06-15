@@ -79,11 +79,11 @@ namespace catInWonderland
 			static_cast<int>(boundingTopLeft.GetX()),
 			static_cast<int>(boundingTopLeft.GetY()),
 			static_cast<int>(boundingBottomRight.GetX() - boundingTopLeft.GetX()),
-			static_cast<int>(boundingBottomRight.GetX() - boundingTopLeft.GetX()),
+			static_cast<int>(boundingBottomRight.GetY() - boundingTopLeft.GetY()),
 			mRotateMemDC,
 			static_cast<int>(boundingTopLeft.GetX()),
 			static_cast<int>(boundingTopLeft.GetY()),
-			static_cast<int>(boundingBottomRight.GetY() - boundingTopLeft.GetY()),
+			static_cast<int>(boundingBottomRight.GetX() - boundingTopLeft.GetX()),
 			static_cast<int>(boundingBottomRight.GetY() - boundingTopLeft.GetY()),
 			RGB(255, 255, 255));
 

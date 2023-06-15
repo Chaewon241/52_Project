@@ -21,10 +21,13 @@
   <ItemGroup>
     <ClInclude Include="BoardManager.h" />
     <ClInclude Include="BoardObject.h" />
+    <ClInclude Include="Brick.h" />
     <ClInclude Include="Butterfly.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="eAnimaitonType.h" />
+    <ClInclude Include="eMagent.h" />
     <ClInclude Include="EnumLoader.h" />
+    <ClInclude Include="eObjectType.h" />
     <ClInclude Include="ePlayerState.h" />
     <ClInclude Include="eSceneType.h" />
     <ClInclude Include="eSoundType.h" />
@@ -33,7 +36,6 @@
     <ClInclude Include="GameScene.h" />
     <ClInclude Include="hRectangle.h" />
     <ClInclude Include="InputManager.h" />
-    <ClInclude Include="Magent.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerAction.h" />
@@ -43,6 +45,7 @@
     <ClInclude Include="PlayerState.h" />
     <ClInclude Include="RenderManager.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="SceneLoader.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="SceneStart.h" />
     <ClInclude Include="SoundManager.h" />
@@ -58,21 +61,24 @@
   <ItemGroup>
     <ClCompile Include="BoardManager.cpp" />
     <ClCompile Include="BoardObject.cpp" />
+    <ClCompile Include="Brick.cpp" />
+    <ClCompile Include="Butterfly.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="EnumLoader.cpp" />
     <ClCompile Include="GameCore.cpp" />
     <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="hRectangle.cpp" />
     <ClCompile Include="InputManager.cpp" />
-    <ClCompile Include="Magent.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PlayerAction.cpp" />
     <ClCompile Include="PlayerIdle.cpp" />
     <ClCompile Include="PlayerMove.cpp" />
     <ClCompile Include="PlayerPlummet.cpp" />
     <ClCompile Include="PlayerState.cpp" />
     <ClCompile Include="RenderManager.cpp" />
     <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="SceneLoader.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="SceneStart.cpp" />
     <ClCompile Include="SoundManager.cpp" />
@@ -85,6 +91,9 @@
     <ClCompile Include="Vector2.cpp" />
     <ClCompile Include="WinApp.cpp" />
     <ClCompile Include="WinMain.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="fmod.dll" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

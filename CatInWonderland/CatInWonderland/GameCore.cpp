@@ -1,12 +1,17 @@
 #include <string>
 
 #include "GameCore.h"
+
+#include "EnumLoader.h"
+
 #include "InputManager.h"
 #include "RenderManager.h"
 #include "SceneManager.h"
 #include "TimeManager.h"
 #include "SpriteManager.h"
-#include "EnumLoader.h"
+#include "BoardManager.h"
+#include "SoundManager.h"
+
 #include "WinApp.h"
 
 namespace catInWonderland
@@ -40,7 +45,8 @@ namespace catInWonderland
 		RenderManager::GetInstance();
 		SceneManager::GetInstance();
 		SpriteManager::GetInstance();
-
+		BoardManager::GetInstance();
+		SoundManager::GetInstance();
 	}
 
 	GameCore::~GameCore()
@@ -50,6 +56,8 @@ namespace catInWonderland
 		RenderManager::DestroyInstance();
 		SceneManager::DestroyInstance();
 		SpriteManager::DestroyInstance();
+		BoardManager::DestroyInstance();
+		SoundManager::DestroyInstance();
 	}
 
 	void GameCore::Frame()

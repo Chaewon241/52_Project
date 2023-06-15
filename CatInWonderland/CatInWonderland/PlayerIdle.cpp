@@ -1,5 +1,7 @@
 #include "PlayerIdle.h"
 #include "PlayerMove.h"
+#include "PlayerPlummet.h"
+#include "PlayerAction.h"
 #include "Player.h"
 #include "InputManager.h"
 #include "TimeManager.h"
@@ -43,6 +45,21 @@ namespace catInWonderland
 				player->SetSpriteRectangle(SpriteManager::GetInstance()->GetSpriteRectangle(eAnimationType::PlayerMove, false));
 				return new PlayerMove();
 			}
+		}
+
+		if (InputManager::GetInstance()->GetKeyState('W') == eKeyState::PUSH)
+		{
+			player->SetSprite(&SpriteManager::GetInstance()->GetSprite(eSpriteType::PlayerAction));
+			player->SetSpriteRectangle(SpriteManager::GetInstance()->GetSpriteRectangle(eAnimationType::PlayerAction, false));
+			return new PlayerAction();
+		}
+
+		if (BoardManager::GetInstance()->GetBoardSize() - 1 != player->GetBoardY())
+		{
+			player->SetSprite(&SpriteManager::GetInstance()->GetSprite(eSpriteType::PlayerPlummet));
+			player->SetSpriteRectangle(SpriteManager::GetInstance()->GetSpriteRectangle(eAnimationType::PlayerPlummet, false));
+			
+			return new PlayerPlummet;
 		}
 
 		return nullptr;

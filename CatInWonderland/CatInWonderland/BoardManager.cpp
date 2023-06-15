@@ -18,7 +18,7 @@ namespace catInWonderland
 		return mInstance;
 	}
 
-	void BoardManager::DeleteInstance()
+	void BoardManager::DestroyInstance()
 	{
 		delete mInstance;
 		mInstance = nullptr;

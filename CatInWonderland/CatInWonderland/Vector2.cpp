@@ -3,6 +3,10 @@
 
 #include "Vector2.h"
 
+#ifndef EPSILON
+#define EPSILON (0.001f)
+#endif 
+
 namespace catInWonderland
 {
 	Vector2::Vector2(float x, float y)
@@ -18,12 +22,12 @@ namespace catInWonderland
 
 	bool Vector2::operator==(const Vector2& other) const
 	{
-		return fabs(mX - other.mX) < FLT_EPSILON && fabs(mY - other.mY) < FLT_EPSILON;
+		return fabs(mX - other.mX) < EPSILON && fabs(mY - other.mY) < EPSILON;
 	}
 
 	bool Vector2::operator!=(const Vector2& other) const
 	{
-		return fabs(mX - other.mX) > FLT_EPSILON || fabs(mY - other.mY) > FLT_EPSILON;
+		return fabs(mX - other.mX) > EPSILON || fabs(mY - other.mY) > EPSILON;
 	}
 
 	float Vector2::GetDistance(const Vector2& vector, const Vector2& otherVector)
@@ -35,3 +39,4 @@ namespace catInWonderland
 	}
 }
 
+ 

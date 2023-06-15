@@ -6,6 +6,9 @@ namespace catInWonderland
 	{
 		PlayerIdle,
 		PlayerMove,
-		Tile
+		PlayerPlummet,
+		PlayerAction,
+		Tile,
+		Brick
 	};
 }

@@ -48,7 +48,7 @@ namespace catInWonderland
 			mVertices[i].Move(-originX, -originY);
 		}
 
-		// 회전
+		// 회전 
 		{
 			float cosScalr = cos(radian);
 			float sinScalr = sin(radian);
@@ -103,7 +103,7 @@ namespace catInWonderland
 			rect.GetBottomRight().GetX() < otherRect.GetBottomRight().GetX() ? rect.GetBottomRight().GetX() : otherRect.GetBottomRight().GetX(),
 			rect.GetBottomRight().GetY() < otherRect.GetBottomRight().GetY() ? rect.GetBottomRight().GetY() : otherRect.GetBottomRight().GetY());
 
-		return hRectangle();
+		return hRectangle(interSectionTopLeft, interSectionBottomRight);
 	}
 
 	hRectangle hRectangle::GetBoundingRectangle(const hRectangle& rectangle)

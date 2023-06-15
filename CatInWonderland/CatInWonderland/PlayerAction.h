@@ -8,9 +8,14 @@ namespace catInWonderland
 
 	class PlayerAction : public PlayerState
 	{
-
 	public:
-		PlayerState* HandleState(const Player& player) {};
-		void Update(Player* player) {};
+		PlayerAction();
+		~PlayerAction() = default;
+
+		PlayerState* HandleStateOrNull(Player* player);
+		void Update(Player* player);
+
+	private:
+		bool mActionCheck;
 	};
 }

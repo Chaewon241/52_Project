@@ -11,7 +11,7 @@ namespace catInWonderland
 	{
 	public:
 		static BoardManager* GetInstance();
-		static void DeleteInstance();
+		static void DestroyInstance();
 
 		void CreateBoard(size_t boardSize, size_t boardPadding, size_t cellPadding);
 

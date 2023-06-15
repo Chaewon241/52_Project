@@ -18,12 +18,12 @@ namespace catInWonderland
 
 	void SceneStart::Enter()
 	{
-		float x1 = WinApp::GetWidth() / 2 - WinApp::GetWidth() / 4;
-		float y1 = WinApp::GetHeight() / 2 - WinApp::GetHeight() / 4;
-		float x2 = x1 + WinApp::GetWidth() / 2;
-		float y2 = y1 + WinApp::GetHeight() / 2;
+		float x1 = WinApp::GetWidth() / 3; //- WinApp::GetWidth() / 8;
+		float y1 = WinApp::GetHeight() / 3;// -WinApp::GetHeight() / 8;
+		float x2 = x1 + WinApp::GetWidth() / 4;
+		float y2 = y1 + WinApp::GetHeight() / 4;
 		mStartButton = new Button(hRectangle(x1,y1,x2,y2)
-			, SpriteManager::GetInstance()->GetSpriteRectangle(eAnimationType::PlayerIdle, true)
+			, hRectangle(0, 0, 700, 500)
 			, &SpriteManager::GetInstance()->GetSprite(eSpriteType::PlayerIdle));
 
 		RegisterObject(mStartButton);

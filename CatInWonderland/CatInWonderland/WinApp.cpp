@@ -51,11 +51,6 @@ namespace catInWonderland
 
 		MSG msg = { 0, };
 		GameCore::GetInstance();
-		
-		// sound test
-		SoundManager::GetInstance()->Init();
-		SoundManager::GetInstance()->PlayMusic(SOUND_LIST::SOUND_LIST_BGM1, SOUND_CHANNEL::SOUND_CHANNEL_BGM, 0.5f);
-		SoundManager::GetInstance()->PlayMusic(SOUND_LIST::SOUND_LIST_BGM2, SOUND_CHANNEL::SOUND_CHANNEL_BGM, 0.5f);
 
 		// ¿©±â¿¡ path
 		WinApp::GetPath();

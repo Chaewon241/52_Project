@@ -138,9 +138,6 @@
     <ClInclude Include="EnumLoader.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Magent.h">
-      <Filter>헤더 파일\Component\Object\BoardObject</Filter>
-    </ClInclude>
     <ClInclude Include="Player.h">
       <Filter>헤더 파일\Component\Object\BoardObject</Filter>
     </ClInclude>
@@ -167,6 +164,21 @@
     </ClInclude>
     <ClInclude Include="GameScene.h">
       <Filter>헤더 파일\Component\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneLoader.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Brick.h">
+      <Filter>헤더 파일\Component\Object\BoardObject</Filter>
+    </ClInclude>
+    <ClInclude Include="eMagent.h">
+      <Filter>헤더 파일\EnumClass</Filter>
+    </ClInclude>
+    <ClInclude Include="eObjectType.h">
+      <Filter>헤더 파일\EnumClass</Filter>
+    </ClInclude>
+    <ClInclude Include="eSoundType.h">
+      <Filter>헤더 파일\EnumClass</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -248,14 +260,26 @@
     <ClCompile Include="Button.cpp">
       <Filter>소스 파일\Component\Object</Filter>
     </ClCompile>
-    <ClCompile Include="Magent.cpp">
-      <Filter>소스 파일\Component\Object\BoardObject</Filter>
-    </ClCompile>
     <ClCompile Include="PlayerPlummet.cpp">
       <Filter>소스 파일\FSM\PlayerState</Filter>
     </ClCompile>
     <ClCompile Include="GameScene.cpp">
       <Filter>소스 파일\Component\Scene</Filter>
     </ClCompile>
+    <ClCompile Include="SceneLoader.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Brick.cpp">
+      <Filter>소스 파일\Component\Object\BoardObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Butterfly.cpp">
+      <Filter>소스 파일\Component\Object\BoardObject</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerAction.cpp">
+      <Filter>소스 파일\FSM\PlayerState</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="fmod.dll" />
   </ItemGroup>
 </Project>

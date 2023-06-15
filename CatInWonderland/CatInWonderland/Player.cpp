@@ -6,11 +6,12 @@
 #include "PlayerIdle.h"
 #include "InputManager.h"
 #include "BoardManager.h"
+#include "SoundManager.h"
 
 namespace catInWonderland
 {
 	Player::Player(hRectangle worldRectangle, hRectangle spriteRectangle, Sprite* sprite, size_t boardX, size_t boardY)
-		: BoardObject(worldRectangle, spriteRectangle, sprite, boardX, boardY)
+		: BoardObject(worldRectangle, spriteRectangle, sprite, eObjectType::Player, boardX, boardY)
 		, mPlayerState(new PlayerIdle())
 		, mbLeft(true)
 	{
@@ -70,28 +71,13 @@ namespace catInWonderland
 		{
 			Rotate(PLAYER_CENTER.GetX(), PLAYER_CENTER.GetY(), -RANDIAN);
 		}
-
-		CheckFloor();
-	}
-
-	void Player::CheckFloor()	//¶³¾îÁö±â
-	{
-		mBoardY = BoardManager::GetInstance()->GetBoardSize() - 1;
-		mWorldRectangle = BoardManager::GetInstance()->GetWorldRectangle(mBoardX, mBoardY);
-	}
-
-	void Player::Move(float x, float y)
-	{
-		mWorldRectangle.Move(x, y);
 	}
 
 	//void Player::Animation(float deltaTime)
 	//{
-
 	//}
 
 	//void Player::Action()
 	//{
-
 	//}
 }

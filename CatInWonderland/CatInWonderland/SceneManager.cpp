@@ -1,4 +1,5 @@
 #include <cassert>
+#include <cassert>
 
 #include "SceneManager.h"
 #include "Scene.h"
@@ -24,10 +25,9 @@ namespace catInWonderland
 		delete instance;
 		instance = nullptr;
 	}
+
 	SceneManager::SceneManager()
-		: mCurrentScene(new Stage01())
 	{
-		mCurrentScene->Enter();
 	}
 
 	SceneManager::~SceneManager()

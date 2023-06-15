@@ -1,27 +1,18 @@
 #pragma once
 #include "BoardObject.h"
+#include "eMagent.h"
 
 namespace catInWonderland
 {
-	enum class eMagent
-	{
-		Red,
-		Bule
-	};
-
 	class Butterfly : public BoardObject
 	{
 	public:
-		virtual void Update();
-		void Magent() {};
-		void Move() {};
+		Butterfly();
+		~Butterfly() = default;
 
-		void Red() {};
-		void Blue() {};
+		virtual void Update();
 
 	private:
-		size_t mBoardX;
-		size_t mBoardY;
-		size_t mMagentState;
+		eMagent mMagentState;
 	};
 }

@@ -7,8 +7,8 @@
 
 namespace catInWonderland
 {
-	BoardObject::BoardObject(hRectangle worldRectangle, hRectangle spriteRectangle, Sprite* sprite, size_t boardX, size_t boardY)
-		: Object(worldRectangle, spriteRectangle, sprite)
+	BoardObject::BoardObject(hRectangle worldRectangle, hRectangle spriteRectangle, Sprite* sprite, eObjectType objectType, size_t boardX, size_t boardY)
+		: Object(worldRectangle, spriteRectangle, sprite, objectType)
 		, mBoardX(boardX)
 		, mBoardY(boardY)
 	{

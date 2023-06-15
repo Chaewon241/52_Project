@@ -17,9 +17,6 @@ namespace catInWonderland
 		virtual void Update();
 		virtual void RotateBoardIndex(bool bLeft);
 
-		void CheckFloor();
-		void Move(float x, float y);
-
 		inline void SetSpriteRectangle(const hRectangle& spriteRectangle);
 		inline void SetIsLeft(bool bLeft);
 

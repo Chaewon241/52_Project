@@ -7,31 +7,14 @@ namespace catInWonderland
 {
 	class Player;
 
-	class Stage01 :public Scene
+	class Stage01 :public GameScene
 	{
 	public:
 		virtual void Enter();
 		virtual eSceneType HandleScene();
-		virtual void Update();
-		virtual void Exit();
-
-		inline void RegisterBoardObject(BoardObject* boardObject);
 
 	public:
-		Stage01() = default;
-		~Stage01() = default;
-
-	private:
-		Player* mPlayer;
-		float mElapsedTime;
-		bool mbLeft;
-		bool mbRotate;
-		std::vector <BoardObject*> mBoardObjects;
+		Stage01();
+		virtual ~Stage01() = default;
 	};
-
-	void Stage01::RegisterBoardObject(BoardObject* boardObject)
-	{
-		mBoardObjects.push_back(boardObject);
-		RegisterObject(static_cast<Object*>(boardObject));
-	}
 }

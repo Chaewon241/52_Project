@@ -4,7 +4,7 @@
 namespace catInWonderland
 {
 	Button::Button(hRectangle worldRectangle, hRectangle spriteRectangle, Sprite* sprite)
-		: Object(worldRectangle, spriteRectangle, sprite)
+		: Object(worldRectangle, spriteRectangle, sprite, eObjectType::None)
 		, mButtonState(eButtonState::None)
 	{
 	}

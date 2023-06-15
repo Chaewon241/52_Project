@@ -1,9 +1,10 @@
 #define WIN32_LEAN_AND_MEAN
 
+#define _CRTDBG_MAP_ALLOC
+#include <crtdbg.h>
+#include <stdlib.h>
 #include <Windows.h>
 #include "WinApp.h"
-
-#define NDEBUG
 
 #ifndef NDEBUG
 #include "UnitTest.h"
@@ -18,15 +19,12 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	UNREFERENCED_PARAMETER(lpCmdLine);
 
 #ifndef NDEBUG
-	catInWonderland::UnitTest::Vector2_DistanceTest();
-	catInWonderland::UnitTest::hRectangle_Rotate();
-	catInWonderland::UnitTest::hRectangle_GetCenter();
-	catInWonderland::UnitTest::hRectangle_GetSize();
-	catInWonderland::UnitTest::hRectangle_IsCollison();
-	catInWonderland::UnitTest::hRectangle_IsContained();
-	catInWonderland::UnitTest::hRectangle_GetBoundingRectangle();
-	
+	catInWonderland::UnitTest::Test();
 #endif /* NDEBUG */
 
-	return catInWonderland::WinApp::Run(hInstance, TEXT("CatInWonderland"), 1920, 1080);
+	int result = catInWonderland::WinApp::Run(hInstance, TEXT("CatInWonderland"), 1920, 1080);
+
+	_CrtDumpMemoryLeaks();
+
+	return result;
 }

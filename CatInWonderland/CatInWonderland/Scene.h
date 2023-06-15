@@ -21,6 +21,8 @@ namespace catInWonderland
 		inline void RegisterObject(Object* object);
 		inline eSceneType GetSceneType() const;
 
+		inline const std::vector<Object*>& GetObjects() const;
+
 	public:
 		Scene();
 		virtual ~Scene();
@@ -31,7 +33,7 @@ namespace catInWonderland
 	private:
 		enum { OBJECT_CAPACITY = 256 };
 
-		std::vector <Object*> mObjects;
+		std::vector<Object*> mObjects;
 	};
 
 	void Scene::RegisterObject(Object* object)
@@ -42,5 +44,10 @@ namespace catInWonderland
 	eSceneType Scene::GetSceneType() const
 	{
 		return mSceneType;
+	}
+
+	const std::vector<Object*>& Scene::GetObjects() const
+	{
+		return mObjects;
 	}
 }

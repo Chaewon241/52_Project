@@ -125,7 +125,7 @@ namespace catInWonderland
 	{
 		return Vector2(GetWidth(), GetHeight());
 	}
-	// 이대로 둬도 되는지
+
 	float hRectangle::GetWidth() const
 	{
 		return GetVertex(eRectangleIndex::TopRight).GetX() - GetVertex(eRectangleIndex::TopLeft).GetX();

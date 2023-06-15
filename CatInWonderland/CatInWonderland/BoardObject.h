@@ -6,7 +6,7 @@ namespace catInWonderland
 	class BoardObject : public Object
 	{
 	public:
-		BoardObject(hRectangle worldRectangle, hRectangle spriteRectangle, Sprite* sprite, size_t boardX, size_t boardY);
+		BoardObject(hRectangle worldRectangle, hRectangle spriteRectangle, Sprite* sprite, eObjectType objectType, size_t boardX, size_t boardY);
 		virtual ~BoardObject() = default;
 
 		virtual void Update() = 0;

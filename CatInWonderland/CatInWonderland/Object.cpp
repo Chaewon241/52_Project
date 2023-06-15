@@ -3,10 +3,11 @@
 
 namespace catInWonderland
 {
-	Object::Object(hRectangle worldRectangle, hRectangle spriteRectangle, Sprite* sprite)
+	Object::Object(hRectangle worldRectangle, hRectangle spriteRectangle, Sprite* sprite, eObjectType objectType)
 		: mWorldRectangle(worldRectangle)
 		, mSpriteRectangle(spriteRectangle)
 		, mSprite(sprite)
+		, mObjectType(objectType)
 	{
 	}
 
