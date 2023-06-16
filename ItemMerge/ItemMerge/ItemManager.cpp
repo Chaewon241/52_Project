@@ -61,8 +61,7 @@ void ItemManager::GradeUp(int item1, int item2)
 
     if (m_itemList[itemIdx1].GetGrade() != m_itemList[itemIdx2].GetGrade())
     {
-        cout << "°­È­ ¾Ó ½ÇÆÐ¶ì~" << endl;
-        cout << endl;
+        cout << "°­È­ ½ÇÆÐ" << endl;
         return;
     }
 
