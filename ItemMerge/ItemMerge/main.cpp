@@ -4,18 +4,25 @@
 
 int main()
 {
-	ItemManager itemIndex;
-	Item* itemList = new Item[itemIndex.GetArrIndex()];
-
 	ItemManager im;
 
-	im.AddItem(itemList[0], 1, "단검", 1, EItemGrade::A);
-	im.AddItem(itemList[1], 2, "단검", 2, EItemGrade::A);
-	im.AddItem(itemList[2], 3, "갑옷", 1, EItemGrade::B);
-	im.AddItem(itemList[3], 4, "반지", 2, EItemGrade::B);
-	im.AddItem(itemList[4], 5, "반지", 3, EItemGrade::S);
+	im.AddItem(0, 1, "단검", 1, EItemGrade::A);
+	im.AddItem(1, 2, "단검", 2, EItemGrade::A);
+	im.AddItem(2, 3, "갑옷", 1, EItemGrade::B);
+	im.AddItem(3, 4, "반지", 2, EItemGrade::B);
+	im.AddItem(4, 5, "반지", 3, EItemGrade::S);
+	
 
-	im.Show(itemList, 2, 3);
-	im.Show(itemList, 1, 2);
-	im.Show(itemList, 3, 4);
+	while (true)
+	{
+		if (im.GetArrIndex() == 0)
+			break;
+
+		cout << "강화할 템을 고르세요" << endl;
+
+		int item1, item2;
+		cin >> item1 >> item2;
+
+		im.Show(item1, item2);
+	}
 }

@@ -14,14 +14,15 @@ enum class EItemGrade : int
 class Item
 {
 private:
-	static int m_index;
+	int m_index;
 	int m_level;
 	string m_name;
 	EItemGrade m_grade;
 
 public:
 	Item()
-		: m_level(0)
+		: m_index(0)
+		, m_level(0)
 		, m_name()
 		, m_grade()
 	{

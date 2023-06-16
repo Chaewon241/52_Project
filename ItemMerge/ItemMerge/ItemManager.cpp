@@ -1,58 +1,54 @@
+#include <iostream>
+
 #include "ItemManager.h"
 #include "Item.h"
-#include "pch.h"
 
 using namespace std;
 
-void AddItem(Item& item, int index, string name, int level, EItemGrade grade)
+void ItemManager::AddItem(int arrIndex, int index, string name, int level, EItemGrade grade)
 {
-	item.SetIndex(index);
-	item.SetName(name);
-	item.SetGrade(grade);
+    Item item;
+    item.SetIndex(index);
+    item.SetName(name);
+    item.SetLevel(level);
+    item.SetGrade(grade);
+
+    m_itemList[arrIndex] = item;
+    m_maxIndex++;
 }
 
-void Show(Item* item, int item1, int item2)
+void ItemManager::Show(int item1, int item2)
 {
-	ItemManager* im;
-
 	cout << "변경전" << endl;
-	for (int i = 0; i < im->GetArrIndex() + 1; i++)
+	for (int i = 0; i < m_arrIndex + 1; i++)
 	{
-		cout << item[i].GetIndex() << ", " << item[i].GetName() << ", " << item[i].GetLevel() <<
-			", " << ConvertToChar(item[i].GetGrade()) << endl;
+		cout << m_itemList[i].GetIndex() << ", " << m_itemList[i].GetName() << ", " << m_itemList[i].GetLevel() <<
+			", " << ConvertToChar(m_itemList[i].GetGrade()) << endl;
 	}
 	cout << endl;
 
 	cout << "변경후" << endl;
-	im->GradeUp(item, item1, item2);
-	for (int i = 0; i < im->GetArrIndex() + 1; i++)
+	GradeUp(item1, item2);
+	for (int i = 0; i < m_arrIndex + 1; i++)
 	{
-		cout << item[i].GetIndex() << ", " << item[i].GetName() << ", " << item[i].GetLevel() <<
-			", " << ConvertToChar(item[i].GetGrade()) << endl;
+		cout << m_itemList[i].GetIndex() << ", " << m_itemList[i].GetName() << ", " << m_itemList[i].GetLevel() <<
+			", " << ConvertToChar(m_itemList[i].GetGrade()) << endl;
 	}
+    cout << endl;
 }
 
-void GradeUp(Item* item, int item1, int item2)
+void ItemManager::GradeUp(int item1, int item2)
 {
-    ItemManager* im;
-
-    if (!item)
-        return;
-
     int itemIdx1 = -1;
     int itemIdx2 = -1;
 
-    // 지금은 아이템 클래스가 m_arrIndex를 가지고 있어서 알 수 있는데,
-    // 배열을 주소값으로만 함수 전달 할때는 배열이 끝나는 지점도 같이 명시해주면서 넘겨야
-    // 배열을 초과하는 주소값을 접근 하지 않음
-
-    for (int i = 0; i < im->GetArrIndex() + 1; i++)
+    for (int i = 0; i <  m_arrIndex + 1; i++)
     {
-        if (item[i].GetIndex() == item1)
+        if (m_itemList[i].GetIndex() == item1)
         {
             itemIdx1 = i;
         }
-        else if (item[i].GetIndex() == item2)
+        else if (m_itemList[i].GetIndex() == item2)
         {
             itemIdx2 = i;
         }
@@ -63,36 +59,38 @@ void GradeUp(Item* item, int item1, int item2)
         }
     }
 
-    if (item[itemIdx1].GetGrade() != item[itemIdx2].GetGrade())
+    if (m_itemList[itemIdx1].GetGrade() != m_itemList[itemIdx2].GetGrade())
     {
         cout << "강화 앙 실패띠~" << endl;
         cout << endl;
         return;
     }
 
-    string itemName = item[itemIdx1].GetName();
+    string itemName = m_itemList[itemIdx1].GetName();
 
-    EItemGrade nextGrade = static_cast<EItemGrade>(static_cast<int>(item[itemIdx1].GetGrade()) + 1);
+    EItemGrade nextGrade = static_cast<EItemGrade>(static_cast<int>(m_itemList[itemIdx1].GetGrade()) + 1);
 
     int tmp = 0;
 
-    for (int i = 0; i < im->GetArrIndex() + 1; i++)
+    for (int i = 0; i < m_arrIndex + 1; i++)
     {
         if (i == itemIdx1 || i == itemIdx2)
         {
             continue;
         }
 
-        AddItem(item[tmp++], item[i].GetIndex(), item[i].GetName(), item[i].GetLevel(), item[i].GetGrade());
+        AddItem(tmp++, m_itemList[i].GetIndex(), m_itemList[i].GetName(), m_itemList[i].GetLevel(), m_itemList[i].GetGrade());
+        m_maxIndex--;
     }
 
-    im->SetArrIndex(im->GetArrIndex() - 1);
-    im->SetMaxIndex(im->GetMaxIndex() - 1);
+    m_arrIndex -= 1;
+    m_maxIndex += 1;
 
-    AddItem(item[im->GetArrIndex()], im->GetArrIndex(), itemName, 1, nextGrade);
+    AddItem(m_arrIndex, m_maxIndex, itemName, 1, nextGrade);
+    m_maxIndex--;
 }
 
-char ConvertToChar(EItemGrade grade) 
+char ItemManager::ConvertToChar(EItemGrade grade)
 {
     switch (grade)
     {
@@ -104,5 +102,7 @@ char ConvertToChar(EItemGrade grade)
         return 'A';
     case EItemGrade::S:
         return 'S';
+    default:
+        return 'F';
     }
 }
