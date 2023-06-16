@@ -38,7 +38,6 @@ void AnimationInstance::Update(float deltaTime)
 
 	m_ProgressTime += deltaTime * m_Speed;
 
-
 	while (Frames[m_FrameIndex].RenderTime < m_ProgressTime)
 	{
 		m_ProgressTime -= Frames[m_FrameIndex].RenderTime;
