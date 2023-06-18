@@ -45,20 +45,20 @@ void DemoApp::Update()
 {
     GameApp::Update();
 
+    m_Background.Update(m_deltaTime);
+    m_Character.Update(m_deltaTime);
 }
 
 void DemoApp::Render()
 {
     D2DRenderer::m_pD2DRenderTarget->BeginDraw();
-    D2D1::ColorF color(D2D1::ColorF::Red);
+    D2DRenderer::m_pD2DRenderTarget->Clear(D2D1::ColorF(D2D1::ColorF::CadetBlue));
 
-    D2DRenderer::m_pD2DRenderTarget->Clear(color);
+    /*D2DRenderer::m_pD2DRenderTarget->SetTransform(D2D1::Matrix3x2F::Translation(0, 400));
+    D2DRenderer::m_pD2DRenderTarget->DrawBitmap(m_pD2DBitmap2);*/
 
-    D2DRenderer::m_pD2DRenderTarget->SetTransform(D2D1::Matrix3x2F::Translation(0, 0));
-    D2DRenderer::m_pD2DRenderTarget->DrawBitmap(m_pBitmap1);
-
-    D2DRenderer::m_pD2DRenderTarget->SetTransform(D2D1::Matrix3x2F::Translation(0, 400));
-    D2DRenderer::m_pD2DRenderTarget->DrawBitmap(m_pBitmap2);
+    m_Background.Render(D2DRenderer::m_pD2DRenderTarget);
+    m_Character.Render(D2DRenderer::m_pD2DRenderTarget);
 
     D2DRenderer::m_pD2DRenderTarget->EndDraw();
 }
@@ -67,8 +67,42 @@ bool DemoApp::Initialize()
 {
     GameApp::Initialize();
 
-    D2DRenderer::m_Instance->CreateD2DBitmapFromFile(L"../resources/run.png", &m_pBitmap1);
-    D2DRenderer::m_Instance->CreateD2DBitmapFromFile(L"../resources/run.png", &m_pBitmap2);
+    AnimationAsset* m_pAnimAssetBackGround = new AnimationAsset;
+    AnimationAsset* m_pAnimAssetCharacter = new AnimationAsset;
 
-    return false;
+    std::vector<FRAME_INFO> Frames;
+
+    m_pAnimAssetBackGround->SetBitmapFilePath(L"../resources/midnight.png");
+    m_pAnimAssetBackGround->Build();
+    Frames.push_back(FRAME_INFO(0, 0, 784, 320, 0.2f));
+    Frames.push_back(FRAME_INFO(789, 0, 784, 320, 0.2f));
+    Frames.push_back(FRAME_INFO(0, 325, 784, 320, 0.2f));
+    Frames.push_back(FRAME_INFO(789, 325, 784, 320, 0.2f));
+    m_pAnimAssetBackGround->m_Animations.push_back(Frames);
+
+    m_Background.SetAnimationInfo(m_pAnimAssetBackGround);
+
+    m_pAnimAssetCharacter->SetBitmapFilePath(L"../resources/run.png");
+    m_pAnimAssetCharacter->Build();
+
+    Frames.clear();
+
+    Frames.push_back(FRAME_INFO(28, 36, 103, 84, 0.1f));
+    Frames.push_back(FRAME_INFO(148, 36, 86, 84, 0.1f));
+    Frames.push_back(FRAME_INFO(255, 34, 87, 86, 0.1f));
+    Frames.push_back(FRAME_INFO(363, 32, 76, 88, 0.1f));
+    Frames.push_back(FRAME_INFO(458, 31, 91, 89, 0.1f));
+    Frames.push_back(FRAME_INFO(567, 40, 103, 80, 0.1f));
+    Frames.push_back(FRAME_INFO(686, 32, 85, 88, 0.1f));
+    Frames.push_back(FRAME_INFO(792, 32, 86, 88, 0.1f));
+    Frames.push_back(FRAME_INFO(899, 31, 76, 89, 0.1f));
+    Frames.push_back(FRAME_INFO(993, 33, 92, 87, 0.1f));
+    m_pAnimAssetCharacter->m_Animations.push_back(Frames);
+
+    m_Character.SetAnimationInfo(m_pAnimAssetCharacter);
+    m_Character.SetAnimationIndex(0, false);
+    m_Character.SetSpeed(2.0f);
+    m_Character.SetPosition(200.0f, 200.0f);
+
+    return true;
 }

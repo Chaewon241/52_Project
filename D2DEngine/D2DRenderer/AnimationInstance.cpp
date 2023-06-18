@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "AnimationInstance.h"
 #include "AnimationAsset.h"
+#include "D2DRenderer.h"
 
 AnimationInstance::AnimationInstance()
 	:m_pAnimationAsset(nullptr), m_AnimationIndex(0), m_FrameIndex(0), m_ProgressTime(0), m_bMirror(false), m_Speed(1.0f)
@@ -19,14 +20,12 @@ AnimationInstance::~AnimationInstance()
 
 void AnimationInstance::SetAnimationInfo(AnimationAsset* pAnimationInfo)
 {
-	/*
 	if (m_pAnimationAsset != nullptr)
 	{
 		D2DRenderer::m_Instance->ReleaseAnimationAsset(m_pAnimationAsset);
 	}
-	*/
 	m_pAnimationAsset = pAnimationInfo;
-	//pAnimationInfo->AddRef();
+	pAnimationInfo->AddRef();
 }
 
 void AnimationInstance::Update(float deltaTime)
@@ -43,10 +42,10 @@ void AnimationInstance::Update(float deltaTime)
 		m_ProgressTime -= Frames[m_FrameIndex].RenderTime;
 		m_FrameIndex = (m_FrameIndex + 1) % MaxFrameIndex;
 	}
-	// 이지미에서의 프레임 영역
+
 	m_SrcRect = m_pAnimationAsset->m_Animations[m_AnimationIndex][m_FrameIndex].Source;
-	// 그릴 영역을 0,0,with,height으로 설정하고 실제 위치는 Transform으로 설정
 	m_DstRect = { 0,0,m_SrcRect.right - m_SrcRect.left,m_SrcRect.bottom - m_SrcRect.top };
+
 	if (m_bMirror)
 	{
 		D2D1_MATRIX_3X2_F Scale(D2D1::Matrix3x2F::Scale(-1.0f, 1.0f, D2D1::Point2F(0, 0)));

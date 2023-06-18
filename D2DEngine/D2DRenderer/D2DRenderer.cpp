@@ -4,6 +4,7 @@
 #include "framework.h"
 #include "D2DRenderer.h"
 #include "GameApp.h"
+#include "AnimationAsset.h"
 
 #pragma comment(lib,"d2d1.lib")
 #pragma comment(lib,"dwrite.lib")
@@ -208,5 +209,24 @@ void D2DRenderer::ReleaseD2DBitmapFromFile(ID2D1Bitmap* pID2D1Bitmap)
     if (it != m_SharingD2DBitmaps.end())
     {
         m_SharingD2DBitmaps.erase(it);
+    }
+}
+
+void D2DRenderer::ReleaseAnimationAsset(AnimationAsset* pAnimationAsset)
+{
+    int cnt = pAnimationAsset->Release();
+    if (cnt > 0)
+        return;
+
+    // 문자열과 포인터 쌍에서 포인터만 같으면 원소를 찾아서 지운다.
+    auto it = std::find_if(m_SharingAnimationAssets.begin(), m_SharingAnimationAssets.end(),
+        [pAnimationAsset](std::pair<std::wstring, AnimationAsset*> ContainerData)
+        {
+            return (ContainerData.second == pAnimationAsset);
+        }
+    );
+    if (it != m_SharingAnimationAssets.end())
+    {
+        m_SharingAnimationAssets.erase(it);
     }
 }

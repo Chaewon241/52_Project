@@ -2,6 +2,8 @@
 
 #include "resource.h"
 #include "../D2DRenderer/GameApp.h"
+#include "../D2DRenderer/AnimationAsset.h"
+#include "../D2DRenderer/AnimationInstance.h"
 
 class DemoApp : public GameApp
 {
@@ -11,10 +13,10 @@ public:
 
 	virtual void Update();
 	virtual void Render();
-	virtual bool Initialize() override;//
-private:
+	virtual bool Initialize() override;
 
-	ID2D1Bitmap* m_pBitmap1;
-	ID2D1Bitmap* m_pBitmap2;
+private:
+	AnimationInstance m_Background;
+	AnimationInstance m_Character;
 };
 
