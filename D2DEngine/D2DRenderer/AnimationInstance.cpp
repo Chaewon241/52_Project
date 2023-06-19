@@ -20,18 +20,12 @@ AnimationInstance::~AnimationInstance()
 
 void AnimationInstance::SetAnimationInfo(AnimationAsset* pAnimationInfo)
 {
-	if (m_pAnimationAsset != nullptr)
-	{
-		D2DRenderer::m_Instance->ReleaseAnimationAsset(m_pAnimationAsset);
-	}
 	m_pAnimationAsset = pAnimationInfo;
 	pAnimationInfo->AddRef();
 }
 
 void AnimationInstance::Update(float deltaTime)
 {
-	assert(m_pAnimationAsset != nullptr);
-	assert(m_pAnimationAsset != nullptr);
 	const std::vector<FRAME_INFO>& Frames = m_pAnimationAsset->m_Animations[m_AnimationIndex];
 	size_t MaxFrameIndex = Frames.size();
 
@@ -66,9 +60,6 @@ void AnimationInstance::Render(ID2D1RenderTarget* pRenderTarget)
 
 void AnimationInstance::SetAnimationIndex(size_t index, bool bMirror)
 {
-	assert(m_pAnimationAsset != nullptr);
-	assert(m_pAnimationAsset->m_Animations.size() > index);
-
 	m_AnimationIndex = index;
 	m_FrameIndex = 0;
 	m_ProgressTime = 0.0f;

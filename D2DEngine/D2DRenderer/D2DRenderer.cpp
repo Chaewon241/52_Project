@@ -212,21 +212,39 @@ void D2DRenderer::ReleaseD2DBitmapFromFile(ID2D1Bitmap* pID2D1Bitmap)
     }
 }
 
-void D2DRenderer::ReleaseAnimationAsset(AnimationAsset* pAnimationAsset)
+HRESULT D2DRenderer::CreateAsset(std::wstring strFilePath)
 {
-    int cnt = pAnimationAsset->Release();
-    if (cnt > 0)
-        return;
-
-    // 문자열과 포인터 쌍에서 포인터만 같으면 원소를 찾아서 지운다.
-    auto it = std::find_if(m_SharingAnimationAssets.begin(), m_SharingAnimationAssets.end(),
-        [pAnimationAsset](std::pair<std::wstring, AnimationAsset*> ContainerData)
+    // 문자열과 포인터 쌍에서 문자열만 같으면 해당 원소를 찾는다.
+    auto it = std::find_if(m_AnimationAsset.begin(), m_AnimationAsset.end(),
+        [strFilePath](std::pair<std::wstring, ID2D1Bitmap*> ContainerData)
         {
-            return (ContainerData.second == pAnimationAsset);
+            return (ContainerData.first == strFilePath);
         }
     );
-    if (it != m_SharingAnimationAssets.end())
+
+    // 찾은경우 
+    if (it != m_AnimationAsset.end())
     {
-        m_SharingAnimationAssets.erase(it);
+        *pID2D1Bitmap = it->second;
+        (*pID2D1Bitmap)->AddRef();
+        return S_OK;
     }
+
+    // 없어서 새로 만든다.
+    HRESULT hr;
+    // Create a decoder
+    IWICBitmapDecoder* pDecoder = NULL;
+
+    hr = m_pIWICImagingFactory->CreateDecoderFromFilename(
+        strFilePath.c_str(),                      // Image to be decoded
+        NULL,                            // Do not prefer a particular vendor
+        GENERIC_READ,                    // Desired read access to the file
+        WICDecodeMetadataCacheOnDemand,  // Cache metadata when needed
+        &pDecoder                        // Pointer to the decoder
+    );
+
+    // Retrieve the first frame of the image from the decoder
+
+    m_SharingD2DBitmaps.push_back(std::make_pair(strFilePath, *pID2D1Bitmap));
+    return hr;
 }

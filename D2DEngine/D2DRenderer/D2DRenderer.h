@@ -21,9 +21,10 @@ public:
 	IWICImagingFactory* m_pIWICImagingFactory = NULL;	// WIC 인터페이스
 
 	std::list < std::pair<std::wstring, ID2D1Bitmap*>> m_SharingD2DBitmaps;
-	std::list<std::pair<std::wstring, AnimationAsset*>> m_SharingAnimationAssets;
+	std::list < std::pair<std::wstring, AnimationAsset*>> m_AnimationAsset;
+
 public:
 	HRESULT CreateD2DBitmapFromFile(std::wstring strFilePath, ID2D1Bitmap** pID2D1Bitmap);
 	void ReleaseD2DBitmapFromFile(ID2D1Bitmap* pID2D1Bitmap);
-	void ReleaseAnimationAsset(AnimationAsset* pAnimationAsset);
+	HRESULT CreateAsset(std::wstring assetName);
 };
