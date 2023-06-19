@@ -26,30 +26,13 @@ void AnimationInstance::SetAnimationInfo(AnimationAsset* pAnimationInfo)
 
 void AnimationInstance::Update(float deltaTime)
 {
-	const std::vector<FRAME_INFO>& Frames = m_pAnimationAsset->m_Animations[m_AnimationIndex];
-	size_t MaxFrameIndex = Frames.size();
-
 	m_ProgressTime += deltaTime * m_Speed;
 
-	while (Frames[m_FrameIndex].RenderTime < m_ProgressTime)
+	if (m_ProgressTime >= m_pAnimationAsset->m_Animations[m_AnimationIndex][m_FrameIndex].RenderTime)
 	{
-		m_ProgressTime -= Frames[m_FrameIndex].RenderTime;
-		m_FrameIndex = (m_FrameIndex + 1) % MaxFrameIndex;
+		m_FrameIndex++;
 	}
 
-	m_SrcRect = m_pAnimationAsset->m_Animations[m_AnimationIndex][m_FrameIndex].Source;
-	m_DstRect = { 0,0,m_SrcRect.right - m_SrcRect.left,m_SrcRect.bottom - m_SrcRect.top };
-
-	if (m_bMirror)
-	{
-		D2D1_MATRIX_3X2_F Scale(D2D1::Matrix3x2F::Scale(-1.0f, 1.0f, D2D1::Point2F(0, 0)));
-		D2D1_MATRIX_3X2_F Translation(D2D1::Matrix3x2F::Translation(m_Position.x + m_DstRect.right, m_Position.y));
-		m_Transform = Scale * Translation;
-	}
-	else
-	{
-		m_Transform = D2D1::Matrix3x2F::Translation(m_Position.x, m_Position.y);
-	}
 }
 
 void AnimationInstance::Render(ID2D1RenderTarget* pRenderTarget)

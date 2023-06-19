@@ -45,6 +45,7 @@ void DemoApp::Update()
 {
     GameApp::Update();
 
+    // m_deltaTime을 쓸 수 있는 이유
     m_Background.Update(m_deltaTime);
     m_Character.Update(m_deltaTime);
 }
