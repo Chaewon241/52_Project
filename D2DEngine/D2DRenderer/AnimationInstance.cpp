@@ -31,8 +31,12 @@ void AnimationInstance::Update(float deltaTime)
 	if (m_ProgressTime >= m_pAnimationAsset->m_Animations[m_AnimationIndex][m_FrameIndex].RenderTime)
 	{
 		m_FrameIndex++;
+		m_ProgressTime = 0;
+		m_FrameIndex = m_FrameIndex % m_pAnimationAsset->m_Animations[m_AnimationIndex].size();
 	}
 
+	m_SrcRect = m_pAnimationAsset->m_Animations[m_AnimationIndex][m_FrameIndex].Source;
+	m_DstRect = { 0,0,m_SrcRect.right - m_SrcRect.left,m_SrcRect.bottom - m_SrcRect.top };
 }
 
 void AnimationInstance::Render(ID2D1RenderTarget* pRenderTarget)
