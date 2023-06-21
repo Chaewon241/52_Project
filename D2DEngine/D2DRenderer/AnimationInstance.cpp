@@ -32,7 +32,7 @@ void AnimationInstance::Update(float deltaTime)
 	{
 		m_FrameIndex++;
 		m_ProgressTime = 0;
-		m_FrameIndex = m_FrameIndex % m_pAnimationAsset->m_Animations[m_AnimationIndex].size();
+		m_FrameIndex %= m_pAnimationAsset->m_Animations[m_AnimationIndex].size();
 	}
 
 	m_SrcRect = m_pAnimationAsset->m_Animations[m_AnimationIndex][m_FrameIndex].Source;

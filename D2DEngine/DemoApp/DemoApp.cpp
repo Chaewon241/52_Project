@@ -102,7 +102,7 @@ bool DemoApp::Initialize()
 
     m_Character.SetAnimationInfo(m_pAnimAssetCharacter);
     m_Character.SetAnimationIndex(0, false);
-    m_Character.SetSpeed(2.0f);
+    m_Character.SetSpeed(3.0f);
     m_Character.SetPosition(200.0f, 200.0f);
 
     return true;
