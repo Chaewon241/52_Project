@@ -1,5 +1,6 @@
 #include "DemoApp.h"
 #include "framework.h"
+#include "../GameApp/D2DRenderer.h"
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     _In_opt_ HINSTANCE hPrevInstance,
@@ -10,7 +11,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     UNREFERENCED_PARAMETER(lpCmdLine);
 
     DemoApp App(hInstance);
-    App.Initialized();
+    App.Initialize();
     App.Loop();
 
     return (int) 1;
@@ -26,4 +27,16 @@ DemoApp::DemoApp(HINSTANCE hInstance)
 
 DemoApp::~DemoApp()
 {
+}
+
+bool DemoApp::Initialize() 
+{
+    __super::Initialize();
+
+    return true;
+}
+
+void DemoApp::Render()
+{
+    D2DRenderer::m_hInstance->Render();
 }

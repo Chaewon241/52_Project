@@ -16,4 +16,14 @@
 #include <malloc.h>
 #include <memory.h>
 #include <tchar.h>
+
+#include <d2d1.h>
+#include <wincodec.h>
+#include <comdef.h>
+#include <d2d1_1helper.h>
+#include <dwrite.h>
+#include <sysinfoapi.h>
+#include <string>
+#include <assert.h>
+
 #endif //PCH_H

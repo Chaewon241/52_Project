@@ -1,5 +1,9 @@
 ﻿#include "pch.h"
 #include "GameApp.h"
+#include "D2DRenderer.h"
+
+GameApp* GameApp::m_hInstance = nullptr;
+HWND GameApp::m_hwnd;
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -41,7 +45,7 @@ GameApp::~GameApp()
     UnregisterClass(L"RotateObject", m_hInst);
 }
 
-bool GameApp::Initialized()
+bool GameApp::Initialize()
 {
     // m_wcex 가 준비되었다고 가정
     RegisterClassExW(&m_wcex);
@@ -57,6 +61,8 @@ bool GameApp::Initialized()
 
     ShowWindow(m_hwnd, SW_SHOW);
     UpdateWindow(m_hwnd);
+
+    HRESULT hr = m_D2DRenderer.Initialize();
 
     return true;
 }
@@ -76,8 +82,8 @@ void GameApp::Loop()
         }
         else
         {
-            GameApp::Update();
-            GameApp::Render();
+            Update();
+            Render();
         }
     }
 }
@@ -92,7 +98,6 @@ void GameApp::Render()
 
 }
 
-// 정보 대화 상자의 메시지 처리기입니다.
 INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
     UNREFERENCED_PARAMETER(lParam);

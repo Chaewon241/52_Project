@@ -1,26 +1,34 @@
 #pragma once
 
 #include <Windows.h>
+#include "../GameApp/D2DRenderer.h"
 
 #define MAX_LOADSTRING 100
 
+class D2DRenderer;
+
+// 게임의 루프를 담당
 class GameApp
 {
 public:
 	GameApp(HINSTANCE hInstance);
-	~GameApp();
+	virtual ~GameApp();
 
-	bool Initialized();
+	virtual bool Initialize();
 	void Loop();
 	virtual void Update();
 	virtual void Render();
+	
+	static HWND m_hwnd;
+	static GameApp* m_hInstance;
 
 protected:
 	WNDCLASSEXW m_wcex;
 	HINSTANCE m_hInst;
-	HWND m_hwnd;
 
 	WCHAR m_szTitle[MAX_LOADSTRING];
 	WCHAR m_szWindowClass[MAX_LOADSTRING];
 	HACCEL m_hAccelTable;
+
+	D2DRenderer m_D2DRenderer;
 };
