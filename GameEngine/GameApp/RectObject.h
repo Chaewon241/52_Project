@@ -1,6 +1,7 @@
 #pragma once
+#include "Object.h"
 
-class RectObject
+class RectObject : public Object
 {
 
 };

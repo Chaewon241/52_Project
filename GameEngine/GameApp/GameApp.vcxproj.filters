@@ -19,6 +19,9 @@
     <Filter Include="소스 파일\Object">
       <UniqueIdentifier>{83490034-3461-404d-ab1b-9e3d42cb3fbc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\Manager">
+      <UniqueIdentifier>{f15cdcc6-a487-4aa5-b3ea-29fb04447152}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -39,6 +42,9 @@
     <ClInclude Include="Object.h">
       <Filter>소스 파일\Object</Filter>
     </ClInclude>
+    <ClInclude Include="TimeManager.h">
+      <Filter>소스 파일\Manager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameApp.cpp">
@@ -55,6 +61,9 @@
     </ClCompile>
     <ClCompile Include="Object.cpp">
       <Filter>소스 파일\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="TimeManager.cpp">
+      <Filter>소스 파일\Manager</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

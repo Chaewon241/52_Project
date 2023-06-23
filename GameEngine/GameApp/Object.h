@@ -2,8 +2,9 @@
 class Object
 {
 public:
-	Object() {};
-	~Object() {};
+	Object();
+	~Object();
 public:
-
+	float x;
+	float y;
 };
