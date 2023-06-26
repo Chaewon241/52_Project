@@ -15,6 +15,7 @@ public:
 	TimeManager();
 	~TimeManager();
 
+	void Initialize();
 	void Update();
 };
 

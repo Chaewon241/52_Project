@@ -1,7 +1,7 @@
 #pragma once
 #include <d2d1.h>
 
-class D2DRenderer
+class D2DRenderer abstract
 {
 private:
 	static ID2D1HwndRenderTarget* m_RenderTarget;

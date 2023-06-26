@@ -139,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Component.h" />
     <ClInclude Include="D2DRenderer.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="GameApp.h" />
@@ -146,8 +147,10 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="RectObject.h" />
     <ClInclude Include="TimeManager.h" />
+    <ClInclude Include="Transform.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Component.cpp" />
     <ClCompile Include="D2DRenderer.cpp" />
     <ClCompile Include="GameApp.cpp" />
     <ClCompile Include="Object.cpp" />
@@ -159,6 +162,7 @@
     </ClCompile>
     <ClCompile Include="RectObject.cpp" />
     <ClCompile Include="TimeManager.cpp" />
+    <ClCompile Include="Transform.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

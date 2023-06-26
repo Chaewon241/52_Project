@@ -10,11 +10,14 @@ TimeManager::~TimeManager()
 {
 }
 
+void TimeManager::Initialize()
+{
+	m_curTime = GetTickCount64() / 1000.f;
+}
+
 void TimeManager::Update()
 {
 	m_prevTime = m_curTime;
 	m_curTime = GetTickCount64() / 1000.f;
 	m_deltaTime = m_curTime - m_prevTime;
-
-
 }
