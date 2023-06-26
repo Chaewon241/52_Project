@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 
+class D2DRenderer;
 class Object
 {
 public:
