@@ -1,6 +1,8 @@
 #include "DemoApp.h"
 #include "framework.h"
 #include "../GameApp/D2DRenderer.h"
+#include "../GameApp/GameObject.h"
+#include "../GameApp/Transform.h"
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     _In_opt_ HINSTANCE hPrevInstance,
@@ -33,10 +35,18 @@ bool DemoApp::Initialize()
 {
     __super::Initialize();
 
+    GameObject* sunObject = new GameObject;
+    gameObjectList.push_back(sunObject);
+    sunObject->AddComponent<Transform>();
     return true;
 }
 
 void DemoApp::Render()
 {
-    D2DRenderer::m_hInstance->Render();
+    D2DRenderer::m_hInstance->BeginRender();
+    for (GameObject* go : gameObjectList)
+    {
+        go->Render(D2DRenderer::m_hInstance);
+    }
+    D2DRenderer::m_hInstance->EndRender();
 }

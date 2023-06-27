@@ -1,7 +1,9 @@
 #pragma once
 
+#include "Component.h"
+
 class GameObject;
-class Component;
+class D2DRender;
 
 class Transform : public Component
 {
@@ -19,9 +21,14 @@ public:
 	Transform(GameObject* gameObject);
 	~Transform();
 public:
-	void Update() override;
+	virtual void Update() override;
+	void Render(D2DRenderer* renderer) override;
 	void CalculateWorldTransform();
 public:
+	void SetLocalPosition(D2D1_VECTOR_2F Position) { m_localPosition = Position; }
+	void SetLocalScale(D2D1_VECTOR_2F Scale) { m_localScale = Scale; }
+	void SetLocalRotation(float rotation) {	m_localRotation = rotation;	}
+
 	D2D1_VECTOR_2F GetLocalPosition() { return m_localPosition; }
 	D2D1_VECTOR_2F GetLocalScale() { return m_localScale; }
 	float GetLocalRotation() { return m_localRotation; }

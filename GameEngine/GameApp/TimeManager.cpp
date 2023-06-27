@@ -21,3 +21,8 @@ void TimeManager::Update()
 	m_curTime = GetTickCount64() / 1000.f;
 	m_deltaTime = m_curTime - m_prevTime;
 }
+
+float TimeManager::GetDeltatime()
+{
+	return m_deltaTime;
+}

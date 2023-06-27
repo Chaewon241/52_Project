@@ -16,7 +16,7 @@ public:
 	GameObject();
 	virtual ~GameObject();
 public:
-	virtual void Update(float deltatime) override;
+	virtual void Update() override;
 	virtual void Render(D2DRenderer* renderer) override;
 public:
 	void AddChild(GameObject* child);

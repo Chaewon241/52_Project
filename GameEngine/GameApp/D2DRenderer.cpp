@@ -75,26 +75,21 @@ HRESULT D2DRenderer::Initialize()
 	return hr;
 }
 
-void D2DRenderer::BegindRender()
+void D2DRenderer::BeginRender()
 {
 	m_RenderTarget->BeginDraw();
 	m_RenderTarget->Clear(D2D1::ColorF(D2D1::ColorF::White));
 }
 
-void D2DRenderer::Render()
+void D2DRenderer::DrawRectangle(int x1, int y1, int x2, int y2)
 {
-	BegindRender();
-	D2D1_RECT_F rect = D2D1::RectF(100.0f, 100.0f, 200.0f, 200.0f);
+	D2D1_RECT_F _rt = {};
+	_rt.left = (float)x;
+	_rt.top = (float)y;
+	_rt.right = (float)x1;
+	_rt.bottom = (float)y1;
 
-	m_RenderTarget->SetTransform(D2D1::Matrix3x2F::Translation(250.0f, 250.0f));
-	m_RenderTarget->DrawRectangle(rect, m_pBlueBrush);
-	
-	D2D1::Matrix3x2F tmp = D2D1::Matrix3x2F::Scale(1.5f, 1.5f) * D2D1::Matrix3x2F::Translation(400.0f, 200.0f);
-
-	m_RenderTarget->SetTransform(tmp);
-	m_RenderTarget->DrawRectangle(rect, m_pRedBrush);
-
-	EndRender();
+	m_RenderTarget->DrawRectangle(_rt, m_pBlackBrush, 2.0f);
 }
 
 void D2DRenderer::EndRender()

@@ -10,7 +10,7 @@ Object::~Object()
 {
 }
 
-void Object::Update(float deltatime)
+void Object::Update()
 {
 }
 

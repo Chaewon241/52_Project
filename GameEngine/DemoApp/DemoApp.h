@@ -1,9 +1,14 @@
 #pragma once
 #include "../GameApp/GameApp.h"
+#include <vector>
+
+class GameObject;
 
 // 게임앱을 상속받아 초기화, 업데이트, 렌더를 실행한다.
 class DemoApp : public GameApp
 {
+public:
+	std::vector<GameObject*> gameObjectList;
 public:
 	DemoApp(HINSTANCE hInstance);
 	~DemoApp();

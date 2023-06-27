@@ -8,8 +8,6 @@ public:
 	Object();
 	~Object();
 
-	virtual void Update(float deltatime);
+	virtual void Update();
 	virtual void Render(D2DRenderer* renderer);
-protected:
-	D2D1_VECTOR_2F m_Position;
 };

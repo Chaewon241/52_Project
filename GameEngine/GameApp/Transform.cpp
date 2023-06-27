@@ -1,15 +1,17 @@
 #include "pch.h"
-#include "Transform.h"
-#include "GameObject.h"
 #include "Component.h"
+#include "GameObject.h"
+#include "Transform.h"
+#include "Timemanager.h"
+#include "D2DRenderer.h"
 
 Transform::Transform(GameObject* gameObject)
 	: Component(gameObject)
-	, m_localPosition({ 0, 0 })
-	, m_localScale({ 0, 0 })
+	, m_localPosition({ 0.f, 0.f })
+	, m_localScale({ 1.f, 1.f })
 	, m_localRotation(0.f)
-	, m_worldPosition({ 0, 0 })
-	, m_worldScale({ 0, 0 })
+	, m_worldPosition({ 0.f, 0.f })
+	, m_worldScale({ 1.f, 1.f })
 	, m_worldRotation(0.f)
 	, m_localTransform(D2D1::Matrix3x2F::Identity())
 	, m_worldTransform(m_localTransform)
@@ -21,6 +23,19 @@ Transform::~Transform()
 }
 
 void Transform::Update()
+{
+	static float time = 0.f;
+	TimeManager tm;
+	float deltaTime = tm.GetDeltatime();
+
+	if (time > 0.001f)
+	{
+		time -= 0.001f;
+	}
+	time += deltaTime;
+}
+
+void Transform::Render(D2DRenderer* renderer)
 {
 
 }
@@ -36,5 +51,9 @@ void Transform::CalculateWorldTransform()
 	if (_parent != nullptr)
 	{
 		m_worldTransform = m_localTransform * _parent->GetComponent<Transform>()->GetWorldTransform();
+	}
+	else
+	{
+		m_worldTransform = m_localTransform;
 	}
 }

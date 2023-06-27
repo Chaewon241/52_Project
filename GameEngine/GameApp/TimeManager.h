@@ -17,5 +17,6 @@ public:
 
 	void Initialize();
 	void Update();
+	float GetDeltatime();
 };
 
