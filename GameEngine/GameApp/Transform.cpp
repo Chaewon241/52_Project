@@ -30,6 +30,7 @@ void Transform::Update()
 
 	if (time > 0.001f)
 	{
+		Rotate(1.0f);
 		time -= 0.001f;
 	}
 	time += deltaTime;
@@ -38,6 +39,14 @@ void Transform::Update()
 void Transform::Render(D2DRenderer* renderer)
 {
 
+}
+
+void Transform::Rotate(float rotation)
+{
+	m_localRotation += rotation;
+
+	if (m_localRotation > 360.0f)
+		m_localRotation -= 360.0f;
 }
 
 void Transform::CalculateWorldTransform()

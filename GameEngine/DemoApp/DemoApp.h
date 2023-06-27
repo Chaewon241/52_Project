@@ -16,6 +16,7 @@ public:
 	// virtual -> 너 나 재정의 할 수 있어
 	// override -> 나 너 재정의할거다
 	bool Initialize() override;
+	void Update();
 	void Render();
 };
 

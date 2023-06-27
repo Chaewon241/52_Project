@@ -54,7 +54,10 @@
     <ClInclude Include="Transform.h">
       <Filter>소스 파일\Component</Filter>
     </ClInclude>
-    <ClInclude Include="RectComponent.h">
+    <ClInclude Include="RenderComponent.h">
+      <Filter>소스 파일\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="RectRenderer.h">
       <Filter>소스 파일\Component</Filter>
     </ClInclude>
   </ItemGroup>
@@ -83,7 +86,10 @@
     <ClCompile Include="Transform.cpp">
       <Filter>소스 파일\Component</Filter>
     </ClCompile>
-    <ClCompile Include="RectComponent.cpp">
+    <ClCompile Include="RenderComponent.cpp">
+      <Filter>소스 파일\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="RectRenderer.cpp">
       <Filter>소스 파일\Component</Filter>
     </ClCompile>
   </ItemGroup>

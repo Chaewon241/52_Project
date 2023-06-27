@@ -81,15 +81,20 @@ void D2DRenderer::BeginRender()
 	m_RenderTarget->Clear(D2D1::ColorF(D2D1::ColorF::White));
 }
 
-void D2DRenderer::DrawRectangle(int x1, int y1, int x2, int y2)
+void D2DRenderer::SetTransform(const D2D1_MATRIX_3X2_F& transMatrix)
 {
-	D2D1_RECT_F _rt = {};
-	_rt.left = (float)x;
-	_rt.top = (float)y;
-	_rt.right = (float)x1;
-	_rt.bottom = (float)y1;
+	m_RenderTarget->SetTransform(transMatrix);
+}
 
-	m_RenderTarget->DrawRectangle(_rt, m_pBlackBrush, 2.0f);
+void D2DRenderer::DrawRectangle(float x1, float y1, float x2, float y2)
+{
+	D2D1_RECT_F rect = {};
+	rect.left = x1;
+	rect.top = y1;
+	rect.right = x2;
+	rect.bottom = y2;
+
+	m_RenderTarget->DrawRectangle(rect, m_pBlackBrush, 2.0f);
 }
 
 void D2DRenderer::EndRender()

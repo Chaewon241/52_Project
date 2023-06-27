@@ -19,6 +19,5 @@ void Component::Update()
 
 void Component::Render(D2DRenderer* renderer)
 {
-	
 }
 

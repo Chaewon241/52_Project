@@ -3,6 +3,7 @@
 #include "../GameApp/D2DRenderer.h"
 #include "../GameApp/GameObject.h"
 #include "../GameApp/Transform.h"
+#include "../GameApp/RectRenderer.h"
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     _In_opt_ HINSTANCE hPrevInstance,
@@ -38,7 +39,27 @@ bool DemoApp::Initialize()
     GameObject* sunObject = new GameObject;
     gameObjectList.push_back(sunObject);
     sunObject->AddComponent<Transform>();
+    sunObject->AddComponent<RectRenderer>();
+    sunObject->GetComponent<Transform>()->SetLocalPosition({ 1000, 500 });
+
+    GameObject* earthObject = new GameObject;
+    gameObjectList.push_back(earthObject);
+    earthObject->AddComponent<Transform>();
+    earthObject->AddComponent<RectRenderer>();
+    earthObject->GetComponent<Transform>()->SetLocalPosition({ 1000, 50 });
+
     return true;
+}
+
+void DemoApp::Update()
+{
+    __super::Update();
+
+    for (GameObject* go : gameObjectList)
+    {
+        go->Update();
+    }
+
 }
 
 void DemoApp::Render()

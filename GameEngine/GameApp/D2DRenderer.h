@@ -15,7 +15,8 @@ public:
 	~D2DRenderer();
 	HRESULT Initialize();
 	void BeginRender();
-	void DrawRectangle(int x1, int y1, int x2, int y2);
+	void SetTransform(const D2D1_MATRIX_3X2_F& transMatrix);
+	void DrawRectangle(float x1, float y1, float x2, float y2);
 	void EndRender();
 public:
 	static D2DRenderer* m_hInstance;

@@ -22,12 +22,25 @@ public:
 	~Transform();
 public:
 	virtual void Update() override;
-	void Render(D2DRenderer* renderer) override;
+	virtual void Render(D2DRenderer* renderer);
 	void CalculateWorldTransform();
+	void Rotate(float rotation);
 public:
-	void SetLocalPosition(D2D1_VECTOR_2F Position) { m_localPosition = Position; }
-	void SetLocalScale(D2D1_VECTOR_2F Scale) { m_localScale = Scale; }
-	void SetLocalRotation(float rotation) {	m_localRotation = rotation;	}
+	void SetLocalPosition(D2D1_VECTOR_2F Position) 
+	{ 
+		m_localPosition = Position; 
+		CalculateWorldTransform();
+	}
+	void SetLocalScale(D2D1_VECTOR_2F Scale)
+	{
+		m_localScale = Scale; 
+		CalculateWorldTransform();
+	}
+	void SetLocalRotation(float rotation) 
+	{	
+		m_localRotation = rotation;
+		CalculateWorldTransform();
+	}
 
 	D2D1_VECTOR_2F GetLocalPosition() { return m_localPosition; }
 	D2D1_VECTOR_2F GetLocalScale() { return m_localScale; }

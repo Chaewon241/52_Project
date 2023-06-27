@@ -146,7 +146,8 @@
     <ClInclude Include="Object.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="GameObject.h" />
-    <ClInclude Include="RectComponent.h" />
+    <ClInclude Include="RectRenderer.h" />
+    <ClInclude Include="RenderComponent.h" />
     <ClInclude Include="TimeManager.h" />
     <ClInclude Include="Transform.h" />
   </ItemGroup>
@@ -162,7 +163,8 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="GameObject.cpp" />
-    <ClCompile Include="RectComponent.cpp" />
+    <ClCompile Include="RectRenderer.cpp" />
+    <ClCompile Include="RenderComponent.cpp" />
     <ClCompile Include="TimeManager.cpp" />
     <ClCompile Include="Transform.cpp" />
   </ItemGroup>
