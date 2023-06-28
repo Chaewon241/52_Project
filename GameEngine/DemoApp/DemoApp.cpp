@@ -40,13 +40,23 @@ bool DemoApp::Initialize()
     gameObjectList.push_back(sunObject);
     sunObject->AddComponent<Transform>();
     sunObject->AddComponent<RectRenderer>();
-    sunObject->GetComponent<Transform>()->SetLocalPosition({ 1000, 500 });
+    sunObject->GetComponent<Transform>()->SetLocalPosition({ 1000, 400 });
 
     GameObject* earthObject = new GameObject;
+    sunObject->AddChild(earthObject);
     gameObjectList.push_back(earthObject);
     earthObject->AddComponent<Transform>();
     earthObject->AddComponent<RectRenderer>();
-    earthObject->GetComponent<Transform>()->SetLocalPosition({ 1000, 50 });
+    earthObject->GetComponent<Transform>()->SetLocalPosition({ 200, 200 });
+    earthObject->GetComponent<Transform>()->SetLocalScale({ 0.8f, 0.8f });
+
+    GameObject* moonObject = new GameObject;
+    earthObject->AddChild(moonObject);
+    gameObjectList.push_back(moonObject);
+    moonObject->AddComponent<Transform>();
+    moonObject->AddComponent<RectRenderer>();
+    moonObject->GetComponent<Transform>()->SetLocalPosition({ 200, 200 });
+    moonObject->GetComponent<Transform>()->SetLocalScale({ 0.5f, 0.5f });
 
     return true;
 }

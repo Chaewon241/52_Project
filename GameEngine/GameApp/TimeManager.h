@@ -9,7 +9,7 @@ protected:
 	float m_time;
 
 public:
-	TimeManager* m_Instance;
+	static TimeManager* m_Instance;
 
 public:
 	TimeManager();

@@ -1,6 +1,7 @@
 ﻿#include "pch.h"
 #include "GameApp.h"
 #include "D2DRenderer.h"
+#include "TimeManager.h"
 
 GameApp* GameApp::m_hInstance = nullptr;
 HWND GameApp::m_hwnd;
@@ -64,6 +65,9 @@ bool GameApp::Initialize()
 
     HRESULT hr = m_D2DRenderer.Initialize();
 
+    TimeManager::m_Instance = new TimeManager;
+    TimeManager::m_Instance->Initialize();
+
     return true;
 }
 
@@ -90,7 +94,7 @@ void GameApp::Loop()
 
 void GameApp::Update()
 {
-
+    TimeManager::m_Instance->Update();
 }
 
 void GameApp::Render()

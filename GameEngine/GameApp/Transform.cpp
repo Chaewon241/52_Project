@@ -2,7 +2,7 @@
 #include "Component.h"
 #include "GameObject.h"
 #include "Transform.h"
-#include "Timemanager.h"
+#include "TimeManager.h"
 #include "D2DRenderer.h"
 
 Transform::Transform(GameObject* gameObject)
@@ -10,9 +10,6 @@ Transform::Transform(GameObject* gameObject)
 	, m_localPosition({ 0.f, 0.f })
 	, m_localScale({ 1.f, 1.f })
 	, m_localRotation(0.f)
-	, m_worldPosition({ 0.f, 0.f })
-	, m_worldScale({ 1.f, 1.f })
-	, m_worldRotation(0.f)
 	, m_localTransform(D2D1::Matrix3x2F::Identity())
 	, m_worldTransform(m_localTransform)
 {
@@ -25,8 +22,7 @@ Transform::~Transform()
 void Transform::Update()
 {
 	static float time = 0.f;
-	TimeManager tm;
-	float deltaTime = tm.GetDeltatime();
+	float deltaTime = TimeManager::m_Instance->GetDeltatime();
 
 	if (time > 0.001f)
 	{
@@ -38,7 +34,7 @@ void Transform::Update()
 
 void Transform::Render(D2DRenderer* renderer)
 {
-
+	CalculateWorldTransform();
 }
 
 void Transform::Rotate(float rotation)
@@ -47,6 +43,7 @@ void Transform::Rotate(float rotation)
 
 	if (m_localRotation > 360.0f)
 		m_localRotation -= 360.0f;
+
 }
 
 void Transform::CalculateWorldTransform()

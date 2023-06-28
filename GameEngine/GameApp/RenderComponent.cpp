@@ -16,6 +16,7 @@ RenderComponent::~RenderComponent()
 
 void RenderComponent::Update()
 {
+	m_transform = GetGameObject()->GetComponent<Transform>();
 }
 
 void RenderComponent::Render(D2DRenderer* renderer)

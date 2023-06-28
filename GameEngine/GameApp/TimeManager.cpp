@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "TimeManager.h"
 
+TimeManager* TimeManager::m_Instance = nullptr;
+
 TimeManager::TimeManager()
 	:m_deltaTime(0.f), m_curTime(0.f), m_prevTime(0.f), m_time(0.f)
 {

@@ -20,7 +20,10 @@ public:
 	virtual void Render(D2DRenderer* renderer) override;
 public:
 	void AddChild(GameObject* child);
-	void SetParent(GameObject* parent) { m_parent = parent; }
+	void SetParent(GameObject* parent) 
+	{ 
+		m_parent = parent;
+	}
 	GameObject* GetParent() { return m_parent; }
 public:
 	template <typename TComponent>

@@ -6,6 +6,7 @@
 #define MAX_LOADSTRING 100
 
 class D2DRenderer;
+class TimeManager;
 
 // 게임의 루프를 담당
 class GameApp
