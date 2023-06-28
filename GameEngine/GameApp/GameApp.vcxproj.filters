@@ -60,6 +60,9 @@
     <ClInclude Include="RectRenderer.h">
       <Filter>소스 파일\Component</Filter>
     </ClInclude>
+    <ClInclude Include="AnimationComponent.h">
+      <Filter>소스 파일\Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameApp.cpp">
@@ -90,6 +93,9 @@
       <Filter>소스 파일\Component</Filter>
     </ClCompile>
     <ClCompile Include="RectRenderer.cpp">
+      <Filter>소스 파일\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationComponent.cpp">
       <Filter>소스 파일\Component</Filter>
     </ClCompile>
   </ItemGroup>

@@ -26,7 +26,7 @@ void Transform::Update()
 
 	if (time > 0.001f)
 	{
-		Rotate(1.0f);
+		Rotate(0.5f);
 		time -= 0.001f;
 	}
 	time += deltaTime;
