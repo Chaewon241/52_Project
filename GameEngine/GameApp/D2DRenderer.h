@@ -5,7 +5,7 @@
 class D2DRenderer
 {
 private:
-	static ID2D1HwndRenderTarget* m_RenderTarget;
+	static ID2D1HwndRenderTarget* m_renderTarget;
 	ID2D1Factory* m_pD2DFactory;	
 	IWICImagingFactory* m_pWICFactory;
 

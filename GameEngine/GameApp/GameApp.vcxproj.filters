@@ -72,6 +72,9 @@
     <ClInclude Include="AnimationAsset.h">
       <Filter>소스 파일\Resource</Filter>
     </ClInclude>
+    <ClInclude Include="AnimationInstance.h">
+      <Filter>소스 파일\Object</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameApp.cpp">
@@ -112,6 +115,9 @@
     </ClCompile>
     <ClCompile Include="AnimationAsset.cpp">
       <Filter>소스 파일\Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationInstance.cpp">
+      <Filter>소스 파일\Object</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
