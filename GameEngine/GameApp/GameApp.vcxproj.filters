@@ -25,6 +25,9 @@
     <Filter Include="소스 파일\Component">
       <UniqueIdentifier>{ccb2f9fa-7df8-4b9b-b6a5-36e7c7ac8958}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\Resource">
+      <UniqueIdentifier>{7ab899a1-f7ff-4943-96a9-a159f3a277fd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -63,6 +66,12 @@
     <ClInclude Include="AnimationComponent.h">
       <Filter>소스 파일\Component</Filter>
     </ClInclude>
+    <ClInclude Include="EllipseRenderer.h">
+      <Filter>소스 파일\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationAsset.h">
+      <Filter>소스 파일\Resource</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameApp.cpp">
@@ -97,6 +106,12 @@
     </ClCompile>
     <ClCompile Include="AnimationComponent.cpp">
       <Filter>소스 파일\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="EllipseRenderer.cpp">
+      <Filter>소스 파일\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationAsset.cpp">
+      <Filter>소스 파일\Resource</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

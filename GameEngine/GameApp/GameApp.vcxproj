@@ -139,9 +139,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AnimationAsset.h" />
     <ClInclude Include="AnimationComponent.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="D2DRenderer.h" />
+    <ClInclude Include="EllipseRenderer.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="GameApp.h" />
     <ClInclude Include="Object.h" />
@@ -153,9 +155,11 @@
     <ClInclude Include="Transform.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AnimationAsset.cpp" />
     <ClCompile Include="AnimationComponent.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="D2DRenderer.cpp" />
+    <ClCompile Include="EllipseRenderer.cpp" />
     <ClCompile Include="GameApp.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="pch.cpp">

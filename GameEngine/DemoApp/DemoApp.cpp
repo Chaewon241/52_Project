@@ -4,6 +4,7 @@
 #include "../GameApp/GameObject.h"
 #include "../GameApp/Transform.h"
 #include "../GameApp/RectRenderer.h"
+#include "../GameApp/EllipseRenderer.h"
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     _In_opt_ HINSTANCE hPrevInstance,
@@ -46,7 +47,7 @@ bool DemoApp::Initialize()
     sunObject->AddChild(earthObject);
     gameObjectList.push_back(earthObject);
     earthObject->AddComponent<Transform>();
-    earthObject->AddComponent<RectRenderer>();
+    earthObject->AddComponent<EllipseRenderer>();
     earthObject->GetComponent<Transform>()->SetLocalPosition({ 200, 200 });
     earthObject->GetComponent<Transform>()->SetLocalScale({ 0.8f, 0.8f });
 

@@ -30,11 +30,12 @@ void Transform::Update()
 		time -= 0.001f;
 	}
 	time += deltaTime;
+
+	CalculateWorldTransform();
 }
 
 void Transform::Render(D2DRenderer* renderer)
 {
-	CalculateWorldTransform();
 }
 
 void Transform::Rotate(float rotation)
