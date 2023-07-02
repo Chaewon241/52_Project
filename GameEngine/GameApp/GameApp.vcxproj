@@ -139,9 +139,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="AnimationAsset.h" />
-    <ClInclude Include="AnimationComponent.h" />
-    <ClInclude Include="AnimationInstance.h" />
+    <ClInclude Include="AnimationClip.h" />
+    <ClInclude Include="Animator.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="D2DRenderer.h" />
     <ClInclude Include="EllipseRenderer.h" />
@@ -152,13 +151,13 @@
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="RectRenderer.h" />
     <ClInclude Include="RenderComponent.h" />
+    <ClInclude Include="SpriteRenderer.h" />
     <ClInclude Include="TimeManager.h" />
     <ClInclude Include="Transform.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AnimationAsset.cpp" />
-    <ClCompile Include="AnimationComponent.cpp" />
-    <ClCompile Include="AnimationInstance.cpp" />
+    <ClCompile Include="AnimationClip.cpp" />
+    <ClCompile Include="Animator.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="D2DRenderer.cpp" />
     <ClCompile Include="EllipseRenderer.cpp" />
@@ -173,6 +172,7 @@
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="RectRenderer.cpp" />
     <ClCompile Include="RenderComponent.cpp" />
+    <ClCompile Include="SpriteRenderer.cpp" />
     <ClCompile Include="TimeManager.cpp" />
     <ClCompile Include="Transform.cpp" />
   </ItemGroup>

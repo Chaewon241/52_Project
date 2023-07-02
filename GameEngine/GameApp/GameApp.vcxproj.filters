@@ -60,20 +60,20 @@
     <ClInclude Include="RenderComponent.h">
       <Filter>소스 파일\Component</Filter>
     </ClInclude>
-    <ClInclude Include="RectRenderer.h">
-      <Filter>소스 파일\Component</Filter>
-    </ClInclude>
-    <ClInclude Include="AnimationComponent.h">
-      <Filter>소스 파일\Component</Filter>
-    </ClInclude>
     <ClInclude Include="EllipseRenderer.h">
+      <Filter>소스 파일\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="RectRenderer.h">
+      <Filter>소스 파일\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Animator.h">
       <Filter>소스 파일\Component</Filter>
     </ClInclude>
-    <ClInclude Include="AnimationAsset.h">
+    <ClInclude Include="AnimationClip.h">
       <Filter>소스 파일\Resource</Filter>
     </ClInclude>
-    <ClInclude Include="AnimationInstance.h">
-      <Filter>소스 파일\Object</Filter>
+    <ClInclude Include="SpriteRenderer.h">
+      <Filter>소스 파일\Render</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -104,20 +104,20 @@
     <ClCompile Include="RenderComponent.cpp">
       <Filter>소스 파일\Component</Filter>
     </ClCompile>
-    <ClCompile Include="RectRenderer.cpp">
-      <Filter>소스 파일\Component</Filter>
-    </ClCompile>
-    <ClCompile Include="AnimationComponent.cpp">
-      <Filter>소스 파일\Component</Filter>
-    </ClCompile>
     <ClCompile Include="EllipseRenderer.cpp">
+      <Filter>소스 파일\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="RectRenderer.cpp">
+      <Filter>소스 파일\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Animator.cpp">
       <Filter>소스 파일\Component</Filter>
     </ClCompile>
-    <ClCompile Include="AnimationAsset.cpp">
+    <ClCompile Include="AnimationClip.cpp">
       <Filter>소스 파일\Resource</Filter>
     </ClCompile>
-    <ClCompile Include="AnimationInstance.cpp">
-      <Filter>소스 파일\Object</Filter>
+    <ClCompile Include="SpriteRenderer.cpp">
+      <Filter>소스 파일\Render</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
