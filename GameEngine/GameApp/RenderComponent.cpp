@@ -3,6 +3,8 @@
 #include "Transform.h"
 #include "GameObject.h"
 #include "D2DRenderer.h"
+#include "AnimationClip.h"
+#include "SpriteRenderer.h"
 
 RenderComponent::RenderComponent(GameObject* gameObject)
 	:Component(gameObject)

@@ -24,7 +24,8 @@ struct FRAME_INFO
 // 하나의 동작에 대한 정보
 struct ANIMATION_INFO
 {
-	std::vector<FRAME_INFO> m_Frames; // 프레임의 모음
+	std::wstring m_Name;
+	std::vector<FRAME_INFO> m_Frames;
 	bool m_Loop;
 
 	ANIMATION_INFO()
@@ -38,13 +39,17 @@ class AnimationClip
 {
 private:
 	std::vector<FRAME_INFO> m_AnimationClips;
-	std::vector<ANIMATION_INFO> m_Animations;
 
 public:
 	AnimationClip()	{}
 	~AnimationClip() {}
 public:
+	void SetD2DBitmap(const WCHAR* szFilePath);
+public:
+	ID2D1Bitmap* m_pBitmap;
+	std::wstring m_BitmapFilePath;
 
+	std::vector<ANIMATION_INFO> m_Animations;
 };
 
 /*

@@ -4,6 +4,7 @@
 class GameObject;
 class D2DRenderer;
 class Transform;
+class AnimationClip;
 
 class RenderComponent : public Component
 {

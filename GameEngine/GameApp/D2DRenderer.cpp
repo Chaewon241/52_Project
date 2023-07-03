@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "D2DRenderer.h"
 #include "GameApp.h"
+#include "AnimationClip.h"
 #include <d2d1.h>
 
 #pragma comment(lib,"d2d1.lib")
@@ -53,6 +54,17 @@ HRESULT D2DRenderer::Initialize()
 
 	if (SUCCEEDED(hr))
 	{
+		// Create WIC factory
+		hr = CoCreateInstance(
+			CLSID_WICImagingFactory,
+			NULL,
+			CLSCTX_INPROC_SERVER,
+			IID_PPV_ARGS(&m_pImageFactory)
+		);
+	}
+
+	if (SUCCEEDED(hr))
+	{
 		hr = m_renderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Red), &m_pRedBrush);
 	}
 
@@ -75,6 +87,103 @@ HRESULT D2DRenderer::Initialize()
 	return hr;
 }
 
+HRESULT D2DRenderer::CreateSharedD2DBitmapFromFile(std::wstring strFilePath, ID2D1Bitmap** ppID2D1Bitmap)
+{
+	auto it = std::find_if(m_SharingBitmaps.begin(), m_SharingBitmaps.end(),
+		[strFilePath](std::pair<std::wstring, ID2D1Bitmap*> ContainerData)
+		{
+			return (ContainerData.first == strFilePath);
+		}
+	);
+
+	HRESULT hr;
+	if (it != m_SharingBitmaps.end())
+	{
+		ID2D1Bitmap* pBitmap = (*it).second;
+		*ppID2D1Bitmap = pBitmap;
+		pBitmap->AddRef();
+		hr = S_OK;
+		return hr;
+	}
+
+	IWICBitmapDecoder* pDecoder = NULL;
+	IWICFormatConverter* pConverter = NULL;
+
+	hr = m_pImageFactory->CreateDecoderFromFilename(
+		strFilePath.c_str(),            
+		NULL,                           
+		GENERIC_READ,                   
+		WICDecodeMetadataCacheOnDemand, 
+		&pDecoder                       
+	);
+
+	IWICBitmapFrameDecode* pFrame = NULL;
+	if (SUCCEEDED(hr))
+	{
+		hr = pDecoder->GetFrame(0, &pFrame);
+	}
+
+	if (SUCCEEDED(hr))
+	{
+		hr = m_pImageFactory->CreateFormatConverter(&pConverter);
+	}
+
+	if (SUCCEEDED(hr))
+	{
+		hr = pConverter->Initialize(
+			pFrame,                        
+			GUID_WICPixelFormat32bppPBGRA, 
+			WICBitmapDitherTypeNone,       
+			NULL,                           
+			0.f,                           
+			WICBitmapPaletteTypeCustom     
+		);
+	}
+
+	if (SUCCEEDED(hr))
+	{
+		hr = m_renderTarget->CreateBitmapFromWicBitmap(pConverter, NULL, ppID2D1Bitmap);
+	}
+
+	if (pConverter)
+		pConverter->Release();
+
+	if (pDecoder)
+		pDecoder->Release();
+
+	if (pFrame)
+		pFrame->Release();
+
+	if (FAILED(hr))
+	{
+		_com_error err(hr);
+		return hr;
+	}
+
+	m_SharingBitmaps.push_back(std::pair<std::wstring, ID2D1Bitmap*>(strFilePath, *ppID2D1Bitmap));
+	return hr;
+}
+
+AnimationClip* D2DRenderer::CreateSharedAnimationAsset(std::wstring strFilePath)
+{
+	auto it = std::find_if(m_SharingAnimationAssets.begin(), m_SharingAnimationAssets.end(),
+		[strFilePath](std::pair<std::wstring, AnimationClip*> ContainerData)
+		{
+			return (ContainerData.first == strFilePath);
+		}
+	);
+
+	AnimationClip* pAnimationClips = nullptr;
+	if (it != m_SharingAnimationAssets.end())
+	{
+		pAnimationClips = (*it).second;
+		return pAnimationClips;
+	}
+	pAnimationClips = new AnimationClip;
+	m_SharingAnimationAssets.push_back(std::pair<std::wstring, AnimationClip*>(strFilePath, pAnimationClips));
+	return pAnimationClips;
+}
+
 void D2DRenderer::BeginRender()
 {
 	m_renderTarget->BeginDraw();
@@ -84,6 +193,12 @@ void D2DRenderer::BeginRender()
 void D2DRenderer::SetTransform(const D2D1_MATRIX_3X2_F& transMatrix)
 {
 	m_renderTarget->SetTransform(transMatrix);
+}
+
+void D2DRenderer::DrawAnimation(AnimationClip* m_pAnimationAsset)
+{
+	m_renderTarget->DrawBitmap(m_pAnimationAsset->m_pBitmap, { 10, 10, 10, 10 }, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, { 0, 0, 0, 0 });
+	
 }
 
 void D2DRenderer::DrawRectangle(float x1, float y1, float x2, float y2)

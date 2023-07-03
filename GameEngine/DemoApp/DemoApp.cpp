@@ -5,6 +5,7 @@
 #include "../GameApp/Transform.h"
 #include "../GameApp/RectRenderer.h"
 #include "../GameApp/EllipseRenderer.h"
+#include "../GameApp/AnimationClip.h"
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     _In_opt_ HINSTANCE hPrevInstance,
@@ -36,6 +37,24 @@ DemoApp::~DemoApp()
 bool DemoApp::Initialize() 
 {
     __super::Initialize();
+
+    ANIMATION_INFO Animation;
+    m_pAnimationAsset = m_D2DRenderer.CreateSharedAnimationAsset(L"Test");
+    m_pAnimationAsset->SetD2DBitmap(L"../resources/run.png");
+
+    Animation.m_Name = L"Run";
+    Animation.m_Frames.clear();
+    Animation.m_Frames.push_back(FRAME_INFO(28, 36, 103, 84, 0.1f));
+    Animation.m_Frames.push_back(FRAME_INFO(148, 36, 86, 84, 0.1f));
+    Animation.m_Frames.push_back(FRAME_INFO(255, 34, 87, 86, 0.1f));
+    Animation.m_Frames.push_back(FRAME_INFO(363, 32, 76, 88, 0.1f));
+    Animation.m_Frames.push_back(FRAME_INFO(458, 31, 91, 89, 0.1f));
+    Animation.m_Frames.push_back(FRAME_INFO(567, 40, 103, 80, 0.1f));
+    Animation.m_Frames.push_back(FRAME_INFO(686, 32, 85, 88, 0.1f));
+    Animation.m_Frames.push_back(FRAME_INFO(792, 32, 86, 88, 0.1f));
+    Animation.m_Frames.push_back(FRAME_INFO(899, 31, 76, 89, 0.1f));
+    Animation.m_Frames.push_back(FRAME_INFO(993, 33, 92, 87, 0.1f));
+    m_pAnimationAsset->m_Animations.push_back(Animation);
 
     GameObject* sunObject = new GameObject;
     gameObjectList.push_back(sunObject);

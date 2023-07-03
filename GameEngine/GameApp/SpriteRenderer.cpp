@@ -20,5 +20,5 @@ void SpriteRenderer::Render(D2DRenderer* renderer)
 {
 	renderer->SetTransform(m_transform->GetWorldTransform());
 
-	// D2DRenderer¿¡ DrawAnimation?
+	renderer->DrawAnimation()
 }
