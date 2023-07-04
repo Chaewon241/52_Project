@@ -5,10 +5,9 @@
 #include "../GameApp/Transform.h"
 #include "../GameApp/RectRenderer.h"
 #include "../GameApp/EllipseRenderer.h"
-#include "../GameApp/AnimationClip.h"
-#include "../GameApp/Animator.h"
 #include "../GameApp/RenderComponent.h"
 #include "../GameApp/SpriteRenderer.h"
+#include "../GameApp/Sprite.h"
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     _In_opt_ HINSTANCE hPrevInstance,
@@ -41,33 +40,18 @@ bool DemoApp::Initialize()
 {
     __super::Initialize();
 
-    ANIMATION_INFO Animation;
-    
-    Animator::m_AnimationClips = m_D2DRenderer.CreateSharedAnimationAsset(L"Test");
-    Animator::m_AnimationClips->SetD2DBitmap(L"../resources/run.png");
-    
-    Animation.m_Name = L"Run";
-    Animation.m_Frames.clear();
-    Animation.m_Frames.push_back(FRAME_INFO(28, 36, 103, 84, 0.1f));
-    Animation.m_Frames.push_back(FRAME_INFO(148, 36, 86, 84, 0.1f));
-    Animation.m_Frames.push_back(FRAME_INFO(255, 34, 87, 86, 0.1f));
-    Animation.m_Frames.push_back(FRAME_INFO(363, 32, 76, 88, 0.1f));
-    Animation.m_Frames.push_back(FRAME_INFO(458, 31, 91, 89, 0.1f));
-    Animation.m_Frames.push_back(FRAME_INFO(567, 40, 103, 80, 0.1f));
-    Animation.m_Frames.push_back(FRAME_INFO(686, 32, 85, 88, 0.1f));
-    Animation.m_Frames.push_back(FRAME_INFO(792, 32, 86, 88, 0.1f));
-    Animation.m_Frames.push_back(FRAME_INFO(899, 31, 76, 89, 0.1f));
-    Animation.m_Frames.push_back(FRAME_INFO(993, 33, 92, 87, 0.1f));
-    Animator::m_AnimationClips->m_Animations.push_back(Animation);
+    GameObject* playerObject = new GameObject;
+    gameObjectList.push_back(playerObject);
+    playerObject->AddComponent<Transform>();
+    playerObject->GetComponent<Transform>()->SetLocalPosition({ 100, 100 });
+    playerObject->AddComponent<SpriteRenderer>();
+    playerObject->GetComponent<SpriteRenderer>()->SetSprite(new Sprite(L"Run", 28, 36, 103, 84));
 
     GameObject* sunObject = new GameObject;
     gameObjectList.push_back(sunObject);
     sunObject->AddComponent<Transform>();
-    sunObject->AddComponent<RectRenderer>();
-    sunObject->AddComponent<Animator>();
-    Animator::m_AnimatorInstance->SetAnimationClip(Animator::m_AnimationClips->m_Animations);
-    Animator::m_AnimatorInstance->SetAnimationPath(Animator::m_AnimationClips->m_BitmapFilePath);
     sunObject->GetComponent<Transform>()->SetLocalPosition({ 1200, 450 });
+    sunObject->AddComponent<RectRenderer>();
 
     GameObject* earthObject = new GameObject;
     sunObject->AddChild(earthObject);
@@ -87,6 +71,7 @@ bool DemoApp::Initialize()
 
     return true;
 }
+
 
 void DemoApp::Update()
 {

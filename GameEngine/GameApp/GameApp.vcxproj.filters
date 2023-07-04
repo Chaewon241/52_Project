@@ -75,6 +75,12 @@
     <ClInclude Include="SpriteRenderer.h">
       <Filter>소스 파일\Render</Filter>
     </ClInclude>
+    <ClInclude Include="Sprite.h">
+      <Filter>소스 파일\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationRenderer.h">
+      <Filter>소스 파일\Render</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameApp.cpp">
@@ -117,6 +123,12 @@
       <Filter>소스 파일\Resource</Filter>
     </ClCompile>
     <ClCompile Include="SpriteRenderer.cpp">
+      <Filter>소스 파일\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Sprite.cpp">
+      <Filter>소스 파일\Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationRenderer.cpp">
       <Filter>소스 파일\Render</Filter>
     </ClCompile>
   </ItemGroup>

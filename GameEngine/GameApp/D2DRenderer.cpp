@@ -3,9 +3,12 @@
 #include "GameApp.h"
 #include "AnimationClip.h"
 #include <d2d1.h>
+#include "../DemoApp/DemoApp.h"
+#include "Sprite.h"
 
 #pragma comment(lib,"d2d1.lib")
 #pragma comment(lib,"dwrite.lib")
+#pragma comment(lib,"Windowscodecs.lib") 
 
 ID2D1HwndRenderTarget* D2DRenderer::m_renderTarget = NULL;
 D2DRenderer* D2DRenderer::m_hInstance = nullptr;
@@ -54,17 +57,6 @@ HRESULT D2DRenderer::Initialize()
 
 	if (SUCCEEDED(hr))
 	{
-		// Create WIC factory
-		hr = CoCreateInstance(
-			CLSID_WICImagingFactory,
-			NULL,
-			CLSCTX_INPROC_SERVER,
-			IID_PPV_ARGS(&m_pImageFactory)
-		);
-	}
-
-	if (SUCCEEDED(hr))
-	{
 		hr = m_renderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Red), &m_pRedBrush);
 	}
 
@@ -84,104 +76,47 @@ HRESULT D2DRenderer::Initialize()
 		MessageBox(GameApp::m_hwnd, err.ErrorMessage(), L"FAILED", MB_OK);
 	}
 
+	LoadSpriteSheet(L"Run", L"../resources/run.png");
+
 	return hr;
 }
 
-HRESULT D2DRenderer::CreateSharedD2DBitmapFromFile(std::wstring strFilePath, ID2D1Bitmap** ppID2D1Bitmap)
+void D2DRenderer::LoadSpriteSheet(std::wstring spriteName, LPCWSTR filePath)
 {
-	auto it = std::find_if(m_SharingBitmaps.begin(), m_SharingBitmaps.end(),
-		[strFilePath](std::pair<std::wstring, ID2D1Bitmap*> ContainerData)
-		{
-			return (ContainerData.first == strFilePath);
-		}
-	);
+	HRESULT hr = D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, &m_D2DFactory);
 
-	HRESULT hr;
-	if (it != m_SharingBitmaps.end())
-	{
-		ID2D1Bitmap* pBitmap = (*it).second;
-		*ppID2D1Bitmap = pBitmap;
-		pBitmap->AddRef();
-		hr = S_OK;
-		return hr;
-	}
-
-	IWICBitmapDecoder* pDecoder = NULL;
+	CoInitializeEx(NULL, COINIT_MULTITHREADED);
+	IWICImagingFactory* pWICFactory = NULL;
 	IWICFormatConverter* pConverter = NULL;
 
-	hr = m_pImageFactory->CreateDecoderFromFilename(
-		strFilePath.c_str(),            
-		NULL,                           
-		GENERIC_READ,                   
-		WICDecodeMetadataCacheOnDemand, 
-		&pDecoder                       
-	);
+	hr = CoCreateInstance(CLSID_WICImagingFactory, NULL, CLSCTX_INPROC_SERVER, IID_IWICImagingFactory, reinterpret_cast<void**>(&pWICFactory));
+
+	IWICBitmapDecoder* pDecoder = NULL;
+	hr = pWICFactory->CreateDecoderFromFilename(filePath, NULL, GENERIC_READ, WICDecodeMetadataCacheOnDemand, &pDecoder);
 
 	IWICBitmapFrameDecode* pFrame = NULL;
-	if (SUCCEEDED(hr))
-	{
-		hr = pDecoder->GetFrame(0, &pFrame);
-	}
+	hr = pDecoder->GetFrame(0, &pFrame);
 
-	if (SUCCEEDED(hr))
-	{
-		hr = m_pImageFactory->CreateFormatConverter(&pConverter);
-	}
+	ID2D1Bitmap* sheet = NULL;
+	hr = pWICFactory->CreateFormatConverter(&pConverter);
 
-	if (SUCCEEDED(hr))
-	{
-		hr = pConverter->Initialize(
-			pFrame,                        
-			GUID_WICPixelFormat32bppPBGRA, 
-			WICBitmapDitherTypeNone,       
-			NULL,                           
-			0.f,                           
-			WICBitmapPaletteTypeCustom     
-		);
-	}
+	hr = pConverter->Initialize(
+		pFrame,                       
+		GUID_WICPixelFormat32bppPBGRA,
+		WICBitmapDitherTypeNone,      
+		NULL,                          
+		0.f,                          
+		WICBitmapPaletteTypeCustom    
+	);
 
-	if (SUCCEEDED(hr))
-	{
-		hr = m_renderTarget->CreateBitmapFromWicBitmap(pConverter, NULL, ppID2D1Bitmap);
-	}
-
-	if (pConverter)
-		pConverter->Release();
-
-	if (pDecoder)
-		pDecoder->Release();
-
-	if (pFrame)
-		pFrame->Release();
+	hr = m_renderTarget->CreateBitmapFromWicBitmap(pConverter, NULL, &sheet);
 
 	if (FAILED(hr))
 	{
-		_com_error err(hr);
-		return hr;
+		_com_issue_error(hr);
 	}
 
-	m_SharingBitmaps.push_back(std::pair<std::wstring, ID2D1Bitmap*>(strFilePath, *ppID2D1Bitmap));
-	return hr;
-}
-
-AnimationClip* D2DRenderer::CreateSharedAnimationAsset(std::wstring strFilePath)
-{
-	auto it = std::find_if(m_SharingAnimationAssets.begin(), m_SharingAnimationAssets.end(),
-		[strFilePath](std::pair<std::wstring, AnimationClip*> ContainerData)
-		{
-			return (ContainerData.first == strFilePath);
-		}
-	);
-
-	AnimationClip* pAnimationClips = nullptr;
-	if (it != m_SharingAnimationAssets.end())
-	{
-		pAnimationClips = (*it).second;
-		return pAnimationClips;
-	}
-	pAnimationClips = new AnimationClip;
-	m_SharingAnimationAssets.push_back(std::pair<std::wstring, AnimationClip*>(strFilePath, pAnimationClips));
-	return pAnimationClips;
+	m_spriteSheets[spriteName] = sheet;
 }
 
 void D2DRenderer::BeginRender()
@@ -195,10 +130,32 @@ void D2DRenderer::SetTransform(const D2D1_MATRIX_3X2_F& transMatrix)
 	m_renderTarget->SetTransform(transMatrix);
 }
 
-void D2DRenderer::DrawAnimation(AnimationClip* m_pAnimationAsset)
+void D2DRenderer::DrawSprite(Sprite* sprite)
 {
-	m_renderTarget->DrawBitmap(m_pAnimationAsset->m_pBitmap, { 10, 10, 10, 10 }, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, { 0, 0, 0, 0 });
+	ID2D1Bitmap* _sheet = m_spriteSheets[sprite->m_SpriteName];
+
 	
+	m_renderTarget->DrawBitmap(
+		_sheet
+		, D2D1::RectF((float)-(sprite->m_width) / 2, (float)-(sprite->m_height) / 2, (float)(sprite->m_width) / 2, (float)(sprite->m_height) / 2)
+		, sprite->m_Opacity
+		, D2D1_BITMAP_INTERPOLATION_MODE_LINEAR
+		, D2D1::RectF((float)sprite->m_left, (float)sprite->m_top, (float)sprite->m_right, (float)sprite->m_bottom)
+		);
+}
+
+
+void D2DRenderer::DrawAnimation(Sprite* sprite)
+{
+	ID2D1Bitmap* _sheet = m_spriteSheets[sprite->m_SpriteName];
+
+	m_renderTarget->DrawBitmap(
+		_sheet
+		, D2D1::RectF((float)-(sprite->m_width) / 2, (float)-(sprite->m_height) / 2, (float)(sprite->m_width) / 2, (float)(sprite->m_height) / 2)
+		, sprite->m_Opacity
+		, D2D1_BITMAP_INTERPOLATION_MODE_LINEAR
+		, D2D1::RectF((float)sprite->m_left, (float)sprite->m_top, (float)sprite->m_right, (float)sprite->m_bottom)
+	);
 }
 
 void D2DRenderer::DrawRectangle(float x1, float y1, float x2, float y2)

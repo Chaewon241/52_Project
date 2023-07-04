@@ -6,5 +6,5 @@
 void AnimationClip::SetD2DBitmap(const WCHAR* szFilePath)
 {
 	m_BitmapFilePath = szFilePath;
-	HRESULT hr = D2DRenderer::m_hInstance->CreateSharedD2DBitmapFromFile(m_BitmapFilePath, &m_pBitmap);
+	//HRESULT hr = D2DRenderer::m_hInstance->CreateSharedD2DBitmapFromFile(m_BitmapFilePath, &m_pBitmap);
 }

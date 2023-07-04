@@ -4,7 +4,7 @@
 #include "D2DRenderer.h"
 #include "GameObject.h"
 #include "Transform.h"
-#include "Animator.h"
+#include "Sprite.h"
 
 SpriteRenderer::SpriteRenderer(GameObject* gameObject)
 	: RenderComponent(gameObject)
@@ -19,5 +19,5 @@ void SpriteRenderer::Render(D2DRenderer* renderer)
 {
 	renderer->SetTransform(m_transform->GetWorldTransform());
 
-	renderer->DrawAnimation(m_Animator->m_AnimationClips);
+	renderer->DrawSprite(m_Sprite);
 }
