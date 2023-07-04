@@ -6,6 +6,9 @@
 #include "../GameApp/RectRenderer.h"
 #include "../GameApp/EllipseRenderer.h"
 #include "../GameApp/AnimationClip.h"
+#include "../GameApp/Animator.h"
+#include "../GameApp/RenderComponent.h"
+#include "../GameApp/SpriteRenderer.h"
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     _In_opt_ HINSTANCE hPrevInstance,
@@ -39,9 +42,10 @@ bool DemoApp::Initialize()
     __super::Initialize();
 
     ANIMATION_INFO Animation;
-    m_pAnimationAsset = m_D2DRenderer.CreateSharedAnimationAsset(L"Test");
-    m_pAnimationAsset->SetD2DBitmap(L"../resources/run.png");
-
+    
+    Animator::m_AnimationClips = m_D2DRenderer.CreateSharedAnimationAsset(L"Test");
+    Animator::m_AnimationClips->SetD2DBitmap(L"../resources/run.png");
+    
     Animation.m_Name = L"Run";
     Animation.m_Frames.clear();
     Animation.m_Frames.push_back(FRAME_INFO(28, 36, 103, 84, 0.1f));
@@ -54,12 +58,15 @@ bool DemoApp::Initialize()
     Animation.m_Frames.push_back(FRAME_INFO(792, 32, 86, 88, 0.1f));
     Animation.m_Frames.push_back(FRAME_INFO(899, 31, 76, 89, 0.1f));
     Animation.m_Frames.push_back(FRAME_INFO(993, 33, 92, 87, 0.1f));
-    m_pAnimationAsset->m_Animations.push_back(Animation);
+    Animator::m_AnimationClips->m_Animations.push_back(Animation);
 
     GameObject* sunObject = new GameObject;
     gameObjectList.push_back(sunObject);
     sunObject->AddComponent<Transform>();
     sunObject->AddComponent<RectRenderer>();
+    sunObject->AddComponent<Animator>();
+    Animator::m_AnimatorInstance->SetAnimationClip(Animator::m_AnimationClips->m_Animations);
+    Animator::m_AnimatorInstance->SetAnimationPath(Animator::m_AnimationClips->m_BitmapFilePath);
     sunObject->GetComponent<Transform>()->SetLocalPosition({ 1200, 450 });
 
     GameObject* earthObject = new GameObject;

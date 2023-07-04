@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "AnimationClip.h"
 #include "D2DRenderer.h"
+#include <cassert>
 
 void AnimationClip::SetD2DBitmap(const WCHAR* szFilePath)
 {

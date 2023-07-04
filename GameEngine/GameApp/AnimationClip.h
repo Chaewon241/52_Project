@@ -50,7 +50,10 @@ public:
 	std::wstring m_BitmapFilePath;
 
 	std::vector<ANIMATION_INFO> m_Animations;
+	AnimationClip* m_AnimationInstance;
 };
+
+// 임채무의 무는 무능의 무...
 
 /*
 FRAME_INFO( 28, 36, 103, 84, 0.1f));

@@ -3,6 +3,7 @@
 #include "Object.h"
 #include "GameObject.h"
 #include "D2DRenderer.h"
+#include "AnimationClip.h"
 
 Component::Component(GameObject* gameObject)
 	: m_GameObject(gameObject)

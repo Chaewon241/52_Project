@@ -2,6 +2,7 @@
 
 class GameObject;
 class D2DRenderer;
+class AnimationClip;
 
 class Component
 {
