@@ -4,6 +4,7 @@
 #include <string>
 #include <wincodec.h>
 #include <unordered_map>
+#include <vector>
 
 class AnimationClip;
 class Sprite;
@@ -30,10 +31,12 @@ public:
 	void BeginRender();
 	void SetTransform(const D2D1_MATRIX_3X2_F& transMatrix);
 	void DrawSprite(Sprite* sprite);
-	void DrawAnimation(Sprite* sprite);
+	void DrawAnimation(AnimationClip* clipName, std::vector<int> vec);
 	void DrawRectangle(float x1, float y1, float x2, float y2);
 	void DrawEllipse(D2D1_POINT_2F point, float radiusX, float radiusY);
 	void EndRender();
 public:
 	static D2DRenderer* m_hInstance;
+
+	
 };

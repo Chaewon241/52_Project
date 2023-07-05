@@ -7,7 +7,9 @@
 #include "../GameApp/EllipseRenderer.h"
 #include "../GameApp/RenderComponent.h"
 #include "../GameApp/SpriteRenderer.h"
+#include "../GameApp/AnimationRenderer.h"
 #include "../GameApp/Sprite.h"
+#include "../GameApp/AnimationClip.h"
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     _In_opt_ HINSTANCE hPrevInstance,
@@ -36,16 +38,35 @@ DemoApp::~DemoApp()
 {
 }
 
-bool DemoApp::Initialize() 
+bool DemoApp::Initialize()
 {
     __super::Initialize();
 
-    GameObject* playerObject = new GameObject;
-    gameObjectList.push_back(playerObject);
-    playerObject->AddComponent<Transform>();
-    playerObject->GetComponent<Transform>()->SetLocalPosition({ 100, 100 });
-    playerObject->AddComponent<SpriteRenderer>();
-    playerObject->GetComponent<SpriteRenderer>()->SetSprite(new Sprite(L"Run", 28, 36, 103, 84));
+    std::vector<std::vector<int>> vec;
+    vec.push_back({ 3, 698, 61, 787});
+    vec.push_back({ 73, 696, 130, 787 });
+    vec.push_back({ 143, 695, 197, 787 });
+    vec.push_back({ 279, 698, 337, 787 });
+    vec.push_back({ 347, 699, 406, 787 });
+
+    AnimationClip* runAni = new AnimationClip(L"Run", vec);
+
+    GameObject* playerObject1 = new GameObject;
+    gameObjectList.push_back(playerObject1);
+    playerObject1->AddComponent<Transform>();
+    playerObject1->GetComponent<Transform>()->SetLocalPosition({ 200, 500 });
+    /*playerObject->AddComponent<SpriteRenderer>();
+    playerObject->GetComponent<SpriteRenderer>()->SetSprite(new Sprite(L"Run", 28, 36, 103, 84));*/
+    playerObject1->AddComponent<AnimationRenderer>();
+    playerObject1->GetComponent<AnimationRenderer>()->SetAnimation(runAni);
+
+    GameObject* playerObject2 = new GameObject;
+    playerObject1->AddChild(playerObject2);
+    gameObjectList.push_back(playerObject2);
+    playerObject2->AddComponent<Transform>();
+    playerObject2->GetComponent<Transform>()->SetLocalPosition({ 100, 100 });
+    playerObject2->AddComponent<AnimationRenderer>();
+    playerObject2->GetComponent<AnimationRenderer>()->SetAnimation(runAni);
 
     GameObject* sunObject = new GameObject;
     gameObjectList.push_back(sunObject);

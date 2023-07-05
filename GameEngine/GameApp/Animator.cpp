@@ -33,9 +33,3 @@ Animator::~Animator()
 //	m_SrcRect = Frame.Source;
 //	m_DstRect = { 0,0,m_SrcRect.right - m_SrcRect.left,m_SrcRect.bottom - m_SrcRect.top };
 //}
-
-
-
-void Animator::Play(const std::string& name)
-{
-}

@@ -76,7 +76,7 @@ HRESULT D2DRenderer::Initialize()
 		MessageBox(GameApp::m_hwnd, err.ErrorMessage(), L"FAILED", MB_OK);
 	}
 
-	LoadSpriteSheet(L"Run", L"../resources/run.png");
+	LoadSpriteSheet(L"Run", L"../resources/ken.png");
 
 	return hr;
 }
@@ -133,7 +133,6 @@ void D2DRenderer::SetTransform(const D2D1_MATRIX_3X2_F& transMatrix)
 void D2DRenderer::DrawSprite(Sprite* sprite)
 {
 	ID2D1Bitmap* _sheet = m_spriteSheets[sprite->m_SpriteName];
-
 	
 	m_renderTarget->DrawBitmap(
 		_sheet
@@ -145,16 +144,16 @@ void D2DRenderer::DrawSprite(Sprite* sprite)
 }
 
 
-void D2DRenderer::DrawAnimation(Sprite* sprite)
+void D2DRenderer::DrawAnimation(AnimationClip* clipName, std::vector<int> vec)
 {
-	ID2D1Bitmap* _sheet = m_spriteSheets[sprite->m_SpriteName];
+	ID2D1Bitmap* _sheet = m_spriteSheets[clipName->m_ClipName];
 
 	m_renderTarget->DrawBitmap(
 		_sheet
-		, D2D1::RectF((float)-(sprite->m_width) / 2, (float)-(sprite->m_height) / 2, (float)(sprite->m_width) / 2, (float)(sprite->m_height) / 2)
-		, sprite->m_Opacity
+		, D2D1::RectF((float)-(100) / 2, (float)-(100) / 2, (float)(100) / 2, (float)(100) / 2)
+		, 1.0f
 		, D2D1_BITMAP_INTERPOLATION_MODE_LINEAR
-		, D2D1::RectF((float)sprite->m_left, (float)sprite->m_top, (float)sprite->m_right, (float)sprite->m_bottom)
+		, D2D1::RectF((float)vec[0], (float)vec[1], (float)vec[2], (float)vec[3])
 	);
 }
 

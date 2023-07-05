@@ -13,7 +13,6 @@ public:
 
 public:
     //virtual void Update() override;
-    void Play(const std::string& name);
     void SetAnimationPath(const std::wstring& strAssetKey) { m_AnimationPath = strAssetKey; }
     void SetAnimationClip(AnimationClip* ac) { m_AnimationClips = ac; }
 public:

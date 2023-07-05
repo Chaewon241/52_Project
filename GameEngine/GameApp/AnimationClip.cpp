@@ -1,10 +1,8 @@
 #include "pch.h"
 #include "AnimationClip.h"
-#include "D2DRenderer.h"
-#include <cassert>
 
-void AnimationClip::SetD2DBitmap(const WCHAR* szFilePath)
+AnimationClip::AnimationClip(std::wstring sheetName, std::vector<std::vector<int>> vec)
 {
-	m_BitmapFilePath = szFilePath;
-	//HRESULT hr = D2DRenderer::m_hInstance->CreateSharedD2DBitmapFromFile(m_BitmapFilePath, &m_pBitmap);
+	m_ClipName = sheetName;
+	m_vClip = vec;
 }

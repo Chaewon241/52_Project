@@ -11,10 +11,6 @@ SpriteRenderer::SpriteRenderer(GameObject* gameObject)
 {
 }
 
-SpriteRenderer::~SpriteRenderer()
-{
-}
-
 void SpriteRenderer::Render(D2DRenderer* renderer)
 {
 	renderer->SetTransform(m_transform->GetWorldTransform());

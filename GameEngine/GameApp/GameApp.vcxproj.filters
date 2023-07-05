@@ -28,6 +28,9 @@
     <Filter Include="소스 파일\Resource">
       <UniqueIdentifier>{7ab899a1-f7ff-4943-96a9-a159f3a277fd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\FSM">
+      <UniqueIdentifier>{0a5de131-14ee-49f1-aaf4-c0369a0e8f98}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -69,9 +72,6 @@
     <ClInclude Include="Animator.h">
       <Filter>소스 파일\Component</Filter>
     </ClInclude>
-    <ClInclude Include="AnimationClip.h">
-      <Filter>소스 파일\Resource</Filter>
-    </ClInclude>
     <ClInclude Include="SpriteRenderer.h">
       <Filter>소스 파일\Render</Filter>
     </ClInclude>
@@ -80,6 +80,9 @@
     </ClInclude>
     <ClInclude Include="AnimationRenderer.h">
       <Filter>소스 파일\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationClip.h">
+      <Filter>소스 파일\Resource</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -119,9 +122,6 @@
     <ClCompile Include="Animator.cpp">
       <Filter>소스 파일\Component</Filter>
     </ClCompile>
-    <ClCompile Include="AnimationClip.cpp">
-      <Filter>소스 파일\Resource</Filter>
-    </ClCompile>
     <ClCompile Include="SpriteRenderer.cpp">
       <Filter>소스 파일\Render</Filter>
     </ClCompile>
@@ -130,6 +130,9 @@
     </ClCompile>
     <ClCompile Include="AnimationRenderer.cpp">
       <Filter>소스 파일\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationClip.cpp">
+      <Filter>소스 파일\Resource</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -140,7 +140,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="AnimationClip.h" />
-    <ClInclude Include="AnimationRenderer.h" />
+    <ClInclude Include="AnimationRenderer.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="Animator.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="D2DRenderer.h" />
@@ -159,7 +161,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AnimationClip.cpp" />
-    <ClCompile Include="AnimationRenderer.cpp" />
+    <ClCompile Include="AnimationRenderer.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="Animator.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="D2DRenderer.cpp" />

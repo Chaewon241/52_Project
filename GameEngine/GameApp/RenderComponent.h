@@ -4,13 +4,13 @@
 class GameObject;
 class D2DRenderer;
 class Transform;
-class Animator;
+class Sprite;
+class AnimationClip;
 
 class RenderComponent : public Component
 {
 protected:
 	Transform* m_transform;
-	Animator* m_Animator;
 public:
 	RenderComponent(GameObject* gameObject);
 	~RenderComponent();

@@ -5,13 +5,12 @@
 #include "D2DRenderer.h"
 #include "AnimationClip.h"
 #include "SpriteRenderer.h"
-#include "Animator.h"
+#include "Sprite.h"
 
 RenderComponent::RenderComponent(GameObject* gameObject)
 	:Component(gameObject)
 {
 	m_transform = GetGameObject()->GetComponent<Transform>();
-	m_Animator = GetGameObject()->GetComponent<Animator>();
 }
 
 RenderComponent::~RenderComponent()
