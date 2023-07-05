@@ -15,13 +15,12 @@ void AnimationRenderer::Update()
 {
 	static float m_time = 0.f;
 	float deltaTime = TimeManager::m_Instance->GetDeltatime();
-	static int frameIndex = 0;
 
-	if (m_time > 0.2f)
+	if (m_time > 0.03f)
 	{
-		m_frame = frameIndex % m_curFrame.size();
 		frameIndex++;
-		m_time -= 0.2f;
+		frameIndex %= m_curFrame.size();
+		m_time = 0.f;
 	}
 	m_time += deltaTime;
 }
@@ -32,10 +31,10 @@ void AnimationRenderer::Render(D2DRenderer* renderer)
 	//m_AnimationClip->m_Animations;
 	//animationInfo.m_Name	
 
-	if (m_frame != -1)
+	if (frameIndex != -1)
 	{
 		// ken.png ºñÆ®¸Ê
-		renderer->DrawAnimation(m_AnimationClip, m_anmationPath, m_curFrame[m_frame]);
+		renderer->DrawAnimation(m_AnimationClip, m_anmationPath, m_curFrame[frameIndex]);
 	}
 }
 

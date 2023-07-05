@@ -7,7 +7,7 @@ class AnimationRenderer :
     public RenderComponent
 {
 private:
-    int m_frame = -1;
+    int frameIndex = -1;
     std::wstring m_anmationPath;
     std::wstring m_animationState;
     std::vector<FRAME_INFO> m_curFrame;

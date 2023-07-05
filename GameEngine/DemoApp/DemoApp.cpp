@@ -78,7 +78,7 @@ bool DemoApp::Initialize()
     GameObject* playerObject1 = new GameObject;
     gameObjectList.push_back(playerObject1);
     playerObject1->AddComponent<Transform>();
-    playerObject1->GetComponent<Transform>()->SetLocalPosition({ 200, 500 });
+    playerObject1->GetComponent<Transform>()->SetLocalPosition({ 300, 300 });
     /*playerObject->AddComponent<SpriteRenderer>();
     playerObject->GetComponent<SpriteRenderer>()->SetSprite(new Sprite(L"Run", 28, 36, 103, 84));*/
     playerObject1->AddComponent<AnimationRenderer>();
@@ -111,7 +111,7 @@ bool DemoApp::Initialize()
     GameObject* sunObject = new GameObject;
     gameObjectList.push_back(sunObject);
     sunObject->AddComponent<Transform>();
-    sunObject->GetComponent<Transform>()->SetLocalPosition({ 1200, 450 });
+    sunObject->GetComponent<Transform>()->SetLocalPosition({ 700, 350 });
     sunObject->AddComponent<RectRenderer>();
 
     GameObject* earthObject = new GameObject;
