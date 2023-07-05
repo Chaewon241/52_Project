@@ -21,4 +21,6 @@ public:
 	bool Initialize() override;
 	void Update();
 	void Render();
+
+	AnimationClip* m_pAnimationClip;
 };

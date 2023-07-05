@@ -8,8 +8,6 @@ class Sprite;
 class SpriteRenderer :
     public RenderComponent
 {
-private:
-    Sprite* m_Sprite;
 public:
     SpriteRenderer(GameObject* gameObject);
 public:

@@ -42,14 +42,38 @@ bool DemoApp::Initialize()
 {
     __super::Initialize();
 
-    std::vector<std::vector<int>> vec;
-    vec.push_back({ 3, 698, 61, 787});
-    vec.push_back({ 73, 696, 130, 787 });
-    vec.push_back({ 143, 695, 197, 787 });
-    vec.push_back({ 279, 698, 337, 787 });
-    vec.push_back({ 347, 699, 406, 787 });
+    ANIMATION_INFO Animation;
 
-    AnimationClip* runAni = new AnimationClip(L"Run", vec);
+    Animation.m_Name = L"Idle";
+    Animation.m_Frames.clear();
+    Animation.m_Frames.push_back(FRAME_INFO(3, 698, 61, 787));
+    Animation.m_Frames.push_back(FRAME_INFO(73, 696, 130, 787));
+    Animation.m_Frames.push_back(FRAME_INFO(143, 695, 197, 787));
+    Animation.m_Frames.push_back(FRAME_INFO(279, 698, 337, 787));
+    Animation.m_Frames.push_back(FRAME_INFO(347, 699, 406, 787));
+    m_pAnimationClip = new AnimationClip();
+    m_pAnimationClip->m_Animations.push_back(Animation);
+
+    Animation.m_Name = L"Move";
+    Animation.m_Frames.clear();
+    Animation.m_Frames.push_back(FRAME_INFO(9, 883, 61, 965));
+    Animation.m_Frames.push_back(FRAME_INFO(71, 878, 130, 965));
+    Animation.m_Frames.push_back(FRAME_INFO(141, 877, 204, 966));
+    Animation.m_Frames.push_back(FRAME_INFO(216, 876, 278, 964));
+    Animation.m_Frames.push_back(FRAME_INFO(358, 878, 407, 966));
+    m_pAnimationClip->m_Animations.push_back(Animation);
+
+    Animation.m_Name = L"Attack";
+    Animation.m_Frames.clear();
+    Animation.m_Frames.push_back(FRAME_INFO(731, 1685, 805, 1775));
+    Animation.m_Frames.push_back(FRAME_INFO(809, 1685, 890, 1772));
+    Animation.m_Frames.push_back(FRAME_INFO(896, 1679, 955, 1773));
+    Animation.m_Frames.push_back(FRAME_INFO(966, 1674, 1079, 1772));
+    Animation.m_Frames.push_back(FRAME_INFO(1101, 1679, 1201, 1772));
+    Animation.m_Frames.push_back(FRAME_INFO(1223, 1677, 1295, 1771));
+    Animation.m_Frames.push_back(FRAME_INFO(1302, 1677, 1373, 1771));
+    Animation.m_Frames.push_back(FRAME_INFO(1400, 1680, 1473, 1777));
+    m_pAnimationClip->m_Animations.push_back(Animation);
 
     GameObject* playerObject1 = new GameObject;
     gameObjectList.push_back(playerObject1);
@@ -58,15 +82,31 @@ bool DemoApp::Initialize()
     /*playerObject->AddComponent<SpriteRenderer>();
     playerObject->GetComponent<SpriteRenderer>()->SetSprite(new Sprite(L"Run", 28, 36, 103, 84));*/
     playerObject1->AddComponent<AnimationRenderer>();
-    playerObject1->GetComponent<AnimationRenderer>()->SetAnimation(runAni);
+    playerObject1->GetComponent<AnimationRenderer>()->SetAnimation(m_pAnimationClip);
+    playerObject1->GetComponent<AnimationRenderer>()->SetAnimationPath(L"Ken");
+    playerObject1->GetComponent<AnimationRenderer>()->SetAnimationState(L"Idle");
 
     GameObject* playerObject2 = new GameObject;
     playerObject1->AddChild(playerObject2);
     gameObjectList.push_back(playerObject2);
     playerObject2->AddComponent<Transform>();
     playerObject2->GetComponent<Transform>()->SetLocalPosition({ 100, 100 });
+    playerObject2->GetComponent<Transform>()->SetLocalScale({ 0.8f, 0.8f });
     playerObject2->AddComponent<AnimationRenderer>();
-    playerObject2->GetComponent<AnimationRenderer>()->SetAnimation(runAni);
+    playerObject2->GetComponent<AnimationRenderer>()->SetAnimation(m_pAnimationClip);
+    playerObject2->GetComponent<AnimationRenderer>()->SetAnimationPath(L"Ken");
+    playerObject2->GetComponent<AnimationRenderer>()->SetAnimationState(L"Attack");
+
+    GameObject* playerObject3 = new GameObject;
+    playerObject2->AddChild(playerObject3);
+    gameObjectList.push_back(playerObject3);
+    playerObject3->AddComponent<Transform>();
+    playerObject3->GetComponent<Transform>()->SetLocalPosition({ 100, 100 });
+    playerObject3->GetComponent<Transform>()->SetLocalScale({ 0.8f, 0.8f });
+    playerObject3->AddComponent<AnimationRenderer>();
+    playerObject3->GetComponent<AnimationRenderer>()->SetAnimation(m_pAnimationClip);
+    playerObject3->GetComponent<AnimationRenderer>()->SetAnimationPath(L"Ken");
+    playerObject3->GetComponent<AnimationRenderer>()->SetAnimationState(L"Move");
 
     GameObject* sunObject = new GameObject;
     gameObjectList.push_back(sunObject);

@@ -1,8 +1,8 @@
+#include <d2d1.h>
 #include "pch.h"
+#include "AnimationClip.h"
 #include "D2DRenderer.h"
 #include "GameApp.h"
-#include "AnimationClip.h"
-#include <d2d1.h>
 #include "../DemoApp/DemoApp.h"
 #include "Sprite.h"
 
@@ -76,7 +76,7 @@ HRESULT D2DRenderer::Initialize()
 		MessageBox(GameApp::m_hwnd, err.ErrorMessage(), L"FAILED", MB_OK);
 	}
 
-	LoadSpriteSheet(L"Run", L"../resources/ken.png");
+	LoadSpriteSheet(L"Ken", L"../resources/ken.png");
 
 	return hr;
 }
@@ -144,16 +144,16 @@ void D2DRenderer::DrawSprite(Sprite* sprite)
 }
 
 
-void D2DRenderer::DrawAnimation(AnimationClip* clipName, std::vector<int> vec)
+void D2DRenderer::DrawAnimation(AnimationClip* animationClip, std::wstring clipName, FRAME_INFO aniName)
 {
-	ID2D1Bitmap* _sheet = m_spriteSheets[clipName->m_ClipName];
-
+	ID2D1Bitmap* _sheet = m_spriteSheets[clipName];
+	std::vector<FRAME_INFO> frames;
 	m_renderTarget->DrawBitmap(
 		_sheet
 		, D2D1::RectF((float)-(100) / 2, (float)-(100) / 2, (float)(100) / 2, (float)(100) / 2)
 		, 1.0f
 		, D2D1_BITMAP_INTERPOLATION_MODE_LINEAR
-		, D2D1::RectF((float)vec[0], (float)vec[1], (float)vec[2], (float)vec[3])
+		, D2D1::RectF((float)aniName.Source.left, (float)aniName.Source.top, (float)aniName.Source.right, (float)aniName.Source.bottom)
 	);
 }
 

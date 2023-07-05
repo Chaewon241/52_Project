@@ -11,6 +11,8 @@ RenderComponent::RenderComponent(GameObject* gameObject)
 	:Component(gameObject)
 {
 	m_transform = GetGameObject()->GetComponent<Transform>();
+	m_Sprite = GetGameObject()->GetComponent<Sprite>();
+	m_AnimationClip = GetGameObject()->GetComponent<AnimationClip>();
 }
 
 RenderComponent::~RenderComponent()
@@ -19,6 +21,9 @@ RenderComponent::~RenderComponent()
 
 void RenderComponent::Update()
 {
+	m_transform = GetGameObject()->GetComponent<Transform>();
+	m_Sprite = GetGameObject()->GetComponent<Sprite>();
+	m_AnimationClip = GetGameObject()->GetComponent<AnimationClip>();
 }
 
 void RenderComponent::Render(D2DRenderer* renderer)

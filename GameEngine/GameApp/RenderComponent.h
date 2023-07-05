@@ -11,6 +11,8 @@ class RenderComponent : public Component
 {
 protected:
 	Transform* m_transform;
+	AnimationClip* m_AnimationClip;
+	Sprite* m_Sprite;
 public:
 	RenderComponent(GameObject* gameObject);
 	~RenderComponent();

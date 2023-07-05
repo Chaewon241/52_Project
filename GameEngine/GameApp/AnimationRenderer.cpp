@@ -5,8 +5,11 @@
 #include "Sprite.h"
 #include "SpriteRenderer.h"
 #include "TimeManager.h"
-#include "AnimationClip.h"
 
+AnimationRenderer::AnimationRenderer(GameObject* gameObject)
+	: RenderComponent(gameObject)
+{
+}
 
 void AnimationRenderer::Update()
 {
@@ -16,7 +19,7 @@ void AnimationRenderer::Update()
 
 	if (m_time > 0.2f)
 	{
-		aniVec = m_AnimationClip->m_vClip[frameIndex % m_AnimationClip->m_vClip.size()];
+		m_frame = frameIndex % m_curFrame.size();
 		frameIndex++;
 		m_time -= 0.2f;
 	}
@@ -26,14 +29,14 @@ void AnimationRenderer::Update()
 void AnimationRenderer::Render(D2DRenderer* renderer)
 {
 	renderer->SetTransform(m_transform->GetWorldTransform());
+	//m_AnimationClip->m_Animations;
+	//animationInfo.m_Name	
 
-	if (aniVec.size() != 0)
+	if (m_frame != -1)
 	{
-		renderer->DrawAnimation(m_AnimationClip, aniVec);
+		// ken.png 비트맵
+		renderer->DrawAnimation(m_AnimationClip, m_anmationPath, m_curFrame[m_frame]);
 	}
 }
 
-AnimationRenderer::AnimationRenderer(GameObject* gameObject)
-	: RenderComponent(gameObject)
-{
-}
+// setstate 해서 상태 불러오기

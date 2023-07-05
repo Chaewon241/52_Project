@@ -8,6 +8,7 @@
 
 class AnimationClip;
 class Sprite;
+struct FRAME_INFO;
 
 class D2DRenderer
 {
@@ -31,7 +32,7 @@ public:
 	void BeginRender();
 	void SetTransform(const D2D1_MATRIX_3X2_F& transMatrix);
 	void DrawSprite(Sprite* sprite);
-	void DrawAnimation(AnimationClip* clipName, std::vector<int> vec);
+	void DrawAnimation(AnimationClip* animationClip, std::wstring clipName, FRAME_INFO aniName);
 	void DrawRectangle(float x1, float y1, float x2, float y2);
 	void DrawEllipse(D2D1_POINT_2F point, float radiusX, float radiusY);
 	void EndRender();
