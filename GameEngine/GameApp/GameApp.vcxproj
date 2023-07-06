@@ -143,12 +143,13 @@
     <ClInclude Include="AnimationRenderer.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
-    <ClInclude Include="Animator.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="D2DRenderer.h" />
     <ClInclude Include="EllipseRenderer.h" />
     <ClInclude Include="framework.h" />
+    <ClInclude Include="FSMState.h" />
     <ClInclude Include="GameApp.h" />
+    <ClInclude Include="InputManager.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="GameObject.h" />
@@ -164,11 +165,12 @@
     <ClCompile Include="AnimationRenderer.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="Animator.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="D2DRenderer.cpp" />
     <ClCompile Include="EllipseRenderer.cpp" />
+    <ClCompile Include="FSMState.cpp" />
     <ClCompile Include="GameApp.cpp" />
+    <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

@@ -79,8 +79,6 @@ bool DemoApp::Initialize()
     gameObjectList.push_back(playerObject1);
     playerObject1->AddComponent<Transform>();
     playerObject1->GetComponent<Transform>()->SetLocalPosition({ 300, 300 });
-    /*playerObject->AddComponent<SpriteRenderer>();
-    playerObject->GetComponent<SpriteRenderer>()->SetSprite(new Sprite(L"Run", 28, 36, 103, 84));*/
     playerObject1->AddComponent<AnimationRenderer>();
     playerObject1->GetComponent<AnimationRenderer>()->SetAnimation(m_pAnimationClip);
     playerObject1->GetComponent<AnimationRenderer>()->SetAnimationPath(L"Ken");

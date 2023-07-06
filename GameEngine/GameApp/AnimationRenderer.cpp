@@ -33,7 +33,6 @@ void AnimationRenderer::Render(D2DRenderer* renderer)
 
 	if (frameIndex != -1)
 	{
-		// ken.png ºñÆ®¸Ê
 		renderer->DrawAnimation(m_AnimationClip, m_anmationPath, m_curFrame[frameIndex]);
 	}
 }
