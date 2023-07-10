@@ -106,28 +106,6 @@ bool DemoApp::Initialize()
     playerObject3->GetComponent<AnimationRenderer>()->SetAnimationPath(L"Ken");
     playerObject3->GetComponent<AnimationRenderer>()->SetAnimationState(L"Move");
 
-    GameObject* sunObject = new GameObject;
-    gameObjectList.push_back(sunObject);
-    sunObject->AddComponent<Transform>();
-    sunObject->GetComponent<Transform>()->SetLocalPosition({ 700, 350 });
-    sunObject->AddComponent<RectRenderer>();
-
-    GameObject* earthObject = new GameObject;
-    sunObject->AddChild(earthObject);
-    gameObjectList.push_back(earthObject);
-    earthObject->AddComponent<Transform>();
-    earthObject->AddComponent<EllipseRenderer>();
-    earthObject->GetComponent<Transform>()->SetLocalPosition({ 200, 200 });
-    earthObject->GetComponent<Transform>()->SetLocalScale({ 0.8f, 0.8f });
-
-    GameObject* moonObject = new GameObject;
-    earthObject->AddChild(moonObject);
-    gameObjectList.push_back(moonObject);
-    moonObject->AddComponent<Transform>();
-    moonObject->AddComponent<RectRenderer>();
-    moonObject->GetComponent<Transform>()->SetLocalPosition({ 100, 100 });
-    moonObject->GetComponent<Transform>()->SetLocalScale({ 0.5f, 0.5f });
-
     return true;
 }
 

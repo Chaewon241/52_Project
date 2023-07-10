@@ -28,11 +28,14 @@
     <Filter Include="소스 파일\Resource">
       <UniqueIdentifier>{7ab899a1-f7ff-4943-96a9-a159f3a277fd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\FSM">
-      <UniqueIdentifier>{0a5de131-14ee-49f1-aaf4-c0369a0e8f98}</UniqueIdentifier>
-    </Filter>
     <Filter Include="소스 파일\Component\RenderComponent">
       <UniqueIdentifier>{a7abc9d3-db90-45a1-a505-5adebcc11934}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\FSM">
+      <UniqueIdentifier>{1c4124ca-1ce3-4f13-b7a5-0e6c020a5c51}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Component\FSMComponent">
+      <UniqueIdentifier>{8ff3d1d3-25e6-478e-85b6-11b50f818bf9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -84,11 +87,20 @@
     <ClInclude Include="AnimationRenderer.h">
       <Filter>소스 파일\Component\RenderComponent</Filter>
     </ClInclude>
+    <ClInclude Include="InputManager.h">
+      <Filter>소스 파일\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="FSMComponent.h">
+      <Filter>소스 파일\Component\FSMComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseState.h">
+      <Filter>소스 파일\FSM</Filter>
+    </ClInclude>
     <ClInclude Include="FSMState.h">
       <Filter>소스 파일\FSM</Filter>
     </ClInclude>
-    <ClInclude Include="InputManager.h">
-      <Filter>소스 파일\Manager</Filter>
+    <ClInclude Include="FSM.h">
+      <Filter>소스 파일\FSM</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -137,11 +149,20 @@
     <ClCompile Include="RenderComponent.cpp">
       <Filter>소스 파일\Component</Filter>
     </ClCompile>
+    <ClCompile Include="InputManager.cpp">
+      <Filter>소스 파일\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="FSMComponent.cpp">
+      <Filter>소스 파일\Component\FSMComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseState.cpp">
+      <Filter>소스 파일\FSM</Filter>
+    </ClCompile>
     <ClCompile Include="FSMState.cpp">
       <Filter>소스 파일\FSM</Filter>
     </ClCompile>
-    <ClCompile Include="InputManager.cpp">
-      <Filter>소스 파일\Manager</Filter>
+    <ClCompile Include="FSM.cpp">
+      <Filter>소스 파일\FSM</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

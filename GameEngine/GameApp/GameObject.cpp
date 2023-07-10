@@ -4,6 +4,13 @@
 
 #include <vector>
 
+enum State
+{
+	Idle,
+	Move,
+	Attack
+};
+
 void Update()
 {
 
