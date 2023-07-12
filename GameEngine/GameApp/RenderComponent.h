@@ -1,5 +1,6 @@
 #pragma once
 #include "Component.h"
+#include "AABB.h"
 
 class GameObject;
 class D2DRenderer;
@@ -13,6 +14,9 @@ protected:
 	Transform* m_transform;
 	AnimationClip* m_AnimationClip;
 	Sprite* m_Sprite;
+
+	AABB m_BoundingBox;
+
 public:
 	RenderComponent(GameObject* gameObject);
 	~RenderComponent();

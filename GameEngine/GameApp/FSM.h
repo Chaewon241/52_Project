@@ -7,12 +7,6 @@ class FSM
 private:
 	BaseState* curState;
 public:
-	FSM(BaseState* initState)
-	{
-		curState = initState;
-		ChangeState(curState);
-	}
-
 	void ChangeState(BaseState* nextState)
 	{
 		if (nextState == curState)

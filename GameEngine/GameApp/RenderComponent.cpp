@@ -24,8 +24,11 @@ void RenderComponent::Update()
 	m_transform = GetGameObject()->GetComponent<Transform>();
 	m_Sprite = GetGameObject()->GetComponent<Sprite>();
 	m_AnimationClip = GetGameObject()->GetComponent<AnimationClip>();
+
+	m_BoundingBox.m_Center = m_transform->GetWorldLocation();
 }
 
 void RenderComponent::Render(D2DRenderer* renderer)
 {
 }
+

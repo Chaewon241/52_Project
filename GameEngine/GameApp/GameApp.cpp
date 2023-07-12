@@ -27,7 +27,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 }
 
 GameApp::GameApp(HINSTANCE hInstance)
-    :m_hInst(hInstance), m_szWindowClass{ L"DefaultWindowClass" }, m_szTitle{ L"DefaultWindowTitle" }
+    :m_hInst(hInstance), m_szWindowClass{ L"DefaultWindowClass" }, m_szTitle{ L"DefaultWindowTitle" }, m_ClientSize({ 1024,768 })
 {
     m_wcex.cbSize = sizeof(WNDCLASSEX);
     m_wcex.style = CS_HREDRAW | CS_VREDRAW;
@@ -51,9 +51,10 @@ bool GameApp::Initialize()
     // m_wcex 가 준비되었다고 가정
     RegisterClassExW(&m_wcex);
 
+    RECT rcClient = { 0, 0, (LONG)m_ClientSize.width, (LONG)m_ClientSize.height };
 
     m_hwnd = CreateWindowW(m_szWindowClass, m_szTitle, WS_OVERLAPPEDWINDOW,
-        CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, m_hInst, nullptr);
+        100, 100, rcClient.right - rcClient.left, rcClient.bottom - rcClient.top, nullptr, nullptr, m_hInst, nullptr);
 
     if (!m_hwnd)
     {

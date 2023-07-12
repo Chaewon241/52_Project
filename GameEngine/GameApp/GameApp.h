@@ -13,15 +13,21 @@ class GameApp
 {
 public:
 	GameApp(HINSTANCE hInstance);
+
+public:
 	virtual ~GameApp();
 
 	virtual bool Initialize();
 	void Loop();
 	virtual void Update();
 	virtual void Render();
+	const D2D_SIZE_U& GetClientSize() { return m_ClientSize; }
 	
+public:
 	static HWND m_hwnd;
 	static GameApp* m_hInstance;
+
+	D2D_SIZE_U m_ClientSize;
 
 protected:
 	WNDCLASSEXW m_wcex;

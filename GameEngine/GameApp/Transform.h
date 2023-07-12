@@ -46,4 +46,12 @@ public:
 	D2D1_MATRIX_3X2_F GetLocalTransform() { return m_localTransform; }
 
 	D2D1_MATRIX_3X2_F GetWorldTransform() { return m_worldTransform; }
+
+	D2D1_VECTOR_2F GetWorldLocation()
+	{
+		D2D1_VECTOR_2F out;
+		out.x = m_worldTransform._31;
+		out.y = m_worldTransform._32;
+		return out;
+	}
 };

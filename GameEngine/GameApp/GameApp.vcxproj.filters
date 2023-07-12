@@ -102,6 +102,15 @@
     <ClInclude Include="FSM.h">
       <Filter>소스 파일\FSM</Filter>
     </ClInclude>
+    <ClInclude Include="StateMachine.h">
+      <Filter>소스 파일\FSM</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraComponent.h">
+      <Filter>소스 파일\Component\RenderComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="AABB.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameApp.cpp">
@@ -163,6 +172,15 @@
     </ClCompile>
     <ClCompile Include="FSM.cpp">
       <Filter>소스 파일\FSM</Filter>
+    </ClCompile>
+    <ClCompile Include="StateMachine.cpp">
+      <Filter>소스 파일\FSM</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraComponent.cpp">
+      <Filter>소스 파일\Component\RenderComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="AABB.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

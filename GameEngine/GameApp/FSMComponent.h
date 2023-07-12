@@ -14,12 +14,8 @@ public:
 public:
     void Update()
     {
-        if (m_pFiniteStateMachine != nullptr)
-        {
-            m_pFiniteStateMachine->
-        }
     }
 protected:
-    FiniteStateMachine* m_pFiniteStateMachine;
+    
 
 };

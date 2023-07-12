@@ -27,7 +27,9 @@ void AnimationRenderer::Update()
 
 void AnimationRenderer::Render(D2DRenderer* renderer)
 {
-	renderer->SetTransform(m_transform->GetWorldTransform());
+	DrawWorldTransform(renderer);
+	D2D1_MATRIX_3X2_F Transform = m_transform->GetWorldTransform() * D2DRenderer::m_CameraTransform;
+	renderer->SetTransform(Transform);
 	//m_AnimationClip->m_Animations;
 	//animationInfo.m_Name	
 
@@ -35,6 +37,15 @@ void AnimationRenderer::Render(D2DRenderer* renderer)
 	{
 		renderer->DrawAnimation(m_AnimationClip, m_anmationPath, m_curFrame[frameIndex]);
 	}
+	renderer->DrawCrossLine();
+}
+
+
+void AnimationRenderer::DrawWorldTransform(D2DRenderer* renderer)
+{
+	D2D1_MATRIX_3X2_F Transform = m_transform->GetWorldTransform() * D2DRenderer::m_CameraTransform * D2DRenderer::m_ScreenTransform;
+	renderer->SetTransform(Transform);
+	renderer->DrawCrossLine();
 }
 
 // setstate 해서 상태 불러오기

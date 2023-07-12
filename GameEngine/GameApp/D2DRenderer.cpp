@@ -13,6 +13,11 @@
 ID2D1HwndRenderTarget* D2DRenderer::m_renderTarget = NULL;
 D2DRenderer* D2DRenderer::m_hInstance = nullptr;
 
+
+D2D1_MATRIX_3X2_F D2DRenderer::m_CameraTransform = D2D1::Matrix3x2F::Identity();
+
+D2D1_MATRIX_3X2_F D2DRenderer::m_ScreenTransform = D2D1::Matrix3x2F::Identity();
+
 D2DRenderer::D2DRenderer()
 {
 	// 어디서든 렌더러 객체에 접근하기 쉽게 인스턴스를 저장해둠
@@ -177,6 +182,12 @@ void D2DRenderer::DrawEllipse(D2D1_POINT_2F point, float radiusX, float radiusY)
 	ellipse.radiusY = radiusY;
 
 	m_renderTarget->DrawEllipse(ellipse, m_pBlueBrush);
+}
+
+void D2DRenderer::DrawCrossLine()
+{
+	m_renderTarget->DrawLine(D2D1::Point2F(0 - 5.0f, 0), D2D1::Point2F(0 + 5.0f, 0), m_pBlackBrush, 1.0f);
+	m_renderTarget->DrawLine(D2D1::Point2F(0, 0 - 5.0f), D2D1::Point2F(0, 0 + 5.0f), m_pBlackBrush, 1.0f);
 }
 
 void D2DRenderer::EndRender()

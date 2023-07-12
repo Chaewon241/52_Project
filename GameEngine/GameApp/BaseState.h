@@ -1,10 +1,12 @@
 #pragma once
+//#include "GameObject.h"
+
 class GameObject;
 
-class BaseState
+class BaseState //: public GameObject
 {
 public:
-	BaseState* m_pBaseStateInstance;
+	BaseState();
 public:
 	virtual void OnStateEnter() {};
 	virtual void OnStateUpdate() {};

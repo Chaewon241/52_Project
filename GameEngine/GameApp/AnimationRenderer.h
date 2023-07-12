@@ -29,5 +29,6 @@ public:
         }
     }
     void Render(D2DRenderer* renderer) override;
+    void DrawWorldTransform(D2DRenderer* renderer);
 };
 
