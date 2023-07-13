@@ -1,10 +1,10 @@
 #pragma once
-#include "Transform.h"
+#include "RenderComponent.h"
 
 class D2DRenderer;
 
 class CameraComponent :
-    public Transform
+    public RenderComponent
 {
 public:
     CameraComponent(GameObject* gameObject);
