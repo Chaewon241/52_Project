@@ -11,23 +11,24 @@ class TimeManager;
 // 게임의 루프를 담당
 class GameApp
 {
-public:
-	GameApp(HINSTANCE hInstance);
+private:
+	D2D_SIZE_U m_ClientSize;
 
 public:
+	GameApp(HINSTANCE hInstace);
 	virtual ~GameApp();
 
 	virtual bool Initialize();
 	void Loop();
 	virtual void Update();
 	virtual void Render();
-	const D2D_SIZE_U& GetClientSize() { return m_ClientSize; }
+	D2D_SIZE_U GetClientSize() { return m_ClientSize; }
+
+	virtual LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 	
 public:
 	static HWND m_hwnd;
 	static GameApp* m_hInstance;
-
-	D2D_SIZE_U m_ClientSize;
 
 protected:
 	WNDCLASSEXW m_wcex;

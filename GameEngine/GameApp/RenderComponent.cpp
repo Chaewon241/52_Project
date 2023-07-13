@@ -8,7 +8,7 @@
 #include "Sprite.h"
 
 RenderComponent::RenderComponent(GameObject* gameObject)
-	:Component(gameObject)
+	:Transform(gameObject)
 {
 	m_transform = GetGameObject()->GetComponent<Transform>();
 	m_Sprite = GetGameObject()->GetComponent<Sprite>();

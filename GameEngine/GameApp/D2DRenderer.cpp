@@ -162,14 +162,8 @@ void D2DRenderer::DrawAnimation(AnimationClip* animationClip, std::wstring clipN
 	);
 }
 
-void D2DRenderer::DrawRectangle(float x1, float y1, float x2, float y2)
+void D2DRenderer::DrawRectangle(D2D1_RECT_F rect)
 {
-	D2D1_RECT_F rect = {};
-	rect.left = x1;
-	rect.top = y1;
-	rect.right = x2;
-	rect.bottom = y2;
-
 	m_renderTarget->DrawRectangle(rect, m_pBlackBrush, 2.0f);
 }
 

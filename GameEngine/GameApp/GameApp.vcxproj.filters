@@ -28,14 +28,17 @@
     <Filter Include="소스 파일\Resource">
       <UniqueIdentifier>{7ab899a1-f7ff-4943-96a9-a159f3a277fd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\Component\RenderComponent">
-      <UniqueIdentifier>{a7abc9d3-db90-45a1-a505-5adebcc11934}</UniqueIdentifier>
-    </Filter>
     <Filter Include="소스 파일\FSM">
       <UniqueIdentifier>{1c4124ca-1ce3-4f13-b7a5-0e6c020a5c51}</UniqueIdentifier>
     </Filter>
     <Filter Include="소스 파일\Component\FSMComponent">
       <UniqueIdentifier>{8ff3d1d3-25e6-478e-85b6-11b50f818bf9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Component\SceneComponent">
+      <UniqueIdentifier>{7ede439e-5f8d-43ed-b89b-2b0a81be4e27}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Component\SceneComponent\RenderComponent">
+      <UniqueIdentifier>{a7abc9d3-db90-45a1-a505-5adebcc11934}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -63,12 +66,6 @@
     <ClInclude Include="Component.h">
       <Filter>소스 파일\Component</Filter>
     </ClInclude>
-    <ClInclude Include="Transform.h">
-      <Filter>소스 파일\Component</Filter>
-    </ClInclude>
-    <ClInclude Include="RenderComponent.h">
-      <Filter>소스 파일\Component</Filter>
-    </ClInclude>
     <ClInclude Include="Sprite.h">
       <Filter>소스 파일\Resource</Filter>
     </ClInclude>
@@ -76,16 +73,16 @@
       <Filter>소스 파일\Resource</Filter>
     </ClInclude>
     <ClInclude Include="EllipseRenderer.h">
-      <Filter>소스 파일\Component\RenderComponent</Filter>
+      <Filter>소스 파일\Component\SceneComponent\RenderComponent</Filter>
     </ClInclude>
     <ClInclude Include="RectRenderer.h">
-      <Filter>소스 파일\Component\RenderComponent</Filter>
+      <Filter>소스 파일\Component\SceneComponent\RenderComponent</Filter>
     </ClInclude>
     <ClInclude Include="SpriteRenderer.h">
-      <Filter>소스 파일\Component\RenderComponent</Filter>
+      <Filter>소스 파일\Component\SceneComponent\RenderComponent</Filter>
     </ClInclude>
     <ClInclude Include="AnimationRenderer.h">
-      <Filter>소스 파일\Component\RenderComponent</Filter>
+      <Filter>소스 파일\Component\SceneComponent\RenderComponent</Filter>
     </ClInclude>
     <ClInclude Include="InputManager.h">
       <Filter>소스 파일\Manager</Filter>
@@ -106,10 +103,16 @@
       <Filter>소스 파일\FSM</Filter>
     </ClInclude>
     <ClInclude Include="CameraComponent.h">
-      <Filter>소스 파일\Component\RenderComponent</Filter>
+      <Filter>소스 파일\Component\SceneComponent\RenderComponent</Filter>
     </ClInclude>
     <ClInclude Include="AABB.h">
       <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Transform.h">
+      <Filter>소스 파일\Component\SceneComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderComponent.h">
+      <Filter>소스 파일\Component\SceneComponent\RenderComponent</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -134,9 +137,6 @@
     <ClCompile Include="Component.cpp">
       <Filter>소스 파일\Component</Filter>
     </ClCompile>
-    <ClCompile Include="Transform.cpp">
-      <Filter>소스 파일\Component</Filter>
-    </ClCompile>
     <ClCompile Include="Sprite.cpp">
       <Filter>소스 파일\Resource</Filter>
     </ClCompile>
@@ -144,19 +144,16 @@
       <Filter>소스 파일\Resource</Filter>
     </ClCompile>
     <ClCompile Include="EllipseRenderer.cpp">
-      <Filter>소스 파일\Component\RenderComponent</Filter>
+      <Filter>소스 파일\Component\SceneComponent\RenderComponent</Filter>
     </ClCompile>
     <ClCompile Include="RectRenderer.cpp">
-      <Filter>소스 파일\Component\RenderComponent</Filter>
+      <Filter>소스 파일\Component\SceneComponent\RenderComponent</Filter>
     </ClCompile>
     <ClCompile Include="SpriteRenderer.cpp">
-      <Filter>소스 파일\Component\RenderComponent</Filter>
+      <Filter>소스 파일\Component\SceneComponent\RenderComponent</Filter>
     </ClCompile>
     <ClCompile Include="AnimationRenderer.cpp">
-      <Filter>소스 파일\Component\RenderComponent</Filter>
-    </ClCompile>
-    <ClCompile Include="RenderComponent.cpp">
-      <Filter>소스 파일\Component</Filter>
+      <Filter>소스 파일\Component\SceneComponent\RenderComponent</Filter>
     </ClCompile>
     <ClCompile Include="InputManager.cpp">
       <Filter>소스 파일\Manager</Filter>
@@ -177,10 +174,16 @@
       <Filter>소스 파일\FSM</Filter>
     </ClCompile>
     <ClCompile Include="CameraComponent.cpp">
-      <Filter>소스 파일\Component\RenderComponent</Filter>
+      <Filter>소스 파일\Component\SceneComponent\RenderComponent</Filter>
     </ClCompile>
     <ClCompile Include="AABB.cpp">
       <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Transform.cpp">
+      <Filter>소스 파일\Component\SceneComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderComponent.cpp">
+      <Filter>소스 파일\Component\SceneComponent\RenderComponent</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -12,6 +12,7 @@ Transform::Transform(GameObject* gameObject)
 	, m_localRotation(0.f)
 	, m_localTransform(D2D1::Matrix3x2F::Identity())
 	, m_worldTransform(m_localTransform)
+	, m_transform(0)
 {
 }
 

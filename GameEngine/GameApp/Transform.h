@@ -1,5 +1,5 @@
 #pragma once
-
+#include "AABB.h"
 #include "Component.h"
 
 class GameObject;
@@ -8,16 +8,18 @@ class TimeManager;
 
 class Transform : public Component
 {
+public:
+	Transform(GameObject* gameObject);
+	~Transform();
 private:
 	D2D1_VECTOR_2F m_localPosition;
 	D2D1_VECTOR_2F m_localScale;
 	float m_localRotation;
 	D2D1_MATRIX_3X2_F m_localTransform;
-
 	D2D1_MATRIX_3X2_F m_worldTransform;
-public:
-	Transform(GameObject* gameObject);
-	~Transform();
+protected:
+	Transform* m_transform;
+	AABB m_BoundingBox;
 public:
 	virtual void Update() override;
 	virtual void Render(D2DRenderer* renderer);

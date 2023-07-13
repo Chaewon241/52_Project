@@ -35,7 +35,7 @@ public:
 	void BeginRender();
 	void DrawSprite(Sprite* sprite);
 	void DrawAnimation(AnimationClip* animationClip, std::wstring clipName, FRAME_INFO aniName);
-	void DrawRectangle(float x1, float y1, float x2, float y2);
+	void DrawRectangle(D2D1_RECT_F rect);
 	void DrawEllipse(D2D1_POINT_2F point, float radiusX, float radiusY);
 	void DrawCrossLine();
 

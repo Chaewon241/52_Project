@@ -10,6 +10,7 @@
 #include "../GameApp/AnimationRenderer.h"
 #include "../GameApp/Sprite.h"
 #include "../GameApp/AnimationClip.h"
+#include "../GameApp/CameraComponent.h"
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     _In_opt_ HINSTANCE hPrevInstance,
@@ -46,33 +47,33 @@ bool DemoApp::Initialize()
 
     Animation.m_Name = L"Idle";
     Animation.m_Frames.clear();
-    Animation.m_Frames.push_back(FRAME_INFO(3, 698, 61, 787));
-    Animation.m_Frames.push_back(FRAME_INFO(73, 696, 130, 787));
-    Animation.m_Frames.push_back(FRAME_INFO(143, 695, 197, 787));
-    Animation.m_Frames.push_back(FRAME_INFO(279, 698, 337, 787));
-    Animation.m_Frames.push_back(FRAME_INFO(347, 699, 406, 787));
+    Animation.m_Frames.push_back(FRAME_INFO(3, 698, 61, 787, 0.2f));
+    Animation.m_Frames.push_back(FRAME_INFO(73, 696, 130, 787, 0.2f));
+    Animation.m_Frames.push_back(FRAME_INFO(143, 695, 197, 787, 0.2f));
+    Animation.m_Frames.push_back(FRAME_INFO(279, 698, 337, 787, 0.2f));
+    Animation.m_Frames.push_back(FRAME_INFO(347, 699, 406, 787, 0.2f));
     m_pAnimationClip = new AnimationClip();
     m_pAnimationClip->m_Animations.push_back(Animation);
 
     Animation.m_Name = L"Move";
     Animation.m_Frames.clear();
-    Animation.m_Frames.push_back(FRAME_INFO(9, 883, 61, 965));
-    Animation.m_Frames.push_back(FRAME_INFO(71, 878, 130, 965));
-    Animation.m_Frames.push_back(FRAME_INFO(141, 877, 204, 966));
-    Animation.m_Frames.push_back(FRAME_INFO(216, 876, 278, 964));
-    Animation.m_Frames.push_back(FRAME_INFO(358, 878, 407, 966));
+    Animation.m_Frames.push_back(FRAME_INFO(9, 883, 61, 965, 0.2f));
+    Animation.m_Frames.push_back(FRAME_INFO(71, 878, 130, 965, 0.2f));
+    Animation.m_Frames.push_back(FRAME_INFO(141, 877, 204, 966, 0.2f));
+    Animation.m_Frames.push_back(FRAME_INFO(216, 876, 278, 964, 0.2f));
+    Animation.m_Frames.push_back(FRAME_INFO(358, 878, 407, 966, 0.2f));
     m_pAnimationClip->m_Animations.push_back(Animation);
 
     Animation.m_Name = L"Attack";
     Animation.m_Frames.clear();
-    Animation.m_Frames.push_back(FRAME_INFO(731, 1685, 805, 1775));
-    Animation.m_Frames.push_back(FRAME_INFO(809, 1685, 890, 1772));
-    Animation.m_Frames.push_back(FRAME_INFO(896, 1679, 955, 1773));
-    Animation.m_Frames.push_back(FRAME_INFO(966, 1674, 1079, 1772));
-    Animation.m_Frames.push_back(FRAME_INFO(1101, 1679, 1201, 1772));
-    Animation.m_Frames.push_back(FRAME_INFO(1223, 1677, 1295, 1771));
-    Animation.m_Frames.push_back(FRAME_INFO(1302, 1677, 1373, 1771));
-    Animation.m_Frames.push_back(FRAME_INFO(1400, 1680, 1473, 1777));
+    Animation.m_Frames.push_back(FRAME_INFO(731, 1685, 805, 1775, 0.125f));
+    Animation.m_Frames.push_back(FRAME_INFO(809, 1685, 890, 1772, 0.125f));
+    Animation.m_Frames.push_back(FRAME_INFO(896, 1679, 955, 1773, 0.125f));
+    Animation.m_Frames.push_back(FRAME_INFO(966, 1674, 1079, 1772, 0.125f));
+    Animation.m_Frames.push_back(FRAME_INFO(1101, 1679, 1201, 1772, 0.125f));
+    Animation.m_Frames.push_back(FRAME_INFO(1223, 1677, 1295, 1771, 0.125f));
+    Animation.m_Frames.push_back(FRAME_INFO(1302, 1677, 1373, 1771, 0.125f));
+    Animation.m_Frames.push_back(FRAME_INFO(1400, 1680, 1473, 1777, 0.125f));
     m_pAnimationClip->m_Animations.push_back(Animation);
 
     GameObject* playerObject1 = new GameObject;
@@ -83,6 +84,8 @@ bool DemoApp::Initialize()
     playerObject1->GetComponent<AnimationRenderer>()->SetAnimation(m_pAnimationClip);
     playerObject1->GetComponent<AnimationRenderer>()->SetAnimationPath(L"Ken");
     playerObject1->GetComponent<AnimationRenderer>()->SetAnimationState(L"Idle");
+    playerObject1->AddComponent<RectRenderer>();
+    playerObject1->GetComponent<RectRenderer>()->SetExtend(55.f, 50.f);
 
     GameObject* playerObject2 = new GameObject;
     playerObject1->AddChild(playerObject2);
@@ -94,6 +97,8 @@ bool DemoApp::Initialize()
     playerObject2->GetComponent<AnimationRenderer>()->SetAnimation(m_pAnimationClip);
     playerObject2->GetComponent<AnimationRenderer>()->SetAnimationPath(L"Ken");
     playerObject2->GetComponent<AnimationRenderer>()->SetAnimationState(L"Attack");
+    playerObject2->AddComponent<RectRenderer>();
+    playerObject2->GetComponent<RectRenderer>()->SetExtend(55.f, 50.f);
 
     GameObject* playerObject3 = new GameObject;
     playerObject2->AddChild(playerObject3);
@@ -105,6 +110,15 @@ bool DemoApp::Initialize()
     playerObject3->GetComponent<AnimationRenderer>()->SetAnimation(m_pAnimationClip);
     playerObject3->GetComponent<AnimationRenderer>()->SetAnimationPath(L"Ken");
     playerObject3->GetComponent<AnimationRenderer>()->SetAnimationState(L"Move");
+    playerObject3->AddComponent<RectRenderer>();
+    playerObject3->GetComponent<RectRenderer>()->SetExtend(55.f, 50.f);
+
+    GameObject* Camera = new GameObject;
+    gameObjectList.push_back(Camera);
+    Camera->AddComponent<Transform>();
+    Camera->GetComponent<Transform>()->SetLocalPosition({ 500, 500 });
+    Camera->AddComponent<CameraComponent>();
+    Camera->GetComponent<CameraComponent>()->SetCamera(m_pCameraComponent);
 
     return true;
 }

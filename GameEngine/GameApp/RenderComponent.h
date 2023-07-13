@@ -1,22 +1,16 @@
 #pragma once
-#include "Component.h"
-#include "AABB.h"
+#include "Transform.h"
 
-class GameObject;
 class D2DRenderer;
 class Transform;
 class Sprite;
 class AnimationClip;
 
-class RenderComponent : public Component
+class RenderComponent : public Transform
 {
 protected:
-	Transform* m_transform;
 	AnimationClip* m_AnimationClip;
 	Sprite* m_Sprite;
-
-	AABB m_BoundingBox;
-
 public:
 	RenderComponent(GameObject* gameObject);
 	~RenderComponent();

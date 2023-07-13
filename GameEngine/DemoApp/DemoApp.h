@@ -6,6 +6,7 @@ class GameObject;
 class AnimationClip;
 class Animator;
 class Sprite;
+class CameraComponent;
 
 // 게임앱을 상속받아 초기화, 업데이트, 렌더를 실행한다.
 class DemoApp : public GameApp
@@ -23,4 +24,5 @@ public:
 	void Render();
 
 	AnimationClip* m_pAnimationClip;
+	CameraComponent* m_pCameraComponent;
 };

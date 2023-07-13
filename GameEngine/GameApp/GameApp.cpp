@@ -6,7 +6,12 @@
 GameApp* GameApp::m_hInstance = nullptr;
 HWND GameApp::m_hwnd;
 
-LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+LRESULT CALLBACK DefaultWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+{
+    return  GameApp::m_hInstance->WndProc(hWnd, message, wParam, lParam);
+}
+
+LRESULT CALLBACK GameApp::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     switch (message)
     {
@@ -29,9 +34,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 GameApp::GameApp(HINSTANCE hInstance)
     :m_hInst(hInstance), m_szWindowClass{ L"DefaultWindowClass" }, m_szTitle{ L"DefaultWindowTitle" }, m_ClientSize({ 1024,768 })
 {
+    GameApp::m_hInstance = this;
+    m_wcex.hInstance = hInstance;
     m_wcex.cbSize = sizeof(WNDCLASSEX);
     m_wcex.style = CS_HREDRAW | CS_VREDRAW;
-    m_wcex.lpfnWndProc = WndProc;
+    m_wcex.lpfnWndProc = DefaultWndProc;
     m_wcex.cbClsExtra = 0;
     m_wcex.cbWndExtra = 0;
     m_wcex.hInstance = m_hInst;
@@ -48,6 +55,9 @@ GameApp::~GameApp()
 
 bool GameApp::Initialize()
 {
+    m_ClientSize.width = 1024;
+    m_ClientSize.height = 768;
+
     // m_wcex 가 준비되었다고 가정
     RegisterClassExW(&m_wcex);
 

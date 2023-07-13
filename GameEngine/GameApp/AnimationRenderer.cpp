@@ -13,10 +13,9 @@ AnimationRenderer::AnimationRenderer(GameObject* gameObject)
 
 void AnimationRenderer::Update()
 {
-	static float m_time = 0.f;
 	float deltaTime = TimeManager::m_Instance->GetDeltatime();
-
-	if (m_time > 0.03f)
+	
+	if (m_time > m_curFrame[frameIndex].RenderTime)
 	{
 		frameIndex++;
 		frameIndex %= m_curFrame.size();
@@ -27,25 +26,14 @@ void AnimationRenderer::Update()
 
 void AnimationRenderer::Render(D2DRenderer* renderer)
 {
-	DrawWorldTransform(renderer);
-	D2D1_MATRIX_3X2_F Transform = m_transform->GetWorldTransform() * D2DRenderer::m_CameraTransform;
-	renderer->SetTransform(Transform);
+	renderer->SetTransform(m_transform->GetWorldTransform());
 	//m_AnimationClip->m_Animations;
-	//animationInfo.m_Name	
-
+	//animationInfo.m_Name
+	//m_
 	if (frameIndex != -1)
 	{
 		renderer->DrawAnimation(m_AnimationClip, m_anmationPath, m_curFrame[frameIndex]);
 	}
-	renderer->DrawCrossLine();
-}
-
-
-void AnimationRenderer::DrawWorldTransform(D2DRenderer* renderer)
-{
-	D2D1_MATRIX_3X2_F Transform = m_transform->GetWorldTransform() * D2DRenderer::m_CameraTransform * D2DRenderer::m_ScreenTransform;
-	renderer->SetTransform(Transform);
-	renderer->DrawCrossLine();
 }
 
 // setstate 해서 상태 불러오기

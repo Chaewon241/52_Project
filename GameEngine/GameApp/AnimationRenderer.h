@@ -7,10 +7,11 @@ class AnimationRenderer :
     public RenderComponent
 {
 private:
-    int frameIndex = -1;
+    int frameIndex = 0;
     std::wstring m_anmationPath;
     std::wstring m_animationState;
     std::vector<FRAME_INFO> m_curFrame;
+    float m_time = 0.f;
 public:
     AnimationRenderer(GameObject* gameObject);
 
@@ -29,6 +30,5 @@ public:
         }
     }
     void Render(D2DRenderer* renderer) override;
-    void DrawWorldTransform(D2DRenderer* renderer);
 };
 
