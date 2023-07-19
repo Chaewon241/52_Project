@@ -102,9 +102,6 @@
     <ClInclude Include="StateMachine.h">
       <Filter>소스 파일\FSM</Filter>
     </ClInclude>
-    <ClInclude Include="CameraComponent.h">
-      <Filter>소스 파일\Component\SceneComponent\RenderComponent</Filter>
-    </ClInclude>
     <ClInclude Include="AABB.h">
       <Filter>소스 파일</Filter>
     </ClInclude>
@@ -113,6 +110,12 @@
     </ClInclude>
     <ClInclude Include="RenderComponent.h">
       <Filter>소스 파일\Component\SceneComponent\RenderComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>소스 파일\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraComponent.h">
+      <Filter>소스 파일\Component\SceneComponent</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -173,9 +176,6 @@
     <ClCompile Include="StateMachine.cpp">
       <Filter>소스 파일\FSM</Filter>
     </ClCompile>
-    <ClCompile Include="CameraComponent.cpp">
-      <Filter>소스 파일\Component\SceneComponent\RenderComponent</Filter>
-    </ClCompile>
     <ClCompile Include="AABB.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -184,6 +184,12 @@
     </ClCompile>
     <ClCompile Include="RenderComponent.cpp">
       <Filter>소스 파일\Component\SceneComponent\RenderComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>소스 파일\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraComponent.cpp">
+      <Filter>소스 파일\Component\SceneComponent</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

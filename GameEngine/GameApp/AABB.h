@@ -5,6 +5,7 @@ class AABB
 public:
 	D2D1_VECTOR_2F m_Center;
 	D2D1_VECTOR_2F m_Extend;	
+
 public:
 	AABB() : m_Center{ 0 }, m_Extend{ 0 } {}
 
@@ -23,10 +24,10 @@ public:
 		float maxBox2Y = other.m_Center.y + other.m_Extend.y;
 
 		if (maxBox1X < minBox2X || minBox1X > maxBox2X || maxBox1Y < minBox2Y || minBox1Y > maxBox2Y) {
-			return false;
+			return true;
 		}
 
-		return true;
+		return false;
 	}
 };
 

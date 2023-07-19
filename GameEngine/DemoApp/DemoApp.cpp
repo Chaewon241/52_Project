@@ -113,10 +113,21 @@ bool DemoApp::Initialize()
     playerObject3->AddComponent<RectRenderer>();
     playerObject3->GetComponent<RectRenderer>()->SetExtend(55.f, 50.f);
 
+    GameObject* playerObject4 = new GameObject;
+    gameObjectList.push_back(playerObject4);
+    playerObject4->AddComponent<Transform>();
+    playerObject4->GetComponent<Transform>()->SetLocalPosition({ 100, 100 });
+    playerObject4->AddComponent<AnimationRenderer>();
+    playerObject4->GetComponent<AnimationRenderer>()->SetAnimation(m_pAnimationClip);
+    playerObject4->GetComponent<AnimationRenderer>()->SetAnimationPath(L"Ken");
+    playerObject4->GetComponent<AnimationRenderer>()->SetAnimationState(L"Idle");
+    playerObject4->AddComponent<RectRenderer>();
+    playerObject4->GetComponent<RectRenderer>()->SetExtend(55.f, 50.f);
+
     GameObject* Camera = new GameObject;
     gameObjectList.push_back(Camera);
     Camera->AddComponent<Transform>();
-    Camera->GetComponent<Transform>()->SetLocalPosition({ 120, 20 });
+
     Camera->AddComponent<CameraComponent>();
     Camera->GetComponent<CameraComponent>()->SetCamera(m_pCameraComponent);
 

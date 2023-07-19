@@ -15,7 +15,6 @@ D2DRenderer* D2DRenderer::m_hInstance = nullptr;
 
 
 D2D1_MATRIX_3X2_F D2DRenderer::m_CameraTransform = D2D1::Matrix3x2F::Identity();
-
 D2D1_MATRIX_3X2_F D2DRenderer::m_ScreenTransform = D2D1::Matrix3x2F::Identity();
 
 D2DRenderer::D2DRenderer()
@@ -149,7 +148,7 @@ void D2DRenderer::DrawSprite(Sprite* sprite)
 }
 
 
-void D2DRenderer::DrawAnimation(AnimationClip* animationClip, std::wstring clipName, FRAME_INFO aniName)
+void D2DRenderer::DrawAnimation(std::wstring clipName, FRAME_INFO aniName)
 {
 	ID2D1Bitmap* _sheet = m_spriteSheets[clipName];
 	std::vector<FRAME_INFO> frames;

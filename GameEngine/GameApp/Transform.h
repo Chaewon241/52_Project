@@ -19,7 +19,7 @@ private:
 	D2D1_MATRIX_3X2_F m_worldTransform;
 protected:
 	Transform* m_transform;
-	AABB m_BoundingBox;
+
 public:
 	virtual void Update() override;
 	virtual void Render(D2DRenderer* renderer);

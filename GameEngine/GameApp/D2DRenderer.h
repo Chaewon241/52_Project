@@ -14,8 +14,10 @@ class D2DRenderer
 {
 public:
 	static ID2D1HwndRenderTarget* m_renderTarget;
-	static D2D1_MATRIX_3X2_F m_CameraTransform;	
-	static D2D1_MATRIX_3X2_F m_ScreenTransform;	 
+	static D2D1_MATRIX_3X2_F m_CameraTransform;
+	static D2D1_MATRIX_3X2_F m_ScreenTransform;
+
+	
 
 	ID2D1Factory* m_pD2DFactory;	
 
@@ -34,7 +36,7 @@ public:
 	void LoadSpriteSheet(std::wstring spriteName,LPCWSTR filePath);
 	void BeginRender();
 	void DrawSprite(Sprite* sprite);
-	void DrawAnimation(AnimationClip* animationClip, std::wstring clipName, FRAME_INFO aniName);
+	void DrawAnimation(std::wstring clipName, FRAME_INFO aniName);
 	void DrawRectangle(D2D1_RECT_F rect);
 	void DrawEllipse(D2D1_POINT_2F point, float radiusX, float radiusY);
 	void DrawCrossLine();

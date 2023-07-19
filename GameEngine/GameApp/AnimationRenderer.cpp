@@ -13,6 +13,7 @@ AnimationRenderer::AnimationRenderer(GameObject* gameObject)
 
 void AnimationRenderer::Update()
 {
+	RenderComponent::Update();
 	float deltaTime = TimeManager::m_Instance->GetDeltatime();
 	
 	if (m_time > m_curFrame[frameIndex].RenderTime)
@@ -26,13 +27,21 @@ void AnimationRenderer::Update()
 
 void AnimationRenderer::Render(D2DRenderer* renderer)
 {
-	renderer->SetTransform(m_transform->GetWorldTransform());
+	if (m_IsAABB)
+	{
+		return;
+	}
+	D2D1_MATRIX_3X2_F Transform = D2D1::Matrix3x2F::Scale(1.0f, -1.0f) * m_transform->GetWorldTransform()
+		* D2DRenderer::m_hInstance->m_CameraTransform 
+		* D2DRenderer::m_hInstance->m_ScreenTransform;
+	renderer->SetTransform(Transform);
 	//m_AnimationClip->m_Animations;
 	//animationInfo.m_Name
 	//m_
+
 	if (frameIndex != -1)
 	{
-		renderer->DrawAnimation(m_AnimationClip, m_anmationPath, m_curFrame[frameIndex]);
+		renderer->DrawAnimation(m_anmationPath, m_curFrame[frameIndex]);
 	}
 }
 
