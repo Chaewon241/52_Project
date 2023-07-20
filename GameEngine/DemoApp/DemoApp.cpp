@@ -92,7 +92,6 @@ bool DemoApp::Initialize()
     gameObjectList.push_back(playerObject2);
     playerObject2->AddComponent<Transform>();
     playerObject2->GetComponent<Transform>()->SetLocalPosition({ 100, 100 });
-    playerObject2->GetComponent<Transform>()->SetLocalScale({ 0.8f, 0.8f });
     playerObject2->AddComponent<AnimationRenderer>();
     playerObject2->GetComponent<AnimationRenderer>()->SetAnimation(m_pAnimationClip);
     playerObject2->GetComponent<AnimationRenderer>()->SetAnimationPath(L"Ken");
@@ -105,7 +104,6 @@ bool DemoApp::Initialize()
     gameObjectList.push_back(playerObject3);
     playerObject3->AddComponent<Transform>();
     playerObject3->GetComponent<Transform>()->SetLocalPosition({ 100, 100 });
-    playerObject3->GetComponent<Transform>()->SetLocalScale({ 0.8f, 0.8f });
     playerObject3->AddComponent<AnimationRenderer>();
     playerObject3->GetComponent<AnimationRenderer>()->SetAnimation(m_pAnimationClip);
     playerObject3->GetComponent<AnimationRenderer>()->SetAnimationPath(L"Ken");

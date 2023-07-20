@@ -9,11 +9,14 @@
 AnimationRenderer::AnimationRenderer(GameObject* gameObject)
 	: RenderComponent(gameObject)
 {
+	m_BoundingBox.m_Extend.x = 55;
+	m_BoundingBox.m_Extend.y = 50;
 }
 
 void AnimationRenderer::Update()
 {
 	RenderComponent::Update();
+
 	float deltaTime = TimeManager::m_Instance->GetDeltatime();
 	
 	if (m_time > m_curFrame[frameIndex].RenderTime)

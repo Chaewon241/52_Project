@@ -13,8 +13,8 @@ CameraComponent::CameraComponent(GameObject* gameObject)
 	: Transform(gameObject)
 {
 	m_transform = GetGameObject()->GetComponent<Transform>();
-	m_CameraAABBbox.m_Extend.x = GameApp::m_hInstance->GetClientSize().width / 3.f;
-	m_CameraAABBbox.m_Extend.y = GameApp::m_hInstance->GetClientSize().height / 3.f;
+	m_CameraAABBbox.m_Extend.x = GameApp::m_hInstance->GetClientSize().width / 2.5f;
+	m_CameraAABBbox.m_Extend.y = GameApp::m_hInstance->GetClientSize().height / 2.5f;
 
 	posVector = m_transform->GetLocalPosition();
 }
