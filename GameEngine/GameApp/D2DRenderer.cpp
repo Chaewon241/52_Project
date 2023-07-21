@@ -154,7 +154,7 @@ void D2DRenderer::DrawAnimation(std::wstring clipName, FRAME_INFO aniName)
 	std::vector<FRAME_INFO> frames;
 	m_renderTarget->DrawBitmap(
 		_sheet
-		, D2D1::RectF((float)-(100) / 2, (float)-(100) / 2, (float)(100) / 2, (float)(100) / 2)
+		, D2D1::RectF((float)aniName.Source.right - (float)aniName.Source.left, (float)aniName.Source.bottom - (float)aniName.Source.top)
 		, 1.0f
 		, D2D1_BITMAP_INTERPOLATION_MODE_LINEAR
 		, D2D1::RectF((float)aniName.Source.left, (float)aniName.Source.top, (float)aniName.Source.right, (float)aniName.Source.bottom)

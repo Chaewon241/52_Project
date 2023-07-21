@@ -14,6 +14,7 @@ public:
 private:
 	D2D1_VECTOR_2F m_localPosition;
 	D2D1_VECTOR_2F m_localScale;
+	D2D1_VECTOR_2F m_worldScale;
 	float m_localRotation;
 	D2D1_MATRIX_3X2_F m_localTransform;
 	D2D1_MATRIX_3X2_F m_worldTransform;
@@ -24,6 +25,7 @@ public:
 	virtual void Update() override;
 	virtual void Render(D2DRenderer* renderer);
 	void CalculateWorldTransform();
+	void CalculateWorldScale();
 	void Rotate(float rotation);
 public:
 	void SetLocalPosition(D2D1_VECTOR_2F Position) 
@@ -35,6 +37,7 @@ public:
 	{
 		m_localScale = Scale; 
 		CalculateWorldTransform();
+		CalculateWorldScale();
 	}
 	void SetLocalRotation(float rotation) 
 	{	
@@ -44,6 +47,7 @@ public:
 
 	D2D1_VECTOR_2F GetLocalPosition() { return m_localPosition; }
 	D2D1_VECTOR_2F GetLocalScale() { return m_localScale; }
+	D2D1_VECTOR_2F GetWorldScale() { return m_worldScale; }
 	float GetLocalRotation() { return m_localRotation; }
 	D2D1_MATRIX_3X2_F GetLocalTransform() { return m_localTransform; }
 

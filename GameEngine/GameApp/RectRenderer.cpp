@@ -22,12 +22,14 @@ void RectRenderer::SetExtend(float x, float y)
 	m_Rect.left = -x;
 	m_Rect.top = -y;
 
-	m_BoundingBox.m_Extend.x = x;
-	m_BoundingBox.m_Extend.y = y;
 }
 
 void RectRenderer::Render(D2DRenderer* renderer)
 {
+
+	m_BoundingBox.m_Extend.x = m_Rect.right * m_transform->GetWorldScale().x;
+	m_BoundingBox.m_Extend.y = m_Rect.bottom * m_transform->GetWorldScale().y;
+
 	if (m_IsAABB)
 	{
 		return;

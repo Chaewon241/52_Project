@@ -33,6 +33,7 @@ void Transform::Update()
 	time += deltaTime;
 
 	CalculateWorldTransform();
+	CalculateWorldScale();
 }
 
 void Transform::Render(D2DRenderer* renderer)
@@ -63,5 +64,20 @@ void Transform::CalculateWorldTransform()
 	else
 	{
 		m_worldTransform = m_localTransform;
+	}
+}
+
+void Transform::CalculateWorldScale()
+{
+	GameObject* _parent = m_GameObject->GetParent();
+
+	if (_parent != nullptr)
+	{
+		m_worldScale.x = m_localScale.x * _parent->GetComponent<Transform>()->GetWorldScale().x;
+		m_worldScale.y = m_localScale.y * _parent->GetComponent<Transform>()->GetWorldScale().y;
+	}
+	else
+	{
+		m_worldScale = m_localScale;
 	}
 }

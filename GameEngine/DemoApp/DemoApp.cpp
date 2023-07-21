@@ -85,7 +85,7 @@ bool DemoApp::Initialize()
     playerObject1->GetComponent<AnimationRenderer>()->SetAnimationPath(L"Ken");
     playerObject1->GetComponent<AnimationRenderer>()->SetAnimationState(L"Idle");
     playerObject1->AddComponent<RectRenderer>();
-    playerObject1->GetComponent<RectRenderer>()->SetExtend(55.f, 50.f);
+    playerObject1->GetComponent<RectRenderer>()->SetExtend(58.f / 2, 70.f / 2);
 
     GameObject* playerObject2 = new GameObject;
     playerObject1->AddChild(playerObject2);
@@ -96,8 +96,9 @@ bool DemoApp::Initialize()
     playerObject2->GetComponent<AnimationRenderer>()->SetAnimation(m_pAnimationClip);
     playerObject2->GetComponent<AnimationRenderer>()->SetAnimationPath(L"Ken");
     playerObject2->GetComponent<AnimationRenderer>()->SetAnimationState(L"Attack");
+    playerObject2->GetComponent<Transform>()->SetLocalScale({ 0.8f, 0.8f });
     playerObject2->AddComponent<RectRenderer>();
-    playerObject2->GetComponent<RectRenderer>()->SetExtend(55.f, 50.f);
+    playerObject2->GetComponent<RectRenderer>()->SetExtend(40.f, 70.f);
 
     GameObject* playerObject3 = new GameObject;
     playerObject2->AddChild(playerObject3);
@@ -108,8 +109,9 @@ bool DemoApp::Initialize()
     playerObject3->GetComponent<AnimationRenderer>()->SetAnimation(m_pAnimationClip);
     playerObject3->GetComponent<AnimationRenderer>()->SetAnimationPath(L"Ken");
     playerObject3->GetComponent<AnimationRenderer>()->SetAnimationState(L"Move");
+    playerObject3->GetComponent<Transform>()->SetLocalScale({ 0.8f, 0.8f });
     playerObject3->AddComponent<RectRenderer>();
-    playerObject3->GetComponent<RectRenderer>()->SetExtend(55.f, 50.f);
+    playerObject3->GetComponent<RectRenderer>()->SetExtend(40.f, 70.f);
 
     GameObject* playerObject4 = new GameObject;
     gameObjectList.push_back(playerObject4);
