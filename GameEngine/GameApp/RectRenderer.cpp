@@ -27,7 +27,7 @@ void RectRenderer::SetExtend(float x, float y)
 void RectRenderer::Render(D2DRenderer* renderer)
 {
 
-	m_BoundingBox.m_Extend.x = m_Rect.right * m_transform->GetWorldScale().x;
+	/*m_BoundingBox.m_Extend.x = m_Rect.right * m_transform->GetWorldScale().x;
 	m_BoundingBox.m_Extend.y = m_Rect.bottom * m_transform->GetWorldScale().y;
 
 	if (m_IsAABB)
@@ -38,6 +38,6 @@ void RectRenderer::Render(D2DRenderer* renderer)
 	D2D1_MATRIX_3X2_F Transform = m_transform->GetWorldTransform() * D2DRenderer::m_hInstance->m_CameraTransform * D2DRenderer::m_hInstance->m_ScreenTransform;
 	renderer->SetTransform(Transform);
 
-	renderer->DrawRectangle(m_Rect);
+	renderer->DrawRectangle(m_Rect);*/
 }
 

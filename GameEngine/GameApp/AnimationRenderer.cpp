@@ -9,8 +9,6 @@
 AnimationRenderer::AnimationRenderer(GameObject* gameObject)
 	: RenderComponent(gameObject)
 {
-	m_BoundingBox.m_Extend.x = 50;
-	m_BoundingBox.m_Extend.y = 55;
 }
 
 void AnimationRenderer::Update()
@@ -27,6 +25,9 @@ void AnimationRenderer::Update()
 		m_time = 0.f;
 	}
 	m_time += deltaTime;
+	m_AniRect = { 
+		m_curFrame[frameIndex].Source.right - m_curFrame[frameIndex].Source.left,
+		m_curFrame[frameIndex].Source.top - m_curFrame[frameIndex].Source.bottom };
 }
 
 void AnimationRenderer::Render(D2DRenderer* renderer)
@@ -46,6 +47,7 @@ void AnimationRenderer::Render(D2DRenderer* renderer)
 	if (frameIndex != -1)
 	{
 		renderer->DrawAnimation(m_anmationPath, m_curFrame[frameIndex]);
+		renderer->DrawRectangle(m_AniRect);
 	}
 }
 
