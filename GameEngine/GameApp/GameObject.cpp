@@ -46,6 +46,14 @@ void GameObject::Render(D2DRenderer* renderer)
 	}
 }
 
+void GameObject::SerializeOut(nlohmann::ordered_json& object)
+{
+	for (Component* cp : m_componentList)
+	{
+		cp->SerializeOut(object);
+	}
+}
+
 // 삭제도 해줘야함
 
 void GameObject::AddChild(GameObject* child)

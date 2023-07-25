@@ -49,6 +49,10 @@ void Transform::Rotate(float rotation)
 
 }
 
+void Transform::SerializeOut(nlohmann::ordered_json& object)
+{
+}
+
 void Transform::CalculateWorldTransform()
 {
 	GameObject* _parent = m_GameObject->GetParent();

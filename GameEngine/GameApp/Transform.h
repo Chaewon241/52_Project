@@ -27,6 +27,7 @@ public:
 	void CalculateWorldTransform();
 	void CalculateWorldScale();
 	void Rotate(float rotation);
+	virtual void SerializeOut(nlohmann::ordered_json& object) override;
 public:
 	void SetLocalPosition(D2D1_VECTOR_2F Position) 
 	{ 

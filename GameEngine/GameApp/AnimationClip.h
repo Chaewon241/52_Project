@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include "json.hpp"
 
 struct FRAME_INFO
 {
@@ -45,6 +46,7 @@ class AnimationClip
 public:
 	AnimationClip();
 	AnimationClip(std::vector<ANIMATION_INFO> vec);
+	void Save(const WCHAR* szFilePath);
 	std::vector<ANIMATION_INFO> m_Animations;
 };
 

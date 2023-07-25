@@ -18,6 +18,7 @@ public:
 public:
 	virtual void Update() override;
 	virtual void Render(D2DRenderer* renderer) override;
+	virtual void SerializeOut(nlohmann::ordered_json& object) override;
 public:
 	void AddChild(GameObject* child);
 	void SetParent(GameObject* parent) 
