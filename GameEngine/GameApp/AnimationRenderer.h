@@ -13,6 +13,7 @@ private:
     std::vector<FRAME_INFO> m_curFrame;
     float m_time = 0.f;
     D2D1_RECT_F m_AniRect;
+    bool m_isInCamera;
     
 public:
     AnimationRenderer(GameObject* gameObject);
