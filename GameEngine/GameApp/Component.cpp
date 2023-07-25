@@ -22,7 +22,3 @@ void Component::Render(D2DRenderer* renderer)
 {
 }
 
-void Component::SerializeOut(nlohmann::ordered_json& object)
-{
-}
-

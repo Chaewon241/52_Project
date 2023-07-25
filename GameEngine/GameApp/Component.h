@@ -17,6 +17,5 @@ public:
 	virtual void Render(D2DRenderer* renderer);
 	GameObject* GetGameObject() const { return m_GameObject; }
 	void SetGameObject(GameObject* gameObject) { m_GameObject = gameObject; }
-	virtual void SerializeOut(nlohmann::ordered_json& object);
 };
 
