@@ -48,7 +48,7 @@ public:
 	AnimationClip();
 	AnimationClip(std::vector<ANIMATION_INFO> vec);
 	void Save(const WCHAR* szFilePath);
-	bool Load(const WCHAR* szFilePath, D2DRenderer renderer);
+	bool Load(const WCHAR* szFilePath);
 	std::vector<ANIMATION_INFO> m_Animations;
 };
 

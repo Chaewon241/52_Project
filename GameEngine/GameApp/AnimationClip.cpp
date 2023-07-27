@@ -3,6 +3,7 @@
 #include "json.hpp"
 #include "D2DRenderer.h"
 #include <fstream>
+#include <codecvt>
 
 AnimationClip::AnimationClip()
 {
@@ -16,12 +17,14 @@ AnimationClip::AnimationClip(std::vector<ANIMATION_INFO> vec)
 void AnimationClip::Save(const WCHAR* szFilePath)
 {
 	nlohmann::ordered_json obj;
+	std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
+	obj["m_BitmapFilePath"] = converter.to_bytes(szFilePath);
 	
 	for (int i = 0; i < m_Animations.size(); i++)
 	{
 		ANIMATION_INFO& animation = m_Animations[i];
 		nlohmann::ordered_json animationObj;
-		obj["animationName"] = animation.m_Name;
+		animationObj["Name"] = converter.to_bytes(animation.m_Name);
 
 		for (int j = 0; j < animation.m_Frames.size(); j++)
 		{
@@ -41,7 +44,7 @@ void AnimationClip::Save(const WCHAR* szFilePath)
 	ofs.close();
 }
 
-bool AnimationClip::Load(const WCHAR* szFilePath, D2DRenderer renderer)
+bool AnimationClip::Load(const WCHAR* szFilePath)
 {
 	std::ifstream ifs(szFilePath, std::ios::in);
 	if (!ifs.is_open())
@@ -56,7 +59,8 @@ bool AnimationClip::Load(const WCHAR* szFilePath, D2DRenderer renderer)
 	for (auto& animationObj : obj["m_Animations"])
 	{
 		ANIMATION_INFO animation;
-		animation.m_Name = animationObj["m_Name"].get<std::wstring>();
+		std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
+		animation.m_Name = converter.from_bytes(animationObj["Name"].get<std::string>());
 		for (auto& frameObj : animationObj["m_Frames"])
 		{
 			FRAME_INFO frame;
