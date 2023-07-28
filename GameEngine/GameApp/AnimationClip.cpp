@@ -52,9 +52,10 @@ bool AnimationClip::Load(const WCHAR* szFilePath)
 		return false;
 	}
 
-	nlohmann::ordered_json obj;
-	ifs >> obj;
+	std::string str((std::istreambuf_iterator<char>(ifs)), std::istreambuf_iterator<char>());
 	ifs.close();
+
+	nlohmann::ordered_json obj = nlohmann::ordered_json::parse(str);
 
 	for (auto& animationObj : obj["m_Animations"])
 	{
