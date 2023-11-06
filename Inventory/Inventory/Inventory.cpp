@@ -27,6 +27,14 @@ int main()
         {
             im->DeleteItem();
         }
+        else if (inputNum == 4)
+        {
+            im->SortItem();
+        }
+        else if (inputNum == 5)
+        {
+            im->MergeItem();
+        }
     }
 }
 

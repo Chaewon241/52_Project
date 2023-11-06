@@ -1,6 +1,7 @@
 #pragma once
 
 enum class ItemType;
+enum class GradeType;
 class Item;
 
 class ItemManager
@@ -27,8 +28,15 @@ public:
 	// 아이템 목록 보여주기
 	void ShowItem();
 
+	// int에서 itemtype으로
 	ItemType NumToItemType(int num);
 	//string ItemTypeToString(ItemType itemType);
+
+	// GradeType에서 char로
+	char GradeTypeToChar(GradeType& gradeType);
+
+	// 위에거 반대
+	GradeType CharToGradeType(char c);
 
 private:
 	vector<unique_ptr<Item>> m_ItemList;
