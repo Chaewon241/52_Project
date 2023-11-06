@@ -11,10 +11,21 @@ int main()
 
     while (inputNum != 0)
     {
+        cout << "메뉴 선택" << endl;
         cin >> inputNum;
+
         if (inputNum == 1)
         {
+            cout << "아이템 추가" << endl;
             im->AddItem();
+        }
+        else if (inputNum == 2)
+        {
+            im->ShowItem();
+        }
+        else if (inputNum == 3)
+        {
+            im->DeleteItem();
         }
     }
 }

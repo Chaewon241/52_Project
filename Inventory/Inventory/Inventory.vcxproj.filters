@@ -48,6 +48,12 @@
     <ClCompile Include="Weapon.cpp">
       <Filter>소스 파일\Item</Filter>
     </ClCompile>
+    <ClCompile Include="Armor.cpp">
+      <Filter>소스 파일\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="Ring.cpp">
+      <Filter>소스 파일\Item</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -60,6 +66,12 @@
       <Filter>헤더 파일\Manager</Filter>
     </ClInclude>
     <ClInclude Include="Weapon.h">
+      <Filter>헤더 파일\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Armor.h">
+      <Filter>헤더 파일\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Ring.h">
       <Filter>헤더 파일\Item</Filter>
     </ClInclude>
   </ItemGroup>

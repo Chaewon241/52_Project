@@ -11,7 +11,7 @@ class Item
 {
 public:
 	Item();
-	~Item();
+	virtual ~Item();
 
 public:
 	void SetItemType(ItemType it) { m_ItemType = it; }
