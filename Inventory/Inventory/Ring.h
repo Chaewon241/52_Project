@@ -8,3 +8,5 @@ public:
     Ring();
     ~Ring();
 };
+
+using RingPtr = unique_ptr<Ring>;

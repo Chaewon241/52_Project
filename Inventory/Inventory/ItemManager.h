@@ -2,6 +2,7 @@
 
 enum class ItemType;
 enum class GradeType;
+
 class Item;
 
 class ItemManager

@@ -3,6 +3,7 @@
 
 Weapon::Weapon()
 {
+	m_ItemName = "´Ü°Ë";
 }
 
 Weapon::~Weapon()

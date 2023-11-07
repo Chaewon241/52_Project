@@ -3,6 +3,7 @@
 
 Ring::Ring()
 {
+	m_ItemName = "¹ÝÁö";
 }
 
 Ring::~Ring()

@@ -11,3 +11,4 @@ public:
 public:
 };
 
+using WeaponPtr = unique_ptr<Weapon>;

@@ -9,3 +9,4 @@ public:
     ~Armor();
 };
 
+using ArmorPtr = unique_ptr<Armor>;
