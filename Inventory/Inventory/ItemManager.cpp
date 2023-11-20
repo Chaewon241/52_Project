@@ -7,10 +7,10 @@
 
 /*
 1. 아이템 목록에 아이템들이 들어있는지 확인하는 함수
-2. 등급 업 시킬 떄 연산자 오버로딩 다시 보기
+2. 등급 업 시킬 떄 연산자 오버로딩 다시 보기 (o)
 3. 반복되는 부분 함수로 따로 빼기
 4. 다른게 입력됐을 때 예외처리
-5. 등급이 최고 등급일 때는 합성 안 하는거 예외처리
+5. 등급이 최고 등급일 때는 합성 안 하는거 예외처리 (o)
 */
 
 ItemManager::ItemManager()
@@ -27,16 +27,16 @@ void ItemManager::AddItem()
 
 	cout << "아이템 타입을 입력하세요(1. 단검 2. 갑옷 3. 반지): ";
 	int itemTypeNum;
-	cin >> itemTypeNum;
+	CheckInput(itemTypeNum);
 
 	cout << "아이템 등급을 입력하세요(S, A, B, C, D): ";
-	char tempGrade;
-	cin >> tempGrade;
-	GradeType grade = CharToGradeType(tempGrade);
+	char inputGrade;
+	CheckInput(inputGrade);
+	GradeType grade = CharToGradeType(inputGrade);
 
 	cout << "아이템 레벨을 입력하세요: ";
 	int level;
-	cin >> level;
+	CheckInput(level);
 
 	ItemPtr item;
 	
@@ -73,6 +73,12 @@ void ItemManager::AddItem()
 
 void ItemManager::DeleteItem()
 {
+	if (IsEmpty())
+	{
+		cout << "아이템 목록이 비어있습니다." << endl;
+		return;
+	}
+
 	cout << "어떤거 삭제?" << endl;
 	int itemTypeNum;
 	cin >> itemTypeNum;
@@ -117,6 +123,12 @@ void ItemManager::DeleteItem()
 
 void ItemManager::SearchItem()
 {
+	if (IsEmpty())
+	{
+		cout << "아이템 목록이 비어있습니다." << endl;
+		return;
+	}
+
 	cout << "어떤거 검색? 1. 단검 2. 갑옷 3. 반지" << endl;
 	int itemTypeNum;
 	cin >> itemTypeNum;
@@ -161,6 +173,12 @@ void ItemManager::SearchItem()
 
 void ItemManager::SortItem()
 {
+	if (IsEmpty())
+	{
+		cout << "아이템 목록이 비어있습니다." << endl;
+		return;
+	}
+
 	cout << "어떻게 정렬? 1. 이름 2. 등급 3. 레베루" << endl;
 	int itemTypeNum;
 	cin >> itemTypeNum;
@@ -197,6 +215,18 @@ void ItemManager::SortItem()
 
 void ItemManager::MergeItem()
 {
+	if (IsEmpty())
+	{
+		cout << "아이템 목록이 비어있습니다." << endl;
+		return;
+	}
+
+	if (m_ItemList.size() == 1)
+	{
+		cout << "아이템이 하나밖에 없습니다." << endl;
+		return;
+	}
+
 	cout << "어떤 아이템 합쳐" << endl;
 	 
 	int itemIndex1;
@@ -289,8 +319,7 @@ void ItemManager::MergeItem()
 
 void ItemManager::ShowItem()
 {
-	// 아이템 목록 비어있는지 확인하는 함수로 따로 넣어야할듯
-	if (m_ItemList.size() == 0)
+	if (IsEmpty())
 	{
 		cout << "아이템 목록이 비어있습니다." << endl;
 		return;
@@ -301,6 +330,13 @@ void ItemManager::ShowItem()
 		cout << itemList->GetItemIndex() << ", " << itemList->GetItemName() << ", " << itemList->GetItemLevel()
 			<< ", "  << GradeTypeToChar(itemList->GetItemGrade()) << endl;
 	}
+}
+
+bool ItemManager::IsEmpty()
+{
+	if (m_ItemList.size() > 0)
+		return false;
+	return true;
 }
 
 ItemType ItemManager::NumToItemType(int num)

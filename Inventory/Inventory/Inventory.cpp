@@ -21,7 +21,8 @@ int main()
         cout << "|| 6. 합성         ||" << endl;
         cout << "|| 0. 종료         ||" << endl;
         cout << "=====================" << endl;
-        cin >> inputNum;
+
+        CheckInput(inputNum);
 
         cout << endl;
         if (inputNum == 1)
@@ -50,4 +51,3 @@ int main()
         }
     }
 }
-

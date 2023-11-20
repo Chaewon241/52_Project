@@ -29,6 +29,8 @@ public:
 	// 아이템 목록 보여주기
 	void ShowItem();
 
+	bool IsEmpty();
+
 	// int에서 itemtype으로
 	ItemType NumToItemType(int num);
 	//string ItemTypeToString(ItemType itemType);
