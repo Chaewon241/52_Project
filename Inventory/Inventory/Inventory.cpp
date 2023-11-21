@@ -6,10 +6,10 @@
 
 int main()
 {
-    int inputNum = -1;
+    int inputNum;
     unique_ptr<ItemManager> im = make_unique<ItemManager>();
 
-    while (inputNum != 0)
+    do
     {
         cout << endl;
         cout << "===== 메뉴 선택 =====" << endl;
@@ -22,7 +22,7 @@ int main()
         cout << "|| 0. 종료         ||" << endl;
         cout << "=====================" << endl;
 
-        CheckInput(inputNum);
+        cin >> inputNum;
 
         cout << endl;
         if (inputNum == 1)
@@ -49,5 +49,5 @@ int main()
         {
             im->MergeItem();
         }
-    }
+    } while (inputNum != 0);
 }

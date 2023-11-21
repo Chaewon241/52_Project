@@ -27,16 +27,16 @@ void ItemManager::AddItem()
 
 	cout << "아이템 타입을 입력하세요(1. 단검 2. 갑옷 3. 반지): ";
 	int itemTypeNum;
-	CheckInput(itemTypeNum);
+	cin >> itemTypeNum;
 
 	cout << "아이템 등급을 입력하세요(S, A, B, C, D): ";
 	char inputGrade;
-	CheckInput(inputGrade);
+	cin >> inputGrade;
 	GradeType grade = CharToGradeType(inputGrade);
 
 	cout << "아이템 레벨을 입력하세요: ";
 	int level;
-	CheckInput(level);
+	cin >> level;
 
 	ItemPtr item;
 	
@@ -79,7 +79,10 @@ void ItemManager::DeleteItem()
 		return;
 	}
 
-	cout << "어떤거 삭제?" << endl;
+	cout << "어떤 아이템을 삭제하시겠습니까?" << endl;
+	// todo 아이템 삭제 전 아이템 목록 보여주기
+	ShowItem();
+
 	int itemTypeNum;
 	cin >> itemTypeNum;
 
@@ -129,9 +132,11 @@ void ItemManager::SearchItem()
 		return;
 	}
 
-	cout << "어떤거 검색? 1. 단검 2. 갑옷 3. 반지" << endl;
+	cout << "어떤 아이템을 검색하시겠습니까? 1. 단검 2. 갑옷 3. 반지" << endl;
 	int itemTypeNum;
 	cin >> itemTypeNum;
+
+	int itemCount = 0;
 
 	if (NumToItemType(itemTypeNum) == ItemType::Weapon)
 	{
@@ -140,6 +145,7 @@ void ItemManager::SearchItem()
 			auto itemPtr = m_ItemList[i].get();
 			if (dynamic_cast<Weapon*>(itemPtr) != nullptr)
 			{
+				itemCount++;
 				cout << itemPtr->GetItemIndex() << ", " << itemPtr->GetItemName() << ", " << itemPtr->GetItemLevel()
 					<< ", " << GradeTypeToChar(itemPtr->GetItemGrade()) << endl;
 			}
@@ -152,6 +158,7 @@ void ItemManager::SearchItem()
 			auto itemPtr = m_ItemList[i].get();
 			if (dynamic_cast<Armor*>(itemPtr) != nullptr)
 			{
+				itemCount++;
 				cout << itemPtr->GetItemIndex() << ", " << itemPtr->GetItemName() << ", " << itemPtr->GetItemLevel()
 					<< ", " << GradeTypeToChar(itemPtr->GetItemGrade()) << endl;
 			}
@@ -164,11 +171,15 @@ void ItemManager::SearchItem()
 			auto itemPtr = m_ItemList[i].get();
 			if (dynamic_cast<Ring*>(itemPtr) != nullptr)
 			{
+				itemCount++;
 				cout << itemPtr->GetItemIndex() << ", " << itemPtr->GetItemName() << ", " << itemPtr->GetItemLevel()
 					<< ", " << GradeTypeToChar(itemPtr->GetItemGrade()) << endl;
 			}
 		}
 	}
+
+	if (itemCount == 0)
+		cout << "해당 아이템이 존재하지 않습니다." << endl;
 }
 
 void ItemManager::SortItem()
@@ -179,7 +190,7 @@ void ItemManager::SortItem()
 		return;
 	}
 
-	cout << "어떻게 정렬? 1. 이름 2. 등급 3. 레베루" << endl;
+	cout << "어떤 기준으로 정렬하시겠습니까? 1. 이름 2. 등급 3. 레베루" << endl;
 	int itemTypeNum;
 	cin >> itemTypeNum;
 
@@ -227,67 +238,71 @@ void ItemManager::MergeItem()
 		return;
 	}
 
-	cout << "어떤 아이템 합쳐" << endl;
+	cout << "합칠 아이템들의 인덱스를 하나씩 입력하세요." << endl;
 	 
-	int itemIndex1;
-	int itemIndex2;
+	// todo 아이템 합성하기 전 아이템 목록 보여주기
+	ShowItem();
 
-	cin >> itemIndex1;
-	cin >> itemIndex2;
+	int inputIndex1;
+	int inputIndex2;
 
-	ItemPtr item1;
-	ItemPtr item2;
+	cin >> inputIndex1;
+	cin >> inputIndex2;
 
-	int item1Index;
-	int item2Index;
+	if (inputIndex1 == inputIndex2)
+	{
+		cout << "둘의 인덱스가 같습니다." << endl;
+		return;
+	}
+
+	int item1Index = -1;
+	int item2Index = -1;
 
 	for (int i = 0; i < m_ItemList.size(); i++)
 	{
-		if (m_ItemList[i]->GetItemIndex() == itemIndex1)
+		// 첫번째 아이템 인덱스 저장해두기
+		if (m_ItemList[i]->GetItemIndex() == inputIndex1)
 		{
-			item1 = move(m_ItemList[i]);
 			item1Index = i;
 			
 		}
-		else if (m_ItemList[i]->GetItemIndex() == itemIndex2)
+		// 두번째 아이템 인덱스 저장해두기
+		else if (m_ItemList[i]->GetItemIndex() == inputIndex2)
 		{
-			item2 = move(m_ItemList[i]);
 			item2Index = i;
 		}
-
-		if (item1 != nullptr && item2 != nullptr)
+		// 둘다 저장 됐으면 break
+		if (item1Index != -1 && item2Index != -1)
 		{
 			break;
 		}
 	}
 
-	if (item1->GetItemGrade() == item2->GetItemGrade())
+	// 둘이 등급이 같으면 합병 진행
+	if (m_ItemList[item1Index]->GetItemGrade() == m_ItemList[item2Index]->GetItemGrade())
 	{
-		if (item1->GetItemGrade() == GradeType::S)
+		if (m_ItemList[item1Index]->GetItemGrade() == GradeType::S)
 		{
 			cout << "이미 최고 등급" << endl;
 
-			m_ItemList[item1Index] = move(item1);
-			m_ItemList[item2Index] = move(item2);
-
 			return;
 		}
-
 		m_ItemListIndex++;
+
 		ItemPtr newItem;
-		if (item1->GetItemType() == ItemType::Weapon)
+		if (m_ItemList[item1Index]->GetItemType() == ItemType::Weapon)
 		{
 			WeaponPtr weaponItem = make_unique<Weapon>();
 			newItem = move(weaponItem);
 			newItem->SetItemType(ItemType::Weapon);
 		}
-		else if (item1->GetItemType() == ItemType::Armor)
+		else if (m_ItemList[item1Index]->GetItemType() == ItemType::Armor)
 		{
 			ArmorPtr armorItem = make_unique<Armor>();
 			newItem = move(armorItem);
 			newItem->SetItemType(ItemType::Armor);
 		}
-		else if (item1->GetItemType() == ItemType::Ring)
+		else if (m_ItemList[item1Index]->GetItemType() == ItemType::Ring)
 		{
 			RingPtr ringItem = make_unique<Ring>();
 			newItem = move(ringItem);
@@ -296,25 +311,33 @@ void ItemManager::MergeItem()
 
 		newItem->SetItemIndex(m_ItemListIndex);
 
-		++(*item1);
+		++(*m_ItemList[item1Index]);
 
-		newItem->SetItemGrade(item1->GetItemGrade());
+		newItem->SetItemGrade(m_ItemList[item1Index]->GetItemGrade());
 		newItem->SetItemLevel(1);
 		m_ItemList.push_back(move(newItem));
+
+		// 기존의 아이템들을 삭제
+		// 삭제해주면서 인덱스가 변화하여 조건을 걸어줌.
+		if (item1Index > item2Index)
+		{
+			m_ItemList.erase(m_ItemList.begin() + item2Index);
+			m_ItemList.erase(m_ItemList.begin() + item1Index - 1);
+		}
+		else
+		{
+			m_ItemList.erase(m_ItemList.begin() + item1Index);
+			m_ItemList.erase(m_ItemList.begin() + item2Index - 1);
+		}
+
+		sort(m_ItemList.begin(), m_ItemList.end(), [](const ItemPtr& a, const ItemPtr& b) {
+			return a->GetItemIndex() < b->GetItemIndex();
+			});
 	}
 	else
 	{
-		cout << "둘이 다름" << endl;
-		m_ItemList.push_back(move(item1));
-		m_ItemList.push_back(move(item2));
+		cout << "둘의 등급이 다릅니다." << endl;
 	}
-
-	m_ItemList.erase(m_ItemList.begin() + item1Index);
-	m_ItemList.erase(m_ItemList.begin() + item2Index);
-	
-	sort(m_ItemList.begin(), m_ItemList.end(), [](const ItemPtr& a, const ItemPtr& b) {
-		return a->GetItemIndex() < b->GetItemIndex();
-		});
 }
 
 void ItemManager::ShowItem()
