@@ -6,7 +6,7 @@
 #include "Ring.h"
 
 /*
-1. 아이템 목록에 아이템들이 들어있는지 확인하는 함수
+1. 아이템 목록에 아이템들이 들어있는지 확인하는 함수(o)
 2. 등급 업 시킬 떄 연산자 오버로딩 다시 보기 (o)
 3. 반복되는 부분 함수로 따로 빼기
 4. 다른게 입력됐을 때 예외처리
@@ -29,14 +29,14 @@ void ItemManager::AddItem()
 	int itemTypeNum;
 	cin >> itemTypeNum;
 
+	cout << "아이템 레벨을 입력하세요: ";
+	int level;
+	cin >> level;
+
 	cout << "아이템 등급을 입력하세요(S, A, B, C, D): ";
 	char inputGrade;
 	cin >> inputGrade;
 	GradeType grade = CharToGradeType(inputGrade);
-
-	cout << "아이템 레벨을 입력하세요: ";
-	int level;
-	cin >> level;
 
 	ItemPtr item;
 	
@@ -79,7 +79,7 @@ void ItemManager::DeleteItem()
 		return;
 	}
 
-	cout << "어떤 아이템을 삭제하시겠습니까?" << endl;
+	cout << "어떤 아이템을 삭제하시겠습니까? 1. 단검 2. 갑옷 3. 반지" << endl;
 	// todo 아이템 삭제 전 아이템 목록 보여주기
 	ShowItem();
 
@@ -333,6 +333,10 @@ void ItemManager::MergeItem()
 		sort(m_ItemList.begin(), m_ItemList.end(), [](const ItemPtr& a, const ItemPtr& b) {
 			return a->GetItemIndex() < b->GetItemIndex();
 			});
+
+		cout << "합성이 완료되었습니다." << endl;
+
+		ShowItem();
 	}
 	else
 	{

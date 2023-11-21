@@ -17,8 +17,8 @@ int main()
         cout << "|| 2. 아이템 삭제  ||" << endl; 
         cout << "|| 3. 아이템 검색  ||" << endl; 
         cout << "|| 4. 아이템 목록  ||" << endl;
-        cout << "|| 5. 정렬         ||" << endl;
-        cout << "|| 6. 합성         ||" << endl;
+        cout << "|| 5. 아이템 정렬  ||" << endl;
+        cout << "|| 6. 아이템 합성  ||" << endl;
         cout << "|| 0. 종료         ||" << endl;
         cout << "=====================" << endl;
 
