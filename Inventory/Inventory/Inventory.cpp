@@ -22,7 +22,7 @@ int main()
         cout << "|| 0. 종료         ||" << endl;
         cout << "=====================" << endl;
 
-        cin >> inputNum;
+        CheckInput(inputNum);
 
         cout << endl;
         if (inputNum == 1)

@@ -9,7 +9,7 @@
 1. 아이템 목록에 아이템들이 들어있는지 확인하는 함수(o)
 2. 등급 업 시킬 떄 연산자 오버로딩 다시 보기 (o)
 3. 반복되는 부분 함수로 따로 빼기
-4. 다른게 입력됐을 때 예외처리
+4. 다른게 입력됐을 때 예외처리(o) -> 깔끔하게 바꾸기
 5. 등급이 최고 등급일 때는 합성 안 하는거 예외처리 (o)
 */
 
@@ -23,19 +23,22 @@ ItemManager::~ItemManager()
 
 void ItemManager::AddItem()
 {
-	m_ItemListIndex++;
-
 	cout << "아이템 타입을 입력하세요(1. 단검 2. 갑옷 3. 반지): ";
 	int itemTypeNum;
-	cin >> itemTypeNum;
-
+	CheckInput(itemTypeNum);
+	if (itemTypeNum > 3 || itemTypeNum <= 0)
+	{
+		cout << "없는 아이템 타입입니다." << endl;
+		return;
+	}
+	m_ItemListIndex++;
 	cout << "아이템 레벨을 입력하세요: ";
 	int level;
-	cin >> level;
+	CheckInput(level);
 
 	cout << "아이템 등급을 입력하세요(S, A, B, C, D): ";
 	char inputGrade;
-	cin >> inputGrade;
+	CheckInput(inputGrade);
 	GradeType grade = CharToGradeType(inputGrade);
 
 	ItemPtr item;
@@ -84,7 +87,12 @@ void ItemManager::DeleteItem()
 	ShowItem();
 
 	int itemTypeNum;
-	cin >> itemTypeNum;
+	CheckInput(itemTypeNum);
+	if (itemTypeNum > 3 || itemTypeNum <= 0)
+	{
+		cout << "없는 아이템 타입입니다." << endl;
+		return;
+	}
 
 	if (NumToItemType(itemTypeNum) == ItemType::Weapon)
 	{
@@ -134,7 +142,12 @@ void ItemManager::SearchItem()
 
 	cout << "어떤 아이템을 검색하시겠습니까? 1. 단검 2. 갑옷 3. 반지" << endl;
 	int itemTypeNum;
-	cin >> itemTypeNum;
+	CheckInput(itemTypeNum);
+	if (itemTypeNum > 3 || itemTypeNum <= 0)
+	{
+		cout << "없는 아이템 타입입니다." << endl;
+		return;
+	}
 
 	int itemCount = 0;
 
@@ -192,7 +205,12 @@ void ItemManager::SortItem()
 
 	cout << "어떤 기준으로 정렬하시겠습니까? 1. 이름 2. 등급 3. 레베루" << endl;
 	int itemTypeNum;
-	cin >> itemTypeNum;
+	CheckInput(itemTypeNum);
+	if (itemTypeNum > 3 || itemTypeNum <= 0)
+	{
+		cout << "없는 기준입니다." << endl;
+		return;
+	}
 
 	if (itemTypeNum == 1)
 	{
@@ -246,8 +264,8 @@ void ItemManager::MergeItem()
 	int inputIndex1;
 	int inputIndex2;
 
-	cin >> inputIndex1;
-	cin >> inputIndex2;
+	CheckInput(inputIndex1);
+	CheckInput(inputIndex2);
 
 	if (inputIndex1 == inputIndex2)
 	{
