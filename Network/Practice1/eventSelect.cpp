@@ -38,6 +38,7 @@ private:
     char m_sendBuffer[BUFSIZE] = "똥닌자~";
 };
 
+// 각 클라이언트와 서버 간의 연결 또는 상호작용
 struct Session
 {
     SOCKET socket = INVALID_SOCKET; // 소켓 핸들
@@ -82,12 +83,15 @@ int main()
     vector<Session> sessions;
     sessions.reserve(100);
 
+    //listenEvent라는 새로운 이벤트 핸들을 생성합니다.
     WSAEVENT listenEvent = ::WSACreateEvent();
     wsaEvents.push_back(listenEvent);               //[listenEvent][][][][]
     sessions.push_back(Session{ listenSocket });    //[listenSession][][][][]
 
+    // ::WSAEventSelect 함수를 호출하여 listenSocket을 FD_ACCEPT 이벤트에 대해 listenEvent와 연결합니다.
     // 이벤트를 등록하고 해당 이벤트가 발생하면 인덱스를 알아올 수 있다.
     // WSAEventSelect 함수는 listenSocket를 넌블러킹 소켓으로 만든다.
+    // FD_ACCEPT 이벤트는 클라이언트의 연결 요청을 받아들일 준비가 되었음을 알려줍니다.
     if (::WSAEventSelect(listenSocket, listenEvent, FD_ACCEPT) == SOCKET_ERROR) return 0;
 
     //더미 클라이언트 객체를 만들어서 스레드로 동작하게 해봅니다.
@@ -155,18 +159,6 @@ int main()
                 // 클라랑 연결된거니까 READ해줌.
                 if (::WSAEventSelect(clientSocket, clientEvent, FD_READ | FD_WRITE | FD_CLOSE) == SOCKET_ERROR)
                     return 0;
-
-                if (networkEvents.lNetworkEvents & FD_ACCEPT)
-                {
-                    if (networkEvents.iErrorCode[FD_ACCEPT_BIT] != 0)
-                    {
-                        // FD_ACCEPT에 맞는 에러
-                        OnError(errorType, WSAGetLastError()); // 앞에는 enum으로 Avvept인 connect 관련해서 정의하고
-                        // 에러 관리에 대한 한 함수에서 일원화
-                        OnAccept(WSAGetLastError());
-                        continue;
-                    }
-                }
             }   
         }// FD_ACCEPT
 
