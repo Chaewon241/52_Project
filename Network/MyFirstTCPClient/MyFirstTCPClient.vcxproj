@@ -127,10 +127,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\MyFirstTcpServer\WinSock.cpp" />
     <ClCompile Include="MyFirstTCPClient.cpp" />
     <ClCompile Include="WinSockBase.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\MyFirstTcpServer\WinSock.h" />
     <ClInclude Include="WinSockBase.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

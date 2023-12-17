@@ -128,6 +128,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="MyFirstTcpServer.cpp" />
+    <ClCompile Include="WinSock.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="WinSock.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,7 +1,13 @@
 #pragma once
 
+#include "../MyFirstTcpServer/WinSock.h"
+#include "WinSockBase.h"
+
 #include <process.h>
 #include <Windows.h>
+
+
+#pragma comment (lib, "Ws2_32.lib")
 
 class CEvent
 {
@@ -32,18 +38,34 @@ class WinSockBase
 public:
 	WinSockBase(void);
 	virtual ~WinSockBase(void);
+};
 
-	virtual	void	DoUpdate() = 0;
+// CAsyncSocket을 참고해서 클래스로 만들어봅니다.
+// 해당 클래스를 사용해서 서버에 연결하는 코드 작성
+// eventSelect 예제를 참고해서 만들어봅니다.
+// eventSelect 서버에 연결을 확인해봅니다.
+//
 
-	bool	Start(bool bBeginAndRun = true);
-	bool	Stop(DWORD dwWaitTime = INFINITE); // millisec
+class WinSockClient : public WinSockBase
+{
+public:
+	WinSockClient() {}
+	virtual ~WinSockClient() {}
+
+	bool Connect();
+
+	bool MainLoop();
+
+	void CloseSocket();
 
 private:
-	CEvent	m_RunEvent;
-	CEvent	m_QuitEvent;
+	SOCKET    m_clientSocket = INVALID_SOCKET;
 
-	WinSockBase(const WinSockBase& rhs) = delete;
-	WinSockBase& operator=(const WinSockBase& rhs) = delete;
+	WSAEVENT m_clientEvent = WSA_INVALID_EVENT;
+
+	bool m_isConnected = false;
+
+	char m_sendBuffer[BUFSIZE] = "Hello";
 };
 
 bool WinsockInit();
