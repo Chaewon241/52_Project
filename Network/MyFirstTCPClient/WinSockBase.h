@@ -54,7 +54,7 @@ public:
 
 	bool Connect();
 
-	bool MainLoop();
+	bool DoUpdate();
 
 	void CloseSocket();
 
@@ -65,7 +65,7 @@ private:
 
 	bool m_isConnected = false;
 
-	char m_sendBuffer[BUFSIZE] = "Hello";
+	char m_sendBuffer[BUFSIZE] = "I'm metaldragon";
 };
 
 bool WinsockInit();

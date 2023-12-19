@@ -127,10 +127,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="MyFirstTcpServer.cpp" />
+    <ClCompile Include="AsyncSocket.cpp" />
+    <ClCompile Include="MyFirstTcpServer.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="RelayServerMain.cpp" />
+    <ClCompile Include="Session.cpp" />
+    <ClCompile Include="TCPRelayServer.cpp" />
     <ClCompile Include="WinSock.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AsyncSocket.h" />
+    <ClInclude Include="Client.h" />
+    <ClInclude Include="Session.h" />
+    <ClInclude Include="TCPRelayServer.h" />
+    <ClInclude Include="Types.h" />
     <ClInclude Include="WinSock.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

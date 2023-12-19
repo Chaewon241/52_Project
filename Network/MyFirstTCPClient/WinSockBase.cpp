@@ -32,29 +32,38 @@ bool WinSockClient::Connect()
     ::memset(&serverAddr, 0, sizeof(serverAddr));
     serverAddr.sin_family = AF_INET;
     serverAddr.sin_port = ::htons(7777);
-    inet_pton(AF_INET, "192.168.35.55", &(serverAddr.sin_addr));  // 여기 주소 바꾸기
+    inet_pton(AF_INET, "172.21.1.81", &(serverAddr.sin_addr));  // 여기 주소 바꾸기
 
     if (::connect(m_clientSocket, (SOCKADDR*)&serverAddr, sizeof(serverAddr)) == SOCKET_ERROR) return false;
 
     return true;
 }
 
-bool WinSockClient::MainLoop()
+bool WinSockClient::DoUpdate()
 {
+    // 이벤트 감지
+    // 이벤트객체가 하나라도 실행 가능한 상태가 되었는지 확인.
     int index = ::WSAWaitForMultipleEvents(1, &m_clientEvent, FALSE, 1000, FALSE);
-
+    // 실행 가능한 상태인 이벤트 중 가장 먼저 발견된 이벤트의 인덱스를 반환
     if (index == WSA_WAIT_FAILED)
         return false;
 
     index -= WSA_WAIT_EVENT_0;
 
+    // 소켓의 내부 정보
     WSANETWORKEVENTS networkEvents;
 
+    // WSAEnumNetworkEvents 함수는 소켓에 발생한 네트워크 이벤트를 확인하는 데 사용
+    // 주로 WSAEvent와 함께 사용되어 소켓에서 발생한 이벤트가 있는지 확인하고 
+    // 이벤트의 상태를 얻는 데 활용
     if (::WSAEnumNetworkEvents(m_clientSocket, m_clientEvent, &networkEvents) == SOCKET_ERROR)
     {
         cout << "EnumNetworkEvents Error" << WSAGetLastError() << endl;
         return false;
     }
+
+    // 여기까지 순서: 이벤트 객체 상태 확인(WSAWaitForMultipleEvents)
+    // -> 소켓에서 발생한 네트워크 이벤트에 대한 정보 얻기(WSAEnumNetworkEvents)
 
     // 만약에 커넥트라면
     if (networkEvents.lNetworkEvents & FD_CONNECT)

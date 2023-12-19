@@ -30,7 +30,7 @@ int main()
 
     while (true)
     {
-        gClient.MainLoop();
+        gClient.DoUpdate();
     }
 
     gClient.CloseSocket();
