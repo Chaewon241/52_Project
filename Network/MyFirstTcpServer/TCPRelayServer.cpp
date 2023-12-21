@@ -2,6 +2,7 @@
 #include "Client.h"
 #include "Session.h"
 #include <cstdio>
+#include <iostream>
 
 // link with Ws2_32.lib
 #pragma comment (lib, "Ws2_32.lib")
@@ -179,6 +180,8 @@ namespace netfish
 		Session* pSession = m_sessions[pClient->GetSessionId()];
 
 		if (pSession == nullptr) return;
+
+		printf("%s \n", pSession->GetReadBuffer());
 
 		pSession->NetUpdate();
 

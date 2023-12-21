@@ -25,6 +25,8 @@ namespace netfish
 
 		SessionId GetSessionId() { return m_sessionId; }
 
+		char* GetReadBuffer() { return m_readBuffer; }
+
 	private:
 
 		Client* m_pClient = nullptr;

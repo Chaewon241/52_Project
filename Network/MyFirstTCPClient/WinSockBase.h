@@ -65,7 +65,7 @@ private:
 
 	bool m_isConnected = false;
 
-	char m_sendBuffer[BUFSIZE] = "I'm metaldragon";
+	char m_sendBuffer[BUFSIZE] = "똥닌자와 동급 혹은 그 이상";
 };
 
 bool WinsockInit();

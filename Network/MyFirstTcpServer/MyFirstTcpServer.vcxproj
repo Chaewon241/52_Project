@@ -131,7 +131,9 @@
     <ClCompile Include="MyFirstTcpServer.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="RelayServerMain.cpp" />
+    <ClCompile Include="RelayServerMain.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="Session.cpp" />
     <ClCompile Include="TCPRelayServer.cpp" />
     <ClCompile Include="WinSock.cpp" />
