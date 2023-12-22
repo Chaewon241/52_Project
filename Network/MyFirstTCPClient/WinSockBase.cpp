@@ -39,6 +39,15 @@ bool WinSockClient::Connect()
     return true;
 }
 
+void WinSockClient::DisConnect()
+{
+    int iResult = shutdown(m_clientSocket, SD_SEND);
+    if (iResult == SOCKET_ERROR)
+    {
+        cout << "DisConnect Error" << WSAGetLastError() << endl;
+    }
+}
+
 bool WinSockClient::DoUpdate()
 {
     // 이벤트 감지
@@ -102,6 +111,15 @@ bool WinSockClient::DoUpdate()
             return false;
         }
         cout << "Recv: " << buffer << endl;
+    }
+
+    if (networkEvents.lNetworkEvents & FD_CLOSE)
+    {
+        if (networkEvents.iErrorCode[FD_CLOSE_BIT] != 0)
+        {
+            cout << "Close Error" << endl;
+        }
+        m_isConnected = false;
     }
 
     if (m_isConnected)

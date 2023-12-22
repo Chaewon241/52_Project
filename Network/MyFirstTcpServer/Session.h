@@ -21,6 +21,8 @@ namespace netfish
 
 		void NetUpdate();
 
+		void ReadUpdate();
+
 		void SetClient(Client* pClient);
 
 		SessionId GetSessionId() { return m_sessionId; }
@@ -35,6 +37,9 @@ namespace netfish
 
 		char m_readBuffer[BUF_SIZE] = {};
 		char m_writeBuffer[BUF_SIZE] = {};
+
+		int m_readBytes = 0;
+		int m_writeBytes = 0;
 
 		SessionId m_sessionId = 0;
 

@@ -54,6 +54,8 @@ public:
 
 	bool Connect();
 
+	void DisConnect();
+
 	bool DoUpdate();
 
 	void CloseSocket();
@@ -65,7 +67,7 @@ private:
 
 	bool m_isConnected = false;
 
-	char m_sendBuffer[BUFSIZE] = "똥닌자와 동급 혹은 그 이상";
+	char m_sendBuffer[BUFSIZE] = "I'm MetalDragon";
 };
 
 bool WinsockInit();

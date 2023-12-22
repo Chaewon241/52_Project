@@ -185,6 +185,8 @@ namespace netfish
 
 		pSession->NetUpdate();
 
+		pSession->ReadUpdate();
+
 	}
 
 	void TCPRelayServer::onSend(AsyncSocket* pSocket)

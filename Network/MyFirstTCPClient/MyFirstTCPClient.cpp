@@ -31,6 +31,12 @@ int main()
     while (true)
     {
         gClient.DoUpdate();
+
+        char c = getchar();
+        if (c == 'q')
+        {
+            gClient.DisConnect();
+        }
     }
 
     gClient.CloseSocket();
