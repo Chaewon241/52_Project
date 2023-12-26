@@ -1,5 +1,5 @@
 ﻿
-#include "WinSockBase.h"
+#include "WinSockClient.h"
 #include "../MyFirstTcpServer/WinSock.h"
 
 #pragma comment (lib, "Ws2_32.lib")
@@ -15,7 +15,7 @@ using namespace std;
 
 int main()
 {
-    WinSockClient gClient;  // 연결을 위한 객체를 만들어서
+    WinSockClient Client;
     
     // 윈속 초기화 하고
     WSAData wsaData;
@@ -23,23 +23,26 @@ int main()
     if (::WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
         return 0;
 
-    if (false == gClient.Connect())
+    Client.Initialize();
+
+    if (false == Client.Connect())
     {
         cout << "Connect Error " << WSAGetLastError() << endl;
     }
 
     while (true)
     {
-        gClient.DoUpdate();
+        Client.DoUpdate();
 
-        char c = getchar();
-        if (c == 'q')
+        if (GetAsyncKeyState(VK_LEFT) & 0x8001)
         {
-            gClient.DisConnect();
+            Client.PressKey();
         }
+
+        Sleep(1000);
     }
 
-    gClient.CloseSocket();
+    Client.CloseSocket();
     WSACleanup();
 
     return 0;

@@ -33,7 +33,7 @@ namespace netfish
 
 		m_pListener->Create(SOCK_STREAM, FD_ACCEPT);
 
-		m_pListener->Bind(7777, "172.21.1.81");
+		m_pListener->Bind(7777, "127.0.0.1");
 		
 		m_pListener->Listen();
 	}
@@ -65,9 +65,16 @@ namespace netfish
 
 		for (auto& pClient : m_clients)
 		{
-			if (pClient == nullptr) break;
+			if (pClient == nullptr)
+			{
+				std::cout << "nullptr " << std::endl;
+			}
+			else
+			{
+				//std::cout << "session id is " << pClient->GetSessionId() << std::endl;;
 
-			wsaEvents.push_back(pClient->GetEvent());
+				wsaEvents.push_back(pClient->GetEvent());
+			}
 		}
 
 		// 생각해 보기: 이벤트를 기다리는 시간을 1ms로 하면 호출 스레드는 대기 상태가 됩니다.
@@ -140,6 +147,11 @@ namespace netfish
 
 			onClose(pSocket);
 		}
+
+		for (auto& session : m_sessions)
+		{
+			session.second->NetUpdate();
+		}
 	}
 
 	void TCPRelayServer::onAccept()
@@ -151,10 +163,10 @@ namespace netfish
 
 		if (m_pListener->OnAccept(pClient))
 		{
+			pSession->SetClient(pClient);
+
 			m_clients.push_back(pClient);
 			m_sessions[pSession->GetSessionId()] = pSession;
-
-			pSession->SetClient(pClient);
 
 			++m_ClientCount;
 
@@ -183,16 +195,12 @@ namespace netfish
 
 		printf("%s \n", pSession->GetReadBuffer());
 
-		pSession->NetUpdate();
-
 		pSession->ReadUpdate();
-
 	}
 
 	void TCPRelayServer::onSend(AsyncSocket* pSocket)
 	{
 		printf("onSend  %s : %d\n", pSocket->GetIP().c_str(), pSocket->GetPort());
-
 	}
 
 	void TCPRelayServer::onClose(AsyncSocket* pSocket)
@@ -214,6 +222,7 @@ namespace netfish
 			}
 		}
 		//숙제: 이코드의 문제점은 무엇일까요?
+		// 효율성
 
 		delete pClient;
 

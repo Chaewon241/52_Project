@@ -1,5 +1,6 @@
 #include "AsyncSocket.h"
 #include <ws2tcpip.h>
+#include <iostream>
 
 namespace netfish
 {
@@ -128,7 +129,6 @@ namespace netfish
 		{
 			return SOCKET_ERROR;
 		}
-
 		return sendLen;
 	}
 
@@ -142,7 +142,6 @@ namespace netfish
 		{
 			return SOCKET_ERROR;
 		}
-
 		return recvLen;
 	}
 

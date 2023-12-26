@@ -20,7 +20,11 @@ bool WinSock::Bind(UINT nSocketPort)
     serverAddr.sin_port = ::htons(nSocketPort);
 
     if (::bind(m_hSocket, (SOCKADDR*)&serverAddr, sizeof(serverAddr)) == SOCKET_ERROR)
+    {
+
         return false;
+    }
+        
 
     return true;
 }
@@ -87,41 +91,3 @@ void MyWinSocket::OnAccept(int nErrorCode)
     }
 }
 
-bool MyWinSocket::OnSend(int nErrorCode)
-{
-    if (nErrorCode != 0)
-        return false;
-
-    Session& s = sessions[index];
-
-    // Receive
-    if (s.recvBytes == 0)
-    {
-        int recvLen = ::recv(s.socket, s.recvBuffer, BUFSIZE, 0);
-        if (recvLen == SOCKET_ERROR && ::WSAGetLastError() != WSAEWOULDBLOCK) {
-            return false;
-        }
-
-        if (recvLen > 0)
-            s.recvBytes = recvLen;
-
-        cout << "Recv Data= " << recvLen << " : " << s.recvBuffer << endl;
-    }
-
-    // Send
-    if (s.recvBytes > s.sendBytes) {
-        int sendLen = ::send(s.socket, &s.recvBuffer[s.sendBytes], s.recvBytes - s.sendBytes, 0);
-        if (sendLen == SOCKET_ERROR && ::WSAGetLastError() != WSAEWOULDBLOCK) {
-            return false;
-        }
-
-        s.sendBytes += sendLen;
-        if (s.recvBytes == s.sendBytes) {
-            s.recvBytes = 0;
-            s.sendBytes = 0;
-        }
-
-        cout << "Send Data= " << sendLen << endl;
-    }
-    return true;
-}
