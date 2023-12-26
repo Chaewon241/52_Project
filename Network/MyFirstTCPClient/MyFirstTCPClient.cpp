@@ -34,12 +34,10 @@ int main()
     {
         Client.DoUpdate();
 
-        if (GetAsyncKeyState(VK_LEFT) & 0x8001)
+        if (GetAsyncKeyState(VK_LEFT) & 0x0001)
         {
             Client.PressKey();
         }
-
-        Sleep(1000);
     }
 
     Client.CloseSocket();

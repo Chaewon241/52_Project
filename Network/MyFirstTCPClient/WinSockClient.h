@@ -25,6 +25,8 @@ public:
 
 	void DisConnect();
 
+	void Send();
+
 	bool DoUpdate();
 
 	void PressKey();

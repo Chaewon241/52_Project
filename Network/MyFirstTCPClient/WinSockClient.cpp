@@ -21,9 +21,6 @@ bool WinSockClient::Initialize()
     m_sendBuffer = new char[SND_BUF_SIZE];
     m_recvBuffer = new char[RCV_BUF_SIZE];
 
-    const char* c = "Hello";
-    memcpy(m_sendBuffer, c, sizeof(c));
-
     return true;
 }
 
@@ -42,6 +39,18 @@ bool WinSockClient::Connect()
 void WinSockClient::DisConnect()
 {
     //m_ClientWinSock->DisConnect();
+}
+
+void WinSockClient::Send()
+{
+    int sendLen = ::send(m_ClientWinSock->GetSocket(), m_sendBuffer, strlen(m_sendBuffer) + 1, 0);
+    if (sendLen == SOCKET_ERROR && ::WSAGetLastError() != WSAEWOULDBLOCK) {
+        cout << "send Error " << ::WSAGetLastError() << endl;
+    }
+    else
+    {
+        cout << "send " << sendLen << " " << endl;
+    }
 }
 
 bool WinSockClient::DoUpdate()
@@ -73,7 +82,8 @@ bool WinSockClient::DoUpdate()
             return false;
     }
 
-    OnConnect(networkEvents.iErrorCode[FD_CONNECT_BIT]);
+    if(!m_isConnected)
+        OnConnect(networkEvents.iErrorCode[FD_CONNECT_BIT]);
 
     if (networkEvents.lNetworkEvents & FD_READ)
     {
@@ -158,27 +168,25 @@ void WinSockClient::PressKey()
     const char* c = "Left";
 
     memcpy(m_sendBuffer, c, sizeof(c));
+
+    Send();
 }
 
 void WinSockClient::CloseSocket()
 {
-   // closesocket(m_clientSocket);
+   closesocket(m_ClientWinSock->GetSocket());
 }
 
 void WinSockClient::OnConnect(int nErrorCode)
 {
     m_isConnected = true;
-
-    m_ClientWinSock->OnConnect(nErrorCode);
     cout << "Connected" << endl;
+    m_ClientWinSock->OnConnect(nErrorCode);
 
+    const char* c = "Hello";
+    memcpy(m_sendBuffer, c, sizeof(c));
+    
     // send ÇØÁÖÀÚ.
-    int sendLen = ::send(m_ClientWinSock->GetSocket(), m_sendBuffer, strlen(m_sendBuffer) + 1, 0);
-    if (sendLen == SOCKET_ERROR && ::WSAGetLastError() != WSAEWOULDBLOCK) {
-        cout << "send Error " << ::WSAGetLastError() << endl;
-    }
-    else
-    {
-        cout << "send " << sendLen << " " << endl;
-    }
+    Send();
+
 }

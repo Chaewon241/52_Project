@@ -193,9 +193,9 @@ namespace netfish
 
 		if (pSession == nullptr) return;
 
-		printf("%s \n", pSession->GetReadBuffer());
-
 		pSession->ReadUpdate();
+
+		printf("readBuffer: %s \n", pSession->GetReadBuffer());
 	}
 
 	void TCPRelayServer::onSend(AsyncSocket* pSocket)
