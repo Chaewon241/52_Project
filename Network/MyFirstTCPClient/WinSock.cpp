@@ -24,7 +24,6 @@ bool WinSock::Bind(UINT nSocketPort)
 
     if (::bind(m_hSocket, (SOCKADDR*)&serverAddr, sizeof(serverAddr)) == SOCKET_ERROR)
     {
-
         return false;
     }
         

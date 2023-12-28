@@ -128,10 +128,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="MyFirstTCPClient.cpp" />
+    <ClCompile Include="NetWorkSystem.cpp" />
     <ClCompile Include="WinSock.cpp" />
     <ClCompile Include="WinSockClient.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="NetWorkSystem.h" />
     <ClInclude Include="WinSock.h" />
     <ClInclude Include="WinSockClient.h" />
   </ItemGroup>

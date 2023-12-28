@@ -37,17 +37,6 @@ public:
     // 연결 Connect
     bool Connect(UINT nSocketPort, const char* nIP);
     bool DisConnect();
-    // 닫기 closesocket : 소켓 닫을 때도 옵션이 있다. 디폴트 옵션으로 닫는다.
-
-    // Accept
-    // API만 래핑해서 만들어두고 상속 받은 클래스의 OnAccept에서 해당 함수를 호출
-
-    // Attach와 Detach가 필요한 이유
-    // 소켓 풀을 만들 때(소켓 핸들 생성전) 미리 만들어서 
-    // Accept의 결과가 소켓 핸들을 받아서 소켓 객체 풀에서 하나 꺼내서 Attach(바인드)하고
-    // 소켓이 닫히면 해당 소켓 핸들은 더이상 사용하지 않으나 객체는 다시 사용해야하므로
-    // Detach하고 풀로 돌려준다.
-    // 
 
     bool CreateEventHandle();
 

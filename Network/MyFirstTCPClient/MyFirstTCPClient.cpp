@@ -1,6 +1,7 @@
 ﻿
 #include "WinSockClient.h"
-#include "../MyFirstTcpServer/WinSock.h"
+#include "WinSock.h"
+#include "NetWorkSystem.h"
 
 #pragma comment (lib, "Ws2_32.lib")
 
@@ -32,12 +33,15 @@ int main()
 
     while (true)
     {
-        Client.DoUpdate();
+        int index = Client.isEventOccurs();
+        if (index == WSA_WAIT_FAILED)
+            return false;
 
-        if (GetAsyncKeyState(VK_LEFT) & 0x0001)
-        {
-            Client.PressKey();
-        }
+        // 이벤트가 발생했을 때
+        index -= WSA_WAIT_EVENT_0;
+
+        // NetworkSystem에서 DoUpdate 가져오기
+        NetWorkSystem::GetNetWorkSystemInstance()->DoUpdate(Client.GetSocket(), index);
     }
 
     Client.CloseSocket();

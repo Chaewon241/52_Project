@@ -152,6 +152,8 @@ namespace netfish
 		{
 			session.second->NetUpdate();
 		}
+
+
 	}
 
 	void TCPRelayServer::onAccept()
