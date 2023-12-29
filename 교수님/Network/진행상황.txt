@@ -1,0 +1,2 @@
+- 하려고 했던 것: WinSock이라는 부모 클래스를 만들어서 서버와 클라이언트에서 공통적으로 쓰이는 Create, Send, Recv 함수를 만들어서 소켓을 생성합니다. 그리고 ServerWinSock, ClientWinSock이라는 자식 클래스를 만들어 ServerWinSock에는 Bind, Listen, Accept함수를, ClientWinSock에는 Connect를 하려고 했습니다.
+- 근데.. Connect 함수 내에서 Socket을 만들 때는 connect가 잘 됐는데 Create함수를 통해서 만든 Socket으로는 connect가 되지않아 다 되돌리기 하고 일단 되는 상태로 올려놨습니다. ㅠㅠ.
