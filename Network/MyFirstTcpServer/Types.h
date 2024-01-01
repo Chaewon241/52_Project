@@ -15,4 +15,10 @@ namespace netfish
 	{
 		NetMessageType type;
 	};
+
+	struct NetMsg
+	{
+		SessionId id;
+		char* pBuf; 
+	};
 }

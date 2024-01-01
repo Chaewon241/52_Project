@@ -43,9 +43,9 @@ void WinSockClient::DisConnect()
     m_ClientWinSock->DisConnect();
 }
 
-void WinSockClient::Send()
+int WinSockClient::Send()
 {
-    int sendLen = ::send(m_ClientWinSock->GetSocket(), m_sendBuffer, strlen(m_sendBuffer) + 1, 0);
+    int sendLen = ::send(m_ClientWinSock->GetSocket(), m_sendBuffer, m_writeBytes, 0);
     if (sendLen == SOCKET_ERROR && ::WSAGetLastError() != WSAEWOULDBLOCK) {
         cout << "send Error " << ::WSAGetLastError() << endl;
     }
@@ -53,23 +53,68 @@ void WinSockClient::Send()
     {
         cout << "send " << sendLen << " " << endl;
     }
+
+    return sendLen;
 }
 
-bool WinSockClient::DoUpdate()
+bool WinSockClient::Update()
 {
-    // isEventOccurs의 필요성이 없어보임.
-    
+    // inputSystem의 update 넣어주기
 
     return true;
 }
 
-void WinSockClient::PressKey()
+void WinSockClient::NetUpdate()
 {
-    const char* c = "Left";
+    if (m_readBytes)
+    {
+        memcpy(m_sendBuffer, m_recvBuffer, m_readBytes);
 
-    memcpy(m_sendBuffer, c, sizeof(c));
+        m_readBytes = 0;
+    }
 
-    Send();
+    if (m_writeBytes)
+    {
+        int nSent = Send();
+
+        if (nSent > 0)
+        {
+            m_writeBytes -= nSent;
+
+            if (m_writeBytes > 0)
+            {
+                memmove(m_sendBuffer, m_sendBuffer + nSent, m_writeBytes);
+            }
+        }
+        // 소켓 버퍼가 가득 차서 전송이 불가능
+        else if (nSent == 0)
+        {
+
+        }
+        // 소켓 에러가 발생함. 우짤까
+        else
+        {
+
+        }
+    }
+}
+
+void WinSockClient::SendAllChatting(char* inputStr)
+{
+    m_sendBuffer = inputStr;
+    m_writeBytes += strlen(inputStr) + 1;
+}
+
+// 네트워크 시스템에서 받은 버퍼들 복사해주기
+void WinSockClient::RecvReadBuffer(char* readBuffer)
+{
+    m_recvBuffer = readBuffer;
+}
+
+void WinSockClient::WriteSendBuffer(char* sendBuffer, int size)
+{
+    m_sendBuffer = sendBuffer;
+    m_writeBytes += size;
 }
 
 void WinSockClient::CloseSocket()
@@ -77,31 +122,7 @@ void WinSockClient::CloseSocket()
    closesocket(m_ClientWinSock->GetSocket());
 }
 
-int WinSockClient::isEventOccurs()
+int WinSockClient::EventState()
 {
     return ::WSAWaitForMultipleEvents(wsaEvents.size(), &wsaEvents[0], FALSE, 1, FALSE);
-}
-
-void WinSockClient::OnConnect(int nErrorCode)
-{
-    m_isConnected = true;
-    printf("Connected\n");
-}
-
-void WinSockClient::OnReceive(int nErrorCode)
-{
-    int recvBytes = ::recv(m_ClientWinSock->GetSocket(), m_recvBuffer, RCV_BUF_SIZE, 0);
-    if (recvBytes == SOCKET_ERROR)
-    {
-        cout << "Read Error" << endl;
-        return;
-    }
-
-    // 읽을거 없을 때
-    if (recvBytes == 0)
-    {
-        cout << "Disconnected" << endl;
-        return;
-    }
-    cout << "Recv: " << m_recvBuffer << endl;
 }

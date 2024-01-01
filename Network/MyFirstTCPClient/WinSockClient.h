@@ -29,22 +29,28 @@ public:
 
 	void DisConnect();
 
-	void Send();
+	int Send();
 
-	bool DoUpdate();
+	bool Update();
 
-	void PressKey();
+	void NetUpdate();
+
+	void SendAllChatting(char* inputStr);
+
+	void RecvReadBuffer(char* readBuffer);
+	void WriteSendBuffer(char* sendBuffer, int size);
 
 	void CloseSocket();
 
 	// 클라이언트에 이벤트가 발생됐는지.
-	int isEventOccurs();
+	int EventState();
 
 	std::vector<WSAEVENT>& GetWSAEvent() { return wsaEvents; }
 
-	void OnConnect(int nErrorCode);
+	// NetworkSystem에 옮겨놨음
+	/*void OnConnect(int nErrorCode);
 
-	void OnReceive(int nErrorCode);
+	void OnReceive(int nErrorCode);*/
 
 	SOCKET GetSocket() { return m_ClientWinSock->GetSocket(); }
 
@@ -54,6 +60,9 @@ private:
 
 	char* m_sendBuffer;
 	char* m_recvBuffer;
+
+	int m_writeBytes = 0;
+	int m_readBytes = 0;
 
 	MyWinSocket* m_ClientWinSock = nullptr;
 
