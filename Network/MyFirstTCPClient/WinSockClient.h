@@ -1,5 +1,7 @@
 #pragma once
 
+#include "WinSock.h"
+
 #include <process.h>
 #include <winsock2.h>
 #include <vector>
@@ -19,8 +21,6 @@ public:
 	virtual ~WinSockClient() 
 	{
 		delete m_ClientWinSock;
-		delete m_sendBuffer;
-		delete m_recvBuffer;
 	}
 
 	bool Initialize();
@@ -29,16 +29,11 @@ public:
 
 	void DisConnect();
 
-	int Send();
+	int Send(char* sendBuffer, int size);
 
 	bool Update();
 
-	void NetUpdate();
-
-	void SendAllChatting(char* inputStr);
-
-	void RecvReadBuffer(char* readBuffer);
-	void WriteSendBuffer(char* sendBuffer, int size);
+	//void NetUpdate();
 
 	void CloseSocket();
 
@@ -57,12 +52,6 @@ public:
 private:
 	bool m_isConnected = false;
 	bool m_bAuth = false;
-
-	char* m_sendBuffer;
-	char* m_recvBuffer;
-
-	int m_writeBytes = 0;
-	int m_readBytes = 0;
 
 	MyWinSocket* m_ClientWinSock = nullptr;
 

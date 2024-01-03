@@ -104,6 +104,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -133,6 +134,7 @@
     <ClCompile Include="WinSockClient.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="MyProtocol.h" />
     <ClInclude Include="NetWorkSystem.h" />
     <ClInclude Include="WinSock.h" />
     <ClInclude Include="WinSockClient.h" />

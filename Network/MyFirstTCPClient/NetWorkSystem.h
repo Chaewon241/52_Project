@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../MyFirstTcpServer/Types.h"
+#include "MyProtocol.h"
 
 #include <winsock2.h>
 #include <ws2tcpip.h>
@@ -22,18 +22,24 @@ class NetWorkSystem
 
 public:
 	void Initialize();
+	void SetClient(WinSockClient* Client);
+
 	void DoUpdate();
+	void NetUpdate();
 
 	static NetWorkSystem* GetNetWorkSystemInstance();
 
-	void PostMsg(netfish::NetMsg* pMsg, const int size);
-	netfish::NetMsg* PopMsg();
+	void PostMsg(PacketC2S_BroadcastMsg* pMsg, const int size);
+	PacketS2C_BroadcastMsg* PopMsg();
 
 	void DestroyInstance();
 
 private:
-	char* m_sendBuffer;
-	char* m_recvBuffer;
+	char* m_sendBuffer = nullptr;
+	char* m_recvBuffer = nullptr;
+
+	int m_sendBytes = 0;
+	int m_recvBytes = 0;
 
 	static NetWorkSystem* m_NetWorkSystemInstance;
 	WinSockClient* m_Client;
