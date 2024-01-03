@@ -32,9 +32,10 @@ int main()
             
             PacketC2S_BroadcastMsg* inputMsg = new PacketC2S_BroadcastMsg;
             inputMsg->id = C2S_BROADCAST_MSG;
-            inputMsg->clientMessage = str;
+            inputMsg->size = strlen(str);
+            inputMsg->clientMessage = str + '\0';
 
-            NetWorkSystem::GetNetWorkSystemInstance()->PostMsg(inputMsg, sizeof(inputMsg));
+            NetWorkSystem::GetNetWorkSystemInstance()->PostMsg(inputMsg, sizeof(PacketC2S_BroadcastMsg));
 
             delete[] str;
         }
@@ -48,7 +49,6 @@ int main()
             // serverMsg를 처리하는 함수
             cout << serverMsg->serverMessage << endl;
         }
-        Sleep(5000);
     }
 
     mClient->CloseSocket();

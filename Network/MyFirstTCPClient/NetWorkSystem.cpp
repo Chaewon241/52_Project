@@ -31,8 +31,10 @@ void NetWorkSystem::Initialize()
         return;
 
     // m_sendBuffer 와 m_recvBuffer 를 동적 할당, 나중에 해제 필수
-    m_sendBuffer = new char[SND_BUF_SIZE];
+    m_sendBuffer = new char[SND_BUF_SIZE + 1];
     m_recvBuffer = new char[RCV_BUF_SIZE];
+
+    m_sendBuffer[SND_BUF_SIZE] = '\0';
 }
 
 void NetWorkSystem::DestroyInstance()
@@ -52,10 +54,30 @@ void NetWorkSystem::DestroyInstance()
 
 void NetWorkSystem::PostMsg(PacketC2S_BroadcastMsg* pMsg, const int size)
 {
-    int sendBufferLen = strlen(m_sendBuffer);
-    memcpy(m_sendBuffer + sendBufferLen, pMsg, size);
+    memcpy(m_sendBuffer, pMsg, size);
 
     m_sendBytes += size;
+
+    // event 발생을 위해서 여기다가 일단 놨습니다.
+    if (m_sendBytes)
+    {
+        int nSent = m_Client->Send(m_sendBuffer, m_sendBytes);
+        if (nSent > 0)
+        {
+            m_sendBytes -= nSent;
+
+            if (m_sendBytes > 0)
+            {
+                memmove(m_sendBuffer, m_sendBuffer + nSent, m_sendBytes);
+            }
+        }
+        // 이 경우 기다렸다가 다시 시도
+        else if (nSent == 0)
+        {
+            // send 할 수 없는 상태인지 아닌지 변수 만들기?
+            // 근데 이렇게 되면 서버가 언제 준비되는지 모름.
+        }
+    }
 }
 
 // 서버에서 받은 메시지를 클라에 Pop해주는 함수
@@ -85,6 +107,9 @@ void NetWorkSystem::DoUpdate()
         return;
 
     eventState -= WSA_WAIT_EVENT_0;
+
+    if (eventState == 258)
+        return;
 
     WSANETWORKEVENTS networkEvents;
     if (::WSAEnumNetworkEvents(m_Client->GetSocket(), m_Client->GetWSAEvent()[eventState], &networkEvents) == SOCKET_ERROR)
@@ -145,25 +170,25 @@ void NetWorkSystem::DoUpdate()
 
 void NetWorkSystem::NetUpdate()
 {
-    if (m_sendBytes > 1024)
-    {
-        int nSent = m_Client->Send(m_sendBuffer, m_sendBytes);
-        if (nSent > 0)
-        {
-            m_sendBytes -= nSent;
+    //if (m_sendBytes > 1024)
+    //{
+    //    int nSent = m_Client->Send(m_sendBuffer, m_sendBytes);
+    //    if (nSent > 0)
+    //    {
+    //        m_sendBytes -= nSent;
 
-            if (m_sendBytes > 0)
-            {
-                memmove(m_sendBuffer, m_sendBuffer + nSent, m_sendBytes);
-            }
-        }
-        // 이 경우 기다렸다가 다시 시도
-        else if (nSent == 0)
-        {
-            // send 할 수 없는 상태인지 아닌지 변수 만들기?
-            // 근데 이렇게 되면 서버가 언제 준비되는지 모름.
-        }
-    }
+    //        if (m_sendBytes > 0)
+    //        {
+    //            memmove(m_sendBuffer, m_sendBuffer + nSent, m_sendBytes);
+    //        }
+    //    }
+    //    // 이 경우 기다렸다가 다시 시도
+    //    else if (nSent == 0)
+    //    {
+    //        // send 할 수 없는 상태인지 아닌지 변수 만들기?
+    //        // 근데 이렇게 되면 서버가 언제 준비되는지 모름.
+    //    }
+    //}
     // popmsg에 있음.
     /*else if (m_recvBytes > 1024)
     {
