@@ -140,10 +140,6 @@ namespace netfish
 
 		std::cout << recvLen << std::endl;
 
-		// todo : 역직렬화 잘 안됩니다 ㅠㅠ
-		PacketC2S_BroadcastMsg msg;
-		memcpy(&msg, buf, sizeof(msg));
-		
 		m_error = ::WSAGetLastError();
 
 		if (recvLen == SOCKET_ERROR && m_error != WSAEWOULDBLOCK)

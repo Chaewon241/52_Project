@@ -54,7 +54,12 @@ void NetWorkSystem::DestroyInstance()
 
 void NetWorkSystem::PostMsg(PacketC2S_BroadcastMsg* pMsg, const int size)
 {
-    memcpy(m_sendBuffer, pMsg, size);
+    m_sendBuffer[0] = pMsg->size / 10 + '0';
+    m_sendBuffer[1] = pMsg->size % 10 + '0';
+    m_sendBuffer[2] = pMsg->id / 10 + '0';
+    m_sendBuffer[3] = pMsg->id % 10 + '0';
+
+    memcpy(m_sendBuffer + 4, pMsg->clientMessage, size);
 
     m_sendBytes += size;
 
@@ -83,15 +88,19 @@ void NetWorkSystem::PostMsg(PacketC2S_BroadcastMsg* pMsg, const int size)
 // 서버에서 받은 메시지를 클라에 Pop해주는 함수
 PacketS2C_BroadcastMsg* NetWorkSystem::PopMsg()
 {
-    if (m_recvBytes < 1024)
+    if (m_recvBytes < 1)
     {
         return nullptr;
     }
     // todo : 역직렬화 바꾸기
-    PacketS2C_BroadcastMsg msg;
-    memcpy(&msg, m_recvBuffer, sizeof(PacketS2C_BroadcastMsg));
+    PacketS2C_BroadcastMsg* msg = new PacketS2C_BroadcastMsg;
+    msg->size = static_cast<short>(m_recvBuffer[0]) * 10 + static_cast<short>(m_recvBuffer[1]) / 10;
+    msg->id = S2C_BROADCAST_MSG;
+    msg->serverMessage = m_recvBuffer + 4;
 
-    return &msg;
+    m_recvBytes = 0;
+
+    return msg;
 }
 
 void NetWorkSystem::SetClient(WinSockClient* Client)
@@ -134,7 +143,7 @@ void NetWorkSystem::DoUpdate()
         }
 
         // 랩핑해야할듯
-        char* recvBuffer = nullptr;
+        char* recvBuffer = new char[RCV_BUF_SIZE];
         int recvBytes = ::recv(m_Client->GetSocket(), recvBuffer, RCV_BUF_SIZE, 0);
 
         if (recvBytes == SOCKET_ERROR)
@@ -149,11 +158,10 @@ void NetWorkSystem::DoUpdate()
             cout << "Disconnected" << endl;
             return;
         }
-        cout << "Recv: " << m_recvBuffer << endl;
+        // todo : 이거 옮겨주기
+        //
 
-        if (recvBuffer)
-            memcpy(m_recvBuffer + strlen(m_recvBuffer), recvBuffer, recvBytes);
-
+        memcpy(m_recvBuffer + m_recvBytes, recvBuffer, recvBytes);
 
         m_recvBytes += recvBytes;
 

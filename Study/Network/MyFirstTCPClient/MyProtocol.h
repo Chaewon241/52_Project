@@ -9,15 +9,20 @@
 // 유명한 라이브러리로는 FlatBuffer가 있다.
 #pragma once
 #include <cstddef>
+#include <string>
 
 #pragma pack (push, 1)
 
-enum EPacketId
+enum EPacketId	: short
 {
+	PACKETID_START,
+
 	C2S_ACCESS,
 	S2C_ACCESS,
 	C2S_BROADCAST_MSG,
 	S2C_BROADCAST_MSG,
+
+	PACKETID_END,
 };
 
 struct PacketHeader

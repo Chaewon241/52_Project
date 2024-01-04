@@ -47,7 +47,7 @@ int main()
         while (serverMsg = NetWorkSystem::GetNetWorkSystemInstance()->PopMsg())
         {
             // serverMsg를 처리하는 함수
-            cout << serverMsg->serverMessage << endl;
+            cout << "server to client recv data: " << serverMsg->serverMessage << endl;
         }
     }
 

@@ -13,7 +13,8 @@ using namespace std;
 
 #define MAX_SIZE 195000
 
-unsigned int Hash(const string& Key, size_t len)
+template<typename T1, typename T2>
+unsigned int Hash(T1& Key, T2 len)
 {
 	unsigned int hash = 0;
 	for (size_t i = 0; i < len; ++i)
