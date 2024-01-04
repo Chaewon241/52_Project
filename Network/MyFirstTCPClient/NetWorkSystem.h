@@ -27,6 +27,8 @@ public:
 	void DoUpdate();
 	void NetUpdate();
 
+	void OnReceive();
+
 	static NetWorkSystem* GetNetWorkSystemInstance();
 
 	void PostMsg(PacketC2S_BroadcastMsg* pMsg, const int size);

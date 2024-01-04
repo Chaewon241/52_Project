@@ -41,6 +41,7 @@ int main()
         }
         // NetworkSystem에서 DoUpdate 가져오기
         NetWorkSystem::GetNetWorkSystemInstance()->DoUpdate();
+        NetWorkSystem::GetNetWorkSystemInstance()->NetUpdate();
 
         PacketS2C_BroadcastMsg* serverMsg = nullptr;
 
