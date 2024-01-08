@@ -1,7 +1,8 @@
 #pragma once
 
-#pragma once
 #include "Types.h"
+#include "MyProtocol.h"
+
 #include <string>
 
 namespace netfish
@@ -15,9 +16,9 @@ namespace netfish
 
 		~Session();
 
-		void Write(const char* pData, int len);
+		void Write(char* pData, int len);
 
-		void Read(char* pData, int len);
+		PacketC2S_BroadcastMsg* Read(char* pData, int len);
 
 		void NetUpdate();
 
@@ -35,8 +36,8 @@ namespace netfish
 
 		static constexpr int BUF_SIZE = 1024;
 
-		char m_readBuffer[BUF_SIZE] = {};
-		char m_writeBuffer[BUF_SIZE] = {};
+		char* m_readBuffer = {};
+		char* m_writeBuffer = {};
 
 		int m_readBytes = 0;
 		int m_writeBytes = 0;

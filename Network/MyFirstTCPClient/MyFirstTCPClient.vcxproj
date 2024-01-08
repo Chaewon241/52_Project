@@ -128,12 +128,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="InputSystem.cpp" />
     <ClCompile Include="MyFirstTCPClient.cpp" />
     <ClCompile Include="NetWorkSystem.cpp" />
     <ClCompile Include="WinSock.cpp" />
     <ClCompile Include="WinSockClient.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="InputSystem.h" />
     <ClInclude Include="MyProtocol.h" />
     <ClInclude Include="NetWorkSystem.h" />
     <ClInclude Include="WinSock.h" />

@@ -31,7 +31,7 @@ public:
 
 	static NetWorkSystem* GetNetWorkSystemInstance();
 
-	void PostMsg(PacketC2S_BroadcastMsg* pMsg, const int size);
+	void PostMsg(char* str, const int size);
 	PacketS2C_BroadcastMsg* PopMsg();
 
 	void DestroyInstance();

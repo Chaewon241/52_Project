@@ -23,6 +23,8 @@ namespace netfish
 
 		void NetUpdate();
 
+		void SessionsUpdate();
+
 	private:
 
 		void onAccept();

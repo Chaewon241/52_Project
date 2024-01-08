@@ -1,6 +1,7 @@
 ﻿#include "WinSockClient.h"
 #include "WinSock.h"
 #include "NetWorkSystem.h"
+#include "InputSystem.h"
 #include "MyProtocol.h"
 
 #pragma comment (lib, "Ws2_32.lib")
@@ -24,18 +25,15 @@ int main()
 
     while (true)
     {
+        InputSystem inputSys;
+
         // 입력 받은 값이 있으면 해당 함수로 이동 -> inputSystem을 통해서 다시 하기
-        if (GetAsyncKeyState(0x41) & 0x0001)
+        if (inputSys.isKeyPressed('A'))
         {
             char* str = new char[100];
             std::cin.getline(str, 100);
-            
-            PacketC2S_BroadcastMsg* inputMsg = new PacketC2S_BroadcastMsg;
-            inputMsg->id = C2S_BROADCAST_MSG;
-            inputMsg->size = strlen(str);
-            inputMsg->clientMessage = str + '\0';
 
-            NetWorkSystem::GetNetWorkSystemInstance()->PostMsg(inputMsg, sizeof(PacketC2S_BroadcastMsg));
+            NetWorkSystem::GetNetWorkSystemInstance()->PostMsg(str, sizeof(PacketC2S_BroadcastMsg));
 
             delete[] str;
         }

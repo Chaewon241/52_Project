@@ -52,14 +52,19 @@ void NetWorkSystem::DestroyInstance()
     m_recvBuffer = nullptr;
 }
 
-void NetWorkSystem::PostMsg(PacketC2S_BroadcastMsg* pMsg, const int size)
+void NetWorkSystem::PostMsg(char* str, const int size)
 {
-    m_sendBuffer[0] = pMsg->size / 10 + '0';
-    m_sendBuffer[1] = pMsg->size % 10 + '0';
-    m_sendBuffer[2] = pMsg->id / 10 + '0';
-    m_sendBuffer[3] = pMsg->id % 10 + '0';
+    PacketC2S_BroadcastMsg* inputMsg = new PacketC2S_BroadcastMsg;
+    inputMsg->id = C2S_BROADCAST_MSG;
+    inputMsg->size = strlen(str);
+    inputMsg->clientMessage = str + '\0';
 
-    memcpy(m_sendBuffer + 4, pMsg->clientMessage, size);
+    m_sendBuffer[0] = inputMsg->size / 10 + '0';
+    m_sendBuffer[1] = inputMsg->size % 10 + '0';
+    m_sendBuffer[2] = inputMsg->id / 10 + '0';
+    m_sendBuffer[3] = inputMsg->id % 10 + '0';
+
+    memcpy(m_sendBuffer + 4, inputMsg->clientMessage, size);
 
     m_sendBytes += size;
 }
@@ -74,10 +79,15 @@ PacketS2C_BroadcastMsg* NetWorkSystem::PopMsg()
     // todo : 역직렬화 바꾸기
     PacketS2C_BroadcastMsg* msg = new PacketS2C_BroadcastMsg;
     msg->size = static_cast<short>(m_recvBuffer[0]) * 10 + static_cast<short>(m_recvBuffer[1]) / 10;
-    msg->id = S2C_BROADCAST_MSG;
+    msg->id = static_cast<EPacketId>((m_recvBuffer[2] - '0') * 10 + (m_recvBuffer[3] - '0'));;
     msg->serverMessage = m_recvBuffer + 4;
 
-    m_recvBytes = 0;
+    if (msg->size != m_recvBytes)
+        return nullptr;
+    if (msg->id != S2C_BROADCAST_MSG)
+        return nullptr;
+
+    m_recvBytes -= msg->size;
 
     return msg;
 }

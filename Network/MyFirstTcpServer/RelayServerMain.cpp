@@ -9,6 +9,7 @@ int main()
 	while (true)
 	{
 		server.NetUpdate();
+		server.SessionsUpdate();
 	}
 	server.Stop();
 	return 0;

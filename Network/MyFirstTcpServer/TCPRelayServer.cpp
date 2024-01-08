@@ -147,13 +147,14 @@ namespace netfish
 
 			onClose(pSocket);
 		}
+	}
 
+	void TCPRelayServer::SessionsUpdate()
+	{
 		for (auto& session : m_sessions)
 		{
 			session.second->NetUpdate();
 		}
-
-
 	}
 
 	void TCPRelayServer::onAccept()
@@ -192,7 +193,6 @@ namespace netfish
 		if (pClient == nullptr) return;
 
 		Session* pSession = m_sessions[pClient->GetSessionId()];
-
 		if (pSession == nullptr) return;
 
 		pSession->ReadUpdate();
