@@ -147,6 +147,7 @@ namespace netfish
 
 			onClose(pSocket);
 		}
+
 	}
 
 	void TCPRelayServer::SessionsUpdate()
@@ -172,7 +173,6 @@ namespace netfish
 			m_sessions[pSession->GetSessionId()] = pSession;
 
 			++m_ClientCount;
-
 		}
 		else
 		{

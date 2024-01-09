@@ -21,7 +21,7 @@ namespace netfish
 		PacketS2C_BroadcastMsg* inputMsg = new PacketS2C_BroadcastMsg;
 		inputMsg->id = S2C_BROADCAST_MSG;
 		inputMsg->size = sizeof(PacketS2C_BroadcastMsg);
-		inputMsg->serverMessage = pData + '\0';
+		inputMsg->serverMessage = pData;
 
 		m_writeBuffer[0] = inputMsg->size / 10 + '0';
 		m_writeBuffer[1] = inputMsg->size % 10 + '0';
@@ -40,19 +40,19 @@ namespace netfish
 		// TODO: 받은 패킷을 어떻게 파싱할 것인가에 따라 구조가 바뀌므로 일단은 나중에 다시.
 		//
 
-		PacketC2S_BroadcastMsg* msg = new PacketC2S_BroadcastMsg;
-		msg->size = static_cast<short>(m_readBuffer[0]) * 10 + static_cast<short>(m_readBuffer[1]) / 10;
-		msg->id = static_cast<EPacketId>((m_readBuffer[2] - '0') * 10 + (m_readBuffer[3] - '0'));
-		msg->clientMessage = m_readBuffer + 4;
+		PacketC2S_BroadcastMsg msg;
+		msg.size = static_cast<short>(m_readBuffer[0] - '0') * 10 + static_cast<short>(m_readBuffer[1] - '0');
+		msg.id = static_cast<EPacketId>((m_readBuffer[2] - '0') * 10 + (m_readBuffer[3] - '0'));
+		msg.clientMessage = m_readBuffer + 4;
 
-		if (msg->size != m_readBytes)
+		if (msg.size != m_readBytes)
 			return nullptr;
-		if (msg->id != C2S_BROADCAST_MSG)
+		if (msg.id != C2S_BROADCAST_MSG)
 			return nullptr;
 
-		m_readBytes -= msg->size;
+		m_readBytes -= msg.size;
 
-		return msg;
+		return &msg;
 	}
 
 	void Session::NetUpdate()
@@ -69,19 +69,27 @@ namespace netfish
 			// 클라에서 보낸 메시지가 abc일 때
 			if (msg->clientMessage == "abc")
 			{
-				m_writeBuffer = msg->clientMessage + 'z' + '\0';
+				char destination[20];
+				const char* source = "Right";
+
+				strcpy_s(destination, sizeof(destination), source);
+
+				Write(destination, sizeof(PacketS2C_BroadcastMsg));
 			}
 			else
 			{
-				m_writeBuffer = msg->clientMessage + 'n' + '\0';
+				char destination[20];
+				const char* source = "Wrong";
+
+				strcpy_s(destination, sizeof(destination), source);
+
+				Write(destination, sizeof(PacketS2C_BroadcastMsg));
 			}
-			m_writeBytes += sizeof(PacketS2C_BroadcastMsg);
 		}
 
 		if (m_writeBytes > 0)
 		{
 			// 클라에 보낼 메시지 m_writeBuffer에 복사
-			Write(m_writeBuffer, m_writeBytes);
 
 			int nSent = m_pClient->Send(m_writeBuffer, m_writeBytes);
 
@@ -119,7 +127,12 @@ namespace netfish
 		int buflen = BUF_SIZE - m_readBytes;
 
 		int nRead = m_pClient->Recv(m_readBuffer, buflen);
-		
+
+		if (nRead == -1)
+		{
+			return;
+		}
+
 		m_readBytes += nRead;
 	}
 

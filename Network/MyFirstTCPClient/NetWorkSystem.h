@@ -25,6 +25,7 @@ public:
 	void SetClient(WinSockClient* Client);
 
 	void DoUpdate();
+	void OnReceive();
 	void NetUpdate();
 
 	static NetWorkSystem* GetNetWorkSystemInstance();

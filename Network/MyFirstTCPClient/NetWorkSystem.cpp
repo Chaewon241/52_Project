@@ -56,7 +56,7 @@ void NetWorkSystem::PostMsg(char* str, const int size)
 {
     PacketC2S_BroadcastMsg inputMsg;
     inputMsg.id = C2S_BROADCAST_MSG;
-    inputMsg.size = size;
+    inputMsg.size = sizeof(PacketC2S_BroadcastMsg);
     inputMsg.clientMessage = str + '\0';
 
     m_sendBuffer[0] = inputMsg.size / 10 + '0';
@@ -67,27 +67,6 @@ void NetWorkSystem::PostMsg(char* str, const int size)
     memcpy(m_sendBuffer + 4, inputMsg.clientMessage, size);
 
     m_sendBytes += size;
-
-    // event 발생을 위해서 여기다가 일단 놨습니다.
-    if (m_sendBytes)
-    {
-        int nSent = m_Client->Send(m_sendBuffer, m_sendBytes);
-        if (nSent > 0)
-        {
-            m_sendBytes -= nSent;
-
-            if (m_sendBytes > 0)
-            {
-                memmove(m_sendBuffer, m_sendBuffer + nSent, m_sendBytes);
-            }
-        }
-        // 이 경우 기다렸다가 다시 시도
-        else if (nSent == 0)
-        {
-            // send 할 수 없는 상태인지 아닌지 변수 만들기?
-            // 근데 이렇게 되면 서버가 언제 준비되는지 모름.
-        }
-    }
 }
 
 // 서버에서 받은 메시지를 클라에 Pop해주는 함수
@@ -98,19 +77,19 @@ PacketS2C_BroadcastMsg* NetWorkSystem::PopMsg()
         return nullptr;
     }
     // todo : 역직렬화 바꾸기
-    PacketS2C_BroadcastMsg msg;
-    msg.size = static_cast<short>(m_recvBuffer[0]) * 10 + static_cast<short>(m_recvBuffer[1]) / 10;
-    msg.id = static_cast<EPacketId>((m_recvBuffer[2] - '0') * 10 + (m_recvBuffer[3] - '0'));;
-    msg.serverMessage = m_recvBuffer + 4;
+    PacketS2C_BroadcastMsg* msg = new PacketS2C_BroadcastMsg;
+    msg->size = static_cast<short>(m_recvBuffer[0] - '0') * 10 + static_cast<short>(m_recvBuffer[1] - '0');
+    msg->id = static_cast<EPacketId>((m_recvBuffer[2] - '0') * 10 + (m_recvBuffer[3] - '0'));;
+    msg->serverMessage = m_recvBuffer + 4 + '\0';
 
-    if (msg.size != m_recvBytes)
+    if (msg->size != m_recvBytes)
         return nullptr;
-    if (msg.id != S2C_BROADCAST_MSG)
+    if (msg->id != S2C_BROADCAST_MSG)
         return nullptr;
 
-    m_recvBytes -= msg.size;
+    m_recvBytes -= msg->size;
 
-    return &msg;
+    return msg;
 }
 
 void NetWorkSystem::SetClient(WinSockClient* Client)
@@ -151,62 +130,62 @@ void NetWorkSystem::DoUpdate()
             cout << "Read Error" << endl;
             return;
         }
-
-        // 랩핑해야할듯
-        char* recvBuffer = new char[RCV_BUF_SIZE];
-        int recvBytes = ::recv(m_Client->GetSocket(), recvBuffer, RCV_BUF_SIZE, 0);
-
-        if (recvBytes == SOCKET_ERROR)
-        {
-            cout << "Read Error" << endl;
-            return;
-        }
-
-        // 읽을거 없을 때
-        if (recvBytes == 0)
-        {
-            cout << "Disconnected" << endl;
-            return;
-        }
-        // todo : 이거 옮겨주기
-        //
-
-        memcpy(m_recvBuffer + m_recvBytes, recvBuffer, recvBytes);
-
-        m_recvBytes += recvBytes;
-
-        // recv한 데이터를 client에 넘겨주기.
-        //m_Client->RecvReadBuffer(m_recvBuffer);
+        OnReceive();
     }
 
-    // 클라이언트 세션은 일단 하나로
-    // NetUpdate를 NetworkSystem에서 해줘야겠다.
-    //m_Client->NetUpdate();
+    if (networkEvents.lNetworkEvents & FD_CLOSE)
+    {
+        if (networkEvents.iErrorCode[FD_CLOSE_BIT] != 0)
+        {
+            cout << "Close Error" << endl;
+        }
+        cout << "Closing....." << endl;
+    }
+}
 
-    NetUpdate();
+void NetWorkSystem::OnReceive()
+{
+    char* recvBuffer = new char[RCV_BUF_SIZE];
+    int recvBytes = ::recv(m_Client->GetSocket(), recvBuffer, RCV_BUF_SIZE, 0);
+
+    if (recvBytes == SOCKET_ERROR)
+    {
+        cout << "Read Error" << endl;
+        return;
+    }
+    // 읽을거 없을 때
+    if (recvBytes == 0)
+    {
+        cout << "Disconnected" << endl;
+        return;
+    }
+
+    memcpy(m_recvBuffer + m_recvBytes, recvBuffer, recvBytes);
+
+    m_recvBytes += recvBytes;
 }
 
 void NetWorkSystem::NetUpdate()
 {
-    //if (m_sendBytes > 1024)
-    //{
-    //    int nSent = m_Client->Send(m_sendBuffer, m_sendBytes);
-    //    if (nSent > 0)
-    //    {
-    //        m_sendBytes -= nSent;
+    if (m_sendBytes)
+    {
+        int nSent = m_Client->Send(m_sendBuffer, m_sendBytes);
+        if (nSent > 0)
+        {
+            m_sendBytes -= nSent;
 
-    //        if (m_sendBytes > 0)
-    //        {
-    //            memmove(m_sendBuffer, m_sendBuffer + nSent, m_sendBytes);
-    //        }
-    //    }
-    //    // 이 경우 기다렸다가 다시 시도
-    //    else if (nSent == 0)
-    //    {
-    //        // send 할 수 없는 상태인지 아닌지 변수 만들기?
-    //        // 근데 이렇게 되면 서버가 언제 준비되는지 모름.
-    //    }
-    //}
+            if (m_sendBytes > 0)
+            {
+                memmove(m_sendBuffer, m_sendBuffer + nSent, m_sendBytes);
+            }
+        }
+        // 이 경우 기다렸다가 다시 시도
+        else if (nSent == 0)
+        {
+            // send 할 수 없는 상태인지 아닌지 변수 만들기?
+            // 근데 이렇게 되면 서버가 언제 준비되는지 모름.
+        }
+    }
     // popmsg에 있음.
     /*else if (m_recvBytes > 1024)
     {
