@@ -36,8 +36,8 @@ namespace netfish
 
 		static constexpr int BUF_SIZE = 1024;
 
-		char m_readBuffer[BUF_SIZE] = {};
-		char m_writeBuffer[BUF_SIZE] = {};
+		char* m_readBuffer;
+		char* m_writeBuffer;
 
 		int m_readBytes = 0;
 		int m_writeBytes = 0;

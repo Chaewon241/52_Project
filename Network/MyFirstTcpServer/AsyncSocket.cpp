@@ -1,5 +1,5 @@
 #include "AsyncSocket.h"
-#include "../MyFirstTCPClient/MyProtocol.h"
+#include "MyProtocol.h"
 
 #include <ws2tcpip.h>
 #include <iostream>

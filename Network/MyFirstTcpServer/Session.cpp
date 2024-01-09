@@ -3,17 +3,23 @@
 
 #include <cassert>
 
+constexpr int SND_BUF_SIZE = 1024;
+constexpr int RCV_BUF_SIZE = 9604;
+
 namespace netfish
 {
 	SessionId Session::s_sessionIdCounter;
 
 	Session::Session()
 	{
-
+		m_writeBuffer = new char[SND_BUF_SIZE];
+		m_readBuffer = new char[RCV_BUF_SIZE];
 	}
 
 	Session::~Session()
 	{
+		delete m_writeBuffer;
+		delete m_readBuffer;
 	}
 
 	void Session::Write(char* pData, int len)
