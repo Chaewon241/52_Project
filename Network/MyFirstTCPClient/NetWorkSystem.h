@@ -27,8 +27,6 @@ public:
 	void DoUpdate();
 	void NetUpdate();
 
-	void OnReceive();
-
 	static NetWorkSystem* GetNetWorkSystemInstance();
 
 	void PostMsg(char* str, const int size);
