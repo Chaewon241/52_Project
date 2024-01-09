@@ -67,6 +67,27 @@ void NetWorkSystem::PostMsg(char* str, const int size)
     memcpy(m_sendBuffer + 4, inputMsg.clientMessage, size);
 
     m_sendBytes += size;
+
+    // event 발생을 위해서 여기다가 일단 놨습니다.
+    if (m_sendBytes)
+    {
+        int nSent = m_Client->Send(m_sendBuffer, m_sendBytes);
+        if (nSent > 0)
+        {
+            m_sendBytes -= nSent;
+
+            if (m_sendBytes > 0)
+            {
+                memmove(m_sendBuffer, m_sendBuffer + nSent, m_sendBytes);
+            }
+        }
+        // 이 경우 기다렸다가 다시 시도
+        else if (nSent == 0)
+        {
+            // send 할 수 없는 상태인지 아닌지 변수 만들기?
+            // 근데 이렇게 되면 서버가 언제 준비되는지 모름.
+        }
+    }
 }
 
 // 서버에서 받은 메시지를 클라에 Pop해주는 함수
@@ -130,31 +151,62 @@ void NetWorkSystem::DoUpdate()
             cout << "Read Error" << endl;
             return;
         }
-        OnReceive();
+
+        // 랩핑해야할듯
+        char* recvBuffer = new char[RCV_BUF_SIZE];
+        int recvBytes = ::recv(m_Client->GetSocket(), recvBuffer, RCV_BUF_SIZE, 0);
+
+        if (recvBytes == SOCKET_ERROR)
+        {
+            cout << "Read Error" << endl;
+            return;
+        }
+
+        // 읽을거 없을 때
+        if (recvBytes == 0)
+        {
+            cout << "Disconnected" << endl;
+            return;
+        }
+        // todo : 이거 옮겨주기
+        //
+
+        memcpy(m_recvBuffer + m_recvBytes, recvBuffer, recvBytes);
+
+        m_recvBytes += recvBytes;
+
+        // recv한 데이터를 client에 넘겨주기.
+        //m_Client->RecvReadBuffer(m_recvBuffer);
     }
+
+    // 클라이언트 세션은 일단 하나로
+    // NetUpdate를 NetworkSystem에서 해줘야겠다.
+    //m_Client->NetUpdate();
+
+    NetUpdate();
 }
 
 void NetWorkSystem::NetUpdate()
 {
-    if (m_sendBytes)
-    {
-        int nSent = m_Client->Send(m_sendBuffer, m_sendBytes);
-        if (nSent > 0)
-        {
-            m_sendBytes -= nSent;
+    //if (m_sendBytes > 1024)
+    //{
+    //    int nSent = m_Client->Send(m_sendBuffer, m_sendBytes);
+    //    if (nSent > 0)
+    //    {
+    //        m_sendBytes -= nSent;
 
-            if (m_sendBytes > 0)
-            {
-                memmove(m_sendBuffer, m_sendBuffer + nSent, m_sendBytes);
-            }
-        }
-        // 이 경우 기다렸다가 다시 시도
-        else if (nSent == 0)
-        {
-            // send 할 수 없는 상태인지 아닌지 변수 만들기?
-            // 
-        }
-    }
+    //        if (m_sendBytes > 0)
+    //        {
+    //            memmove(m_sendBuffer, m_sendBuffer + nSent, m_sendBytes);
+    //        }
+    //    }
+    //    // 이 경우 기다렸다가 다시 시도
+    //    else if (nSent == 0)
+    //    {
+    //        // send 할 수 없는 상태인지 아닌지 변수 만들기?
+    //        // 근데 이렇게 되면 서버가 언제 준비되는지 모름.
+    //    }
+    //}
     // popmsg에 있음.
     /*else if (m_recvBytes > 1024)
     {
@@ -162,27 +214,4 @@ void NetWorkSystem::NetUpdate()
         m_recvBytes = 0;
         
     }*/
-}
-
-void NetWorkSystem::OnReceive()
-{
-    char* recvBuffer = new char[RCV_BUF_SIZE];
-    int recvBytes = ::recv(m_Client->GetSocket(), recvBuffer, RCV_BUF_SIZE, 0);
-
-    if (recvBytes == SOCKET_ERROR)
-    {
-        cout << "Read Error" << endl;
-        return;
-    }
-
-    // 읽을거 없을 때
-    if (recvBytes == 0)
-    {
-        cout << "Disconnected" << endl;
-        return;
-    }
-
-    memcpy(m_recvBuffer + m_recvBytes, recvBuffer, recvBytes);
-
-    m_recvBytes += recvBytes;
 }
