@@ -54,17 +54,17 @@ void NetWorkSystem::DestroyInstance()
 
 void NetWorkSystem::PostMsg(char* str, const int size)
 {
-    PacketC2S_BroadcastMsg* inputMsg = new PacketC2S_BroadcastMsg;
-    inputMsg->id = C2S_BROADCAST_MSG;
-    inputMsg->size = strlen(str);
-    inputMsg->clientMessage = str + '\0';
+    PacketC2S_BroadcastMsg inputMsg;
+    inputMsg.id = C2S_BROADCAST_MSG;
+    inputMsg.size = size;
+    inputMsg.clientMessage = str + '\0';
 
-    m_sendBuffer[0] = inputMsg->size / 10 + '0';
-    m_sendBuffer[1] = inputMsg->size % 10 + '0';
-    m_sendBuffer[2] = inputMsg->id / 10 + '0';
-    m_sendBuffer[3] = inputMsg->id % 10 + '0';
+    m_sendBuffer[0] = inputMsg.size / 10 + '0';
+    m_sendBuffer[1] = inputMsg.size % 10 + '0';
+    m_sendBuffer[2] = inputMsg.id / 10 + '0';
+    m_sendBuffer[3] = inputMsg.id % 10 + '0';
 
-    memcpy(m_sendBuffer + 4, inputMsg->clientMessage, size);
+    memcpy(m_sendBuffer + 4, inputMsg.clientMessage, size);
 
     m_sendBytes += size;
 }
@@ -77,19 +77,19 @@ PacketS2C_BroadcastMsg* NetWorkSystem::PopMsg()
         return nullptr;
     }
     // todo : 역직렬화 바꾸기
-    PacketS2C_BroadcastMsg* msg = new PacketS2C_BroadcastMsg;
-    msg->size = static_cast<short>(m_recvBuffer[0]) * 10 + static_cast<short>(m_recvBuffer[1]) / 10;
-    msg->id = static_cast<EPacketId>((m_recvBuffer[2] - '0') * 10 + (m_recvBuffer[3] - '0'));;
-    msg->serverMessage = m_recvBuffer + 4;
+    PacketS2C_BroadcastMsg msg;
+    msg.size = static_cast<short>(m_recvBuffer[0]) * 10 + static_cast<short>(m_recvBuffer[1]) / 10;
+    msg.id = static_cast<EPacketId>((m_recvBuffer[2] - '0') * 10 + (m_recvBuffer[3] - '0'));;
+    msg.serverMessage = m_recvBuffer + 4;
 
-    if (msg->size != m_recvBytes)
+    if (msg.size != m_recvBytes)
         return nullptr;
-    if (msg->id != S2C_BROADCAST_MSG)
+    if (msg.id != S2C_BROADCAST_MSG)
         return nullptr;
 
-    m_recvBytes -= msg->size;
+    m_recvBytes -= msg.size;
 
-    return msg;
+    return &msg;
 }
 
 void NetWorkSystem::SetClient(WinSockClient* Client)

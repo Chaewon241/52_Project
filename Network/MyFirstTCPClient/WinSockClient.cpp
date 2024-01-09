@@ -56,41 +56,6 @@ bool WinSockClient::Update()
     return true;
 }
 
-//void WinSockClient::NetUpdate()
-//{
-//    if (m_readBytes)
-//    {
-//        memcpy(m_sendBuffer, m_recvBuffer, m_readBytes);
-//
-//        m_readBytes = 0;
-//    }
-//
-//    if (m_writeBytes)
-//    {
-//        int nSent = Send();
-//
-//        if (nSent > 0)
-//        {
-//            m_writeBytes -= nSent;
-//
-//            if (m_writeBytes > 0)
-//            {
-//                memmove(m_sendBuffer, m_sendBuffer + nSent, m_writeBytes);
-//            }
-//        }
-//        // 소켓 버퍼가 가득 차서 전송이 불가능
-//        else if (nSent == 0)
-//        {
-//
-//        }
-//        // 소켓 에러가 발생함. 우짤까
-//        else
-//        {
-//
-//        }
-//    }
-//}
-
 void WinSockClient::CloseSocket()
 {
    closesocket(m_ClientWinSock->GetSocket());

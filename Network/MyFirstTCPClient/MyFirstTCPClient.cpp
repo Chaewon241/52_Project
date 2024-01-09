@@ -34,8 +34,6 @@ int main()
             std::cin.getline(str, 100);
 
             NetWorkSystem::GetNetWorkSystemInstance()->PostMsg(str, sizeof(PacketC2S_BroadcastMsg));
-
-            delete[] str;
         }
         // NetworkSystem에서 DoUpdate 가져오기
         NetWorkSystem::GetNetWorkSystemInstance()->DoUpdate();
