@@ -31,10 +31,8 @@ void NetWorkSystem::Initialize()
         return;
 
     // m_sendBuffer 와 m_recvBuffer 를 동적 할당, 나중에 해제 필수
-    m_sendBuffer = new char[SND_BUF_SIZE + 1];
+    m_sendBuffer = new char[SND_BUF_SIZE ];
     m_recvBuffer = new char[RCV_BUF_SIZE];
-
-    m_sendBuffer[SND_BUF_SIZE] = '\0';
 }
 
 void NetWorkSystem::DestroyInstance()
@@ -56,7 +54,7 @@ void NetWorkSystem::PostMsg(char* str, const int size)
 {
     PacketC2S_BroadcastMsg inputMsg;
     inputMsg.id = C2S_BROADCAST_MSG;
-    inputMsg.size = sizeof(PacketC2S_BroadcastMsg);
+    inputMsg.size = size + 5;
     inputMsg.clientMessage = str + '\0';
 
     m_sendBuffer[0] = inputMsg.size / 10 + '0';
@@ -66,7 +64,7 @@ void NetWorkSystem::PostMsg(char* str, const int size)
 
     memcpy(m_sendBuffer + 4, inputMsg.clientMessage, size);
 
-    m_sendBytes += size;
+    m_sendBytes += inputMsg.size;
 }
 
 // 서버에서 받은 메시지를 클라에 Pop해주는 함수
@@ -80,7 +78,7 @@ PacketS2C_BroadcastMsg* NetWorkSystem::PopMsg()
     PacketS2C_BroadcastMsg* msg = new PacketS2C_BroadcastMsg;
     msg->size = static_cast<short>(m_recvBuffer[0] - '0') * 10 + static_cast<short>(m_recvBuffer[1] - '0');
     msg->id = static_cast<EPacketId>((m_recvBuffer[2] - '0') * 10 + (m_recvBuffer[3] - '0'));;
-    msg->serverMessage = m_recvBuffer + 4 + '\0';
+    msg->serverMessage = m_recvBuffer + '\0';
 
     if (msg->size != m_recvBytes)
         return nullptr;

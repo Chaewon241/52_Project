@@ -26,8 +26,8 @@ namespace netfish
 	{
 		PacketS2C_BroadcastMsg* inputMsg = new PacketS2C_BroadcastMsg;
 		inputMsg->id = S2C_BROADCAST_MSG;
-		inputMsg->size = sizeof(PacketS2C_BroadcastMsg);
-		inputMsg->serverMessage = pData;
+		inputMsg->size = strlen(pData) + 5;
+		inputMsg->serverMessage = pData + '\0';
 
 		m_writeBuffer[0] = inputMsg->size / 10 + '0';
 		m_writeBuffer[1] = inputMsg->size % 10 + '0';
@@ -49,7 +49,7 @@ namespace netfish
 		PacketC2S_BroadcastMsg msg;
 		msg.size = static_cast<short>(m_readBuffer[0] - '0') * 10 + static_cast<short>(m_readBuffer[1] - '0');
 		msg.id = static_cast<EPacketId>((m_readBuffer[2] - '0') * 10 + (m_readBuffer[3] - '0'));
-		msg.clientMessage = m_readBuffer + 4;
+		msg.clientMessage = m_readBuffer + '\0';
 
 		if (msg.size != m_readBytes)
 			return nullptr;
@@ -67,20 +67,20 @@ namespace netfish
 		if (m_readBytes > 0)
 		{
 			// Read
-			msg = Read(m_readBuffer, m_readBytes);
+			msg = Read(m_readBuffer, strlen(m_readBuffer));
 			
 			if (msg == nullptr)
 				return;
 
 			// 클라에서 보낸 메시지가 abc일 때
-			if (msg->clientMessage == "abc")
+			if (strcmp(msg->clientMessage, "abcd") == 0)
 			{
 				char destination[20];
 				const char* source = "Right";
 
 				strcpy_s(destination, sizeof(destination), source);
 
-				Write(destination, sizeof(PacketS2C_BroadcastMsg));
+				Write(destination, strlen(source));
 			}
 			else
 			{
@@ -89,7 +89,7 @@ namespace netfish
 
 				strcpy_s(destination, sizeof(destination), source);
 
-				Write(destination, sizeof(PacketS2C_BroadcastMsg));
+				Write(destination, strlen(source));
 			}
 		}
 
@@ -132,7 +132,7 @@ namespace netfish
 
 		int buflen = BUF_SIZE - m_readBytes;
 
-		int nRead = m_pClient->Recv(m_readBuffer, buflen);
+		int nRead = m_pClient->Recv(m_readBuffer, RCV_BUF_SIZE);
 
 		if (nRead == -1)
 		{

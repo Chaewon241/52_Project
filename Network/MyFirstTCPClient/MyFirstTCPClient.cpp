@@ -27,13 +27,12 @@ int main()
     {
         InputSystem inputSys;
 
-        // 입력 받은 값이 있으면 해당 함수로 이동 -> inputSystem을 통해서 다시 하기
         if (inputSys.isKeyPressed('A'))
         {
             char* str = new char[100];
             std::cin.getline(str, 100);
 
-            NetWorkSystem::GetNetWorkSystemInstance()->PostMsg(str, sizeof(PacketC2S_BroadcastMsg));
+            NetWorkSystem::GetNetWorkSystemInstance()->PostMsg(str, strlen(str));
         }
         // NetworkSystem에서 DoUpdate 가져오기
         NetWorkSystem::GetNetWorkSystemInstance()->DoUpdate();

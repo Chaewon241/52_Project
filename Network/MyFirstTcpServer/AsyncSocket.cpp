@@ -121,9 +121,14 @@ namespace netfish
 		::closesocket(m_hSocket);
 	}
 
-	int netfish::AsyncSocket::Send(const char* buf, int len)
+	int netfish::AsyncSocket::Send(char* buf, int len)
 	{
 		int sendLen = ::send(m_hSocket, buf, len, 0);
+
+		if (sendLen > 0) 
+		{
+			buf[sendLen] = '\0';
+		}
 
 		m_error = ::WSAGetLastError();
 

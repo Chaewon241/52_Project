@@ -34,7 +34,7 @@ namespace netfish
 
 		void Close();
 
-		int Send(const char* buf, int len);
+		int Send(char* buf, int len);
 
 		int Recv(char* buf, int len);
 

@@ -37,7 +37,7 @@ void WinSockClient::DisConnect()
 
 int WinSockClient::Send(char* sendBuffer, int size)
 {
-    int sendLen = ::send(m_ClientWinSock->GetSocket(), sendBuffer, size, 0);
+    int sendLen = ::send(m_ClientWinSock->GetSocket(), sendBuffer, size + 1, 0);
     if (sendLen == SOCKET_ERROR && ::WSAGetLastError() != WSAEWOULDBLOCK) {
         cout << "send Error " << ::WSAGetLastError() << endl;
     }
@@ -45,7 +45,6 @@ int WinSockClient::Send(char* sendBuffer, int size)
     {
         cout << "send " << sendLen << " " << endl;
     }
-
     return sendLen;
 }
 
