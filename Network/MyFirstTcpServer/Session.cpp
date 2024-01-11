@@ -26,7 +26,7 @@ namespace netfish
 	{
 		PacketS2C_BroadcastMsg* inputMsg = new PacketS2C_BroadcastMsg;
 		inputMsg->id = S2C_BROADCAST_MSG;
-		inputMsg->size = strlen(pData) + 5;
+		inputMsg->size = len + 5;
 		inputMsg->serverMessage = pData + '\0';
 
 		m_writeBuffer[0] = inputMsg->size / 10 + '0';
@@ -34,9 +34,9 @@ namespace netfish
 		m_writeBuffer[2] = inputMsg->id / 10 + '0';
 		m_writeBuffer[3] = inputMsg->id % 10 + '0';
 
-		memcpy(m_writeBuffer + 4, inputMsg->serverMessage, len);
+		memcpy(m_writeBuffer + 4, inputMsg->serverMessage, len + 1);
 
-		m_writeBytes += len;
+		m_writeBytes += len + 5;
 	}
 
 	PacketC2S_BroadcastMsg* Session::Read(char* pData, int len)
@@ -49,7 +49,7 @@ namespace netfish
 		PacketC2S_BroadcastMsg msg;
 		msg.size = static_cast<short>(m_readBuffer[0] - '0') * 10 + static_cast<short>(m_readBuffer[1] - '0');
 		msg.id = static_cast<EPacketId>((m_readBuffer[2] - '0') * 10 + (m_readBuffer[3] - '0'));
-		msg.clientMessage = m_readBuffer + '\0';
+		msg.clientMessage = m_readBuffer + 4 + '\0';
 
 		if (msg.size != m_readBytes)
 			return nullptr;
