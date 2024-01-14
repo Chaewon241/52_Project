@@ -15,7 +15,8 @@
 //
 //    char recvBuffer[BUFSIZE] = {};
 //
-//    int recvBytes = 0;
+//    int recv
+// s = 0;
 //    int sendBytes = 0; // 받은만큼 돌려 주는 인과응보 에코 서버
 //};
 

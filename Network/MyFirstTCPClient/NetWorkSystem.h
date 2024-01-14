@@ -1,6 +1,7 @@
 #pragma once
 
 #include "MyProtocol.h"
+#include "MyCircularQueue.h"
 
 #include <winsock2.h>
 #include <ws2tcpip.h>
@@ -44,6 +45,9 @@ private:
 
 	static NetWorkSystem* m_NetWorkSystemInstance;
 	WinSockClient* m_Client;
+
+	MyCircularQueue* m_RecvQueue;
+	MyCircularQueue* m_SendQueue;
 
 	bool m_bConnected = false;
 };

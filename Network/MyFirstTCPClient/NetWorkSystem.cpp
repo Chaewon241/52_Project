@@ -31,8 +31,11 @@ void NetWorkSystem::Initialize()
         return;
 
     // m_sendBuffer 와 m_recvBuffer 를 동적 할당, 나중에 해제 필수
-    m_sendBuffer = new char[SND_BUF_SIZE ];
+    m_sendBuffer = new char[SND_BUF_SIZE];
     m_recvBuffer = new char[RCV_BUF_SIZE];
+
+    m_RecvQueue = new MyCircularQueue(100);
+    m_SendQueue = new MyCircularQueue(100);
 }
 
 void NetWorkSystem::DestroyInstance()
@@ -48,37 +51,36 @@ void NetWorkSystem::DestroyInstance()
 
     delete m_recvBuffer;
     m_recvBuffer = nullptr;
+
+    delete m_RecvQueue;
+    m_RecvQueue = nullptr;
+
+    delete m_SendQueue;
+    m_SendQueue = nullptr;
 }
 
 void NetWorkSystem::PostMsg(char* str, const int size)
 {
     PacketC2S_BroadcastMsg inputMsg;
-    inputMsg.id = C2S_BROADCAST_MSG;
     inputMsg.size = strlen(str) + 5;
+    inputMsg.id = C2S_BROADCAST_MSG;
     inputMsg.clientMessage = str + '\0';
 
-    m_sendBuffer[0] = inputMsg.size / 10 + '0';
-    m_sendBuffer[1] = inputMsg.size % 10 + '0';
-    m_sendBuffer[2] = inputMsg.id / 10 + '0';
-    m_sendBuffer[3] = inputMsg.id % 10 + '0';
+    m_sendBuffer = inputMsg.Serialize();
 
-    memcpy(m_sendBuffer + 4, inputMsg.clientMessage, size + 1);
-
+    m_SendQueue->enQueue(m_sendBuffer);
     m_sendBytes += size + 5;
 }
 
 // 서버에서 받은 메시지를 클라에 Pop해주는 함수
 PacketS2C_BroadcastMsg* NetWorkSystem::PopMsg()
 {
-    if (m_recvBytes < 1)
+    if (m_RecvQueue->isEmpty())
     {
         return nullptr;
     }
-    // todo : 역직렬화 바꾸기
     PacketS2C_BroadcastMsg* msg = new PacketS2C_BroadcastMsg;
-    msg->size = static_cast<short>(m_recvBuffer[0] - '0') * 10 + static_cast<short>(m_recvBuffer[1] - '0');
-    msg->id = static_cast<EPacketId>((m_recvBuffer[2] - '0') * 10 + (m_recvBuffer[3] - '0'));;
-    msg->serverMessage = m_recvBuffer + 4 + '\0';
+    msg->DeSerialize(m_RecvQueue->Peek());
 
     if (msg->size != m_recvBytes)
         return nullptr;
@@ -86,6 +88,7 @@ PacketS2C_BroadcastMsg* NetWorkSystem::PopMsg()
         return nullptr;
 
     m_recvBytes -= msg->size;
+    m_RecvQueue->deQueue();
 
     return msg;
 }
@@ -158,24 +161,27 @@ void NetWorkSystem::OnReceive()
         return;
     }
 
-    memcpy(m_recvBuffer + m_recvBytes, recvBuffer, recvBytes);
+    m_RecvQueue->enQueue(recvBuffer);
+    //memcpy(m_recvBuffer + m_recvBytes, recvBuffer, recvBytes);
 
     m_recvBytes += recvBytes;
 }
 
 void NetWorkSystem::NetUpdate()
 {
-    if (m_sendBytes)
+    // 보낼게 있다면 == SendQueue에 값이 있다면
+    if (!(m_SendQueue->isEmpty()))
     {
-        int nSent = m_Client->Send(m_sendBuffer, m_sendBytes);
+        int nSent = m_Client->Send(m_SendQueue->Peek(), m_sendBytes);
         if (nSent > 0)
         {
             m_sendBytes -= nSent;
+            m_SendQueue->deQueue();
 
-            if (m_sendBytes > 0)
+            /*if (m_sendBytes > 0)
             {
                 memmove(m_sendBuffer, m_sendBuffer + nSent, m_sendBytes);
-            }
+            }*/
         }
         // 이 경우 기다렸다가 다시 시도
         else if (nSent == 0)

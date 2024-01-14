@@ -32,6 +32,7 @@ int main()
             char* str = new char[100];
             std::cin.getline(str, 100);
 
+            // 직렬화
             NetWorkSystem::GetNetWorkSystemInstance()->PostMsg(str, strlen(str));
         }
         // NetworkSystem에서 DoUpdate 가져오기
