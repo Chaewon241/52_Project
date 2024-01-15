@@ -66,8 +66,10 @@ void NetWorkSystem::PostMsg(char* str, const int size)
     inputMsg.id = C2S_BROADCAST_MSG;
     inputMsg.clientMessage = str + '\0';
 
+    // 메시지 직렬화
     m_sendBuffer = inputMsg.Serialize();
 
+    // 원형큐에 넣어주기
     m_SendQueue->enQueue(m_sendBuffer);
     m_sendBytes += size + 5;
 }
