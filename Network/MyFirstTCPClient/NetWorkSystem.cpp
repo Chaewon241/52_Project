@@ -34,8 +34,8 @@ void NetWorkSystem::Initialize()
     m_sendBuffer = new char[SND_BUF_SIZE];
     m_recvBuffer = new char[RCV_BUF_SIZE];
 
-    m_RecvQueue = new MyCircularQueue(100);
-    m_SendQueue = new MyCircularQueue(100);
+    m_RecvQueue = new Curtaincall::CircularQueue(100);
+    m_SendQueue = new Curtaincall::CircularQueue(100);
 }
 
 void NetWorkSystem::DestroyInstance()

@@ -1,6 +1,6 @@
 #include "MyCircularQueue.h"
 
-MyCircularQueue::MyCircularQueue(int maxQueueSize)
+Curtaincall::CircularQueue::CircularQueue(int maxQueueSize)
 	:m_MaxQueueSize(maxQueueSize)
 {
 	m_Queue = new char*[maxQueueSize];
@@ -8,12 +8,12 @@ MyCircularQueue::MyCircularQueue(int maxQueueSize)
 	m_Rear = 0;
 }
 
-MyCircularQueue::~MyCircularQueue()
+Curtaincall::CircularQueue::~CircularQueue()
 {
 	delete[] m_Queue;
 }
 
-bool MyCircularQueue::isEmpty() {
+bool Curtaincall::CircularQueue::isEmpty() {
 	if (m_Front == m_Rear)
 	{
 		return true;
@@ -21,7 +21,7 @@ bool MyCircularQueue::isEmpty() {
 	return false;
 }
 
-bool MyCircularQueue::isFull() 
+bool Curtaincall::CircularQueue::isFull()
 {
 	if (m_Front == (m_Rear + 1) % m_MaxQueueSize)
 	{
@@ -30,7 +30,7 @@ bool MyCircularQueue::isFull()
 	return false;
 }
 
-void MyCircularQueue::enQueue(char* item) {
+void Curtaincall::CircularQueue::enQueue(char* item) {
 	if (isFull())
 		return;
 	else 
@@ -40,7 +40,7 @@ void MyCircularQueue::enQueue(char* item) {
 	}
 }
 
-void MyCircularQueue::deQueue() {
+void Curtaincall::CircularQueue::deQueue() {
 	if (isEmpty())
 		return;
 
@@ -48,7 +48,7 @@ void MyCircularQueue::deQueue() {
 		m_Front = ++m_Front % m_MaxQueueSize;
 }
 
-char* MyCircularQueue::Peek() const
+char* Curtaincall::CircularQueue::Peek() const
 {
 	return m_Queue[m_Front % m_MaxQueueSize];
 }
