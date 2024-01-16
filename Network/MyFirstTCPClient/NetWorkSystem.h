@@ -40,7 +40,7 @@ private:
 	char* m_sendBuffer = nullptr;
 	char* m_recvBuffer = nullptr;
 
-	// 원형큐가 있으면 얘네들이 필요없는거죠?
+	// 원형큐가 있으면 얘네들이 필요없을 것 같음.
 	int m_sendBytes = 0;
 	int m_recvBytes = 0;
 

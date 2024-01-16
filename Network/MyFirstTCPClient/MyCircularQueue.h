@@ -1,5 +1,6 @@
 #pragma once
 
+// namespace ¸¸µé±â
 class MyCircularQueue 
 {
 private:
