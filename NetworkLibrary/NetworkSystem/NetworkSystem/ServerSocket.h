@@ -5,11 +5,17 @@
 class ServerSocket : public WinSock
 {
 public:
-    virtual bool OnAccept() override;
-    virtual void OnConnect(int nErrorCode) override {};
-    virtual void OnSend(int nErrorCode) override {};
-    virtual void OnReceive(int nErrorCode) override {};
-    virtual void OnClose(int nErrorCode) override {};
+	ServerSocket() = default;
+	~ServerSocket() = default;
+
+	virtual bool OnAccept(WinSock* pSocket) override
+	{
+		return (Accept(*pSocket));
+	}
+	virtual bool OnConnect() override { return false; }
+	virtual bool OnClose() override { return false; }
+	virtual bool OnSend() override { return false; }
+	virtual bool OnReceive() override { return false; }
 };
 
 

@@ -10,38 +10,61 @@
 class WinSock
 {
 public:
-    // 소켓
-    bool Create(int nSocketType = SOCK_STREAM,
-        long lEvent = FD_READ | FD_WRITE | FD_OOB | FD_ACCEPT | FD_CONNECT | FD_CLOSE);
-    SOCKET GetSocket() { return m_hSocket; }
+	WinSock();
+	virtual ~WinSock();
 
-    // 서버
-    bool Bind(UINT nSocketPort);
-    bool Listen(int nConnectionBacklog = SOMAXCONN);
+	virtual bool OnAccept(WinSock* pSocket) { return false; }
+	virtual bool OnConnect() { return false; };
+	virtual bool OnClose() { return false; };
+	virtual bool OnSend() { return false; };
+	virtual bool OnReceive() { return false; };
 
-    // 클라
-    bool Connect(UINT nSocketPort, const char* nIP);
-    bool DisConnect();
-    virtual void Attach(SOCKET socket) {};
-    virtual void SetIp(std::string ip) {};
-    virtual void SetPortNum(int port) {};
+	bool Create(
+		int nSocketType = SOCK_STREAM,
+		long lEvent = FD_READ | FD_WRITE | FD_OOB | FD_ACCEPT | FD_CONNECT | FD_CLOSE
+	);
 
-    // 이벤트 관련
-    void AddEvent(WSAEVENT hEvent) { m_WSAEvents.push_back(hEvent); }
-    std::vector<WSAEVENT>& GetWSAEvents() { return m_WSAEvents; }
-    int GetEventIndex();
+	bool Bind(int port, const char* lpszSocketAddress = nullptr);
 
+	bool Listen(int backlog = SOMAXCONN);
 
-    virtual bool OnAccept() {};
-    virtual void OnClose(int nErrorCode) {};
-    virtual void OnConnect(int nErrorCode) {};
-    virtual void OnReceive(int nErrorCode) {};
-    virtual void OnSend(int nErrorCode) {};
+	bool Accept(WinSock& acceptSocket);
 
-protected:
-    SOCKET m_hSocket;
-    std::vector<WSAEVENT> m_WSAEvents;
-    int m_error;
+	bool Connect(const char* ip, int port);
+
+	bool DisConnect();
+
+	void Close();
+
+	int Send(char* buf, int len);
+
+	int Recv(char* buf, int len);
+
+	int SendTo(const char* buf, int len, const char* ip, int port);
+
+	int RecvFrom(char* buf, int len, char* ip, int* port);
+
+	SOCKET GetHandle() { return m_hSocket; }
+	WSAEVENT GetEvent() { return m_hEvent; }
+
+	void SetEvent(WSAEVENT hEvent) { m_hEvent = hEvent; }
+
+	void Attach(SOCKET hSocket) { m_hSocket = hSocket; }
+	void Detach() { m_hSocket = INVALID_SOCKET; }
+
+	const std::string& GetIP() { return m_ip; }
+	int GetPort() { return m_port; }
+
+	int GetLastError() { return m_error; }
+
+private:
+	SOCKET		m_hSocket = INVALID_SOCKET;
+	WSAEVENT	m_hEvent = WSA_INVALID_EVENT;
+
+	std::string m_ip;
+	int			m_port = 0;
+
+	int m_error;
 };
 
 

@@ -12,6 +12,11 @@ void NetworkSystem::Initialize(WinSock* socket)
 	m_socket = socket;
 }
 
+void NetworkSystem::CleanUpSock()
+{
+    ::WSACleanup();
+}
+
 void NetworkSystem::DestroyInstance()
 {
     delete m_NetWorkSystemInstance;
@@ -31,29 +36,6 @@ void NetworkSystem::DestroyInstance()
 
     delete m_SendQueue;
     m_SendQueue = nullptr;
-}
-
-void NetworkSystem::OnReceive()
-{
-    char* recvBuffer = new char[RCV_BUF_SIZE];
-    int recvBytes = ::recv(m_socket->GetSocket(), recvBuffer, RCV_BUF_SIZE, 0);
-
-    if (recvBytes == SOCKET_ERROR)
-    {
-        //cout << "Read Error" << endl;
-        return;
-    }
-    // 읽을거 없을 때
-    if (recvBytes == 0)
-    {
-        //cout << "Disconnected" << endl;
-        return;
-    }
-
-    //m_RecvQueue->enQueue(recvBuffer);
-    //memcpy(m_recvBuffer + m_recvBytes, recvBuffer, recvBytes);
-
-    //m_recvBytes += recvBytes;
 }
 
 void NetworkSystem::PostMsg(char* str, const int size)

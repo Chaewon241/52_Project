@@ -4,22 +4,25 @@
 void Client::Start()
 {
 	m_clientSocket = new ClientSocket;
+    if (!m_clientSocket->Create() || !m_clientSocket->Connect("127.0.0.1", 7777))
+        return;
 }
 
 void Client::Update()
 {
-    int eventState = m_clientSocket->GetEventIndex();
+    WSAEVENT clientEvent = m_clientSocket->GetEvent();
+    int index = ::WSAWaitForMultipleEvents(1, &clientEvent, FALSE, 1, FALSE);
 
-    if (eventState == WSA_WAIT_FAILED)
+    if (index == WSA_WAIT_FAILED)
         return;
 
-    eventState -= WSA_WAIT_EVENT_0;
+    index -= WSA_WAIT_EVENT_0;
 
-    if (eventState == WSA_WAIT_TIMEOUT)
+    if (index == WSA_WAIT_TIMEOUT)
         return;
 
     WSANETWORKEVENTS networkEvents;
-    if (::WSAEnumNetworkEvents(m_clientSocket->GetSocket(), m_clientSocket->GetWSAEvents()[eventState], &networkEvents) == SOCKET_ERROR)
+    if (::WSAEnumNetworkEvents(m_clientSocket->GetHandle(), clientEvent, &networkEvents) == SOCKET_ERROR)
         return;
 
     if (networkEvents.lNetworkEvents & FD_CONNECT)
@@ -61,7 +64,7 @@ void Client::Update()
 
 void Client::OnReceive()
 {
-    m_networkSystem.OnReceive();
+    m_clientSocket->Recv();
 }
 
 void Client::OnSend()
@@ -81,4 +84,5 @@ void Client::ClientLoop()
 	{
         Update();
 	}
+    m_networkSystem.CleanUpSock();
 }

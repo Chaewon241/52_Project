@@ -30,11 +30,14 @@ void Server::Stop()
 	{
 		delete pSession.second;
 	}
+	m_networkSystem.CleanUpSock();
 }
 
 void Server::Update()
 {
-	if (m_pServerSocket == nullptr) return;
+	std::vector<WSAEVENT> wsaEvents;
+
+	wsaEvents.push_back(m_pServerSocket->GetEvent());
 
 	for (auto& pClient : m_clients)
 	{
@@ -45,13 +48,12 @@ void Server::Update()
 		else
 		{
 			//std::cout << "session id is " << pClient->GetSessionId() << std::endl;;
-			m_pServerSocket->GetWSAEvents().push_back(pClient->GetWSAEvents()[0]);
+
+			wsaEvents.push_back(pClient->GetEvent());
 		}
 	}
 
-	// 생각해 보기: 이벤트를 기다리는 시간을 1ms로 하면 호출 스레드는 대기 상태가 됩니다.
-	// 메인 스레드(혹은 랜더 스레드)에서 딜레이를 주고 싶지 않을 경우, 어떻게 해야 할까요?
-	int index = ::WSAWaitForMultipleEvents(m_pServerSocket->GetWSAEvents().size(), &m_pServerSocket->GetWSAEvents()[0], FALSE, 1, FALSE);
+	int index = ::WSAWaitForMultipleEvents(wsaEvents.size(), &wsaEvents[0], FALSE, 1, FALSE);
 
 	if (index == WSA_WAIT_FAILED)
 	{
@@ -63,9 +65,9 @@ void Server::Update()
 
 	index -= WSA_WAIT_EVENT_0;
 
-	AsyncSocket* pSocket = nullptr;
+	WinSock* pSocket = nullptr;
 
-	if (wsaEvents[index] == m_pListener->GetEvent()) pSocket = m_pListener;
+	if (wsaEvents[index] == m_pServerSocket->GetEvent()) pSocket = m_pServerSocket;
 	else pSocket = m_clients[index - 1];
 
 	WSANETWORKEVENTS networkEvents;
@@ -85,7 +87,7 @@ void Server::Update()
 			return;
 		}
 
-		onAccept();
+		OnAccept();
 	}
 
 	if (networkEvents.lNetworkEvents & FD_READ)
@@ -96,7 +98,7 @@ void Server::Update()
 			return;
 		}
 
-		onReceive(pSocket);
+		OnReceive(pSocket);
 	}
 
 	if (networkEvents.lNetworkEvents & FD_WRITE)
@@ -107,7 +109,7 @@ void Server::Update()
 			return;
 		}
 
-		onSend(pSocket);
+		OnSend(pSocket);
 	}
 
 	if (networkEvents.lNetworkEvents & FD_CLOSE)
@@ -117,17 +119,98 @@ void Server::Update()
 			onNetError(networkEvents.iErrorCode[FD_CLOSE_BIT], "Close", pSocket);
 		}
 
-		onClose(pSocket);
+		OnClose(pSocket);
 	}
-	
 }
 
-void Server::OnReceive()
+void Server::OnAccept()
 {
+	ClientSocket* pClient = new ClientSocket();
+	Session* pSession = new Session();
+
+	if (m_pServerSocket->OnAccept(pClient))
+	{
+		pSession->SetClient(pClient);
+
+		m_clients.push_back(pClient);
+		m_sessions[pSession->GetSessionId()] = pSession;
+
+		++m_ClientCount;
+	}
+	else
+	{
+		delete pClient;
+		delete pSession;
+
+		printf("Accept Error %d\n", WSAGetLastError());
+	}
+
+	printf("연결된 클라이언트 수 : %d \n", m_ClientCount);
 }
 
-void Server::OnSend()
+void Server::OnReceive(WinSock* pSocket)
 {
+	printf("onReceive  %s : %d\n", pSocket->GetIP().c_str(), pSocket->GetPort());
+
+	ClientSocket* pClient = dynamic_cast<ClientSocket*>(pSocket);
+	if (pClient == nullptr) return;
+
+	Session* pSession = m_sessions[pClient->GetSessionId()];
+	if (pSession == nullptr) return;
+
+	pSession->ReadUpdate();
+
+	printf("readBuffer: %s \n", pSession->GetReadBuffer());
+}
+
+void Server::OnSend(WinSock* pSocket)
+{
+	printf("onSend  %s : %d\n", pSocket->GetIP().c_str(), pSocket->GetPort());
+}
+
+void Server::OnClose(WinSock* pSocket)
+{
+	printf("onClose  %s : %d", pSocket->GetIP().c_str(), pSocket->GetPort());
+
+	// todo : erase 고치기
+	ClientSocket* pClient = dynamic_cast<ClientSocket*>(pSocket);
+	if (pClient == nullptr) return;
+
+	m_sessions.erase(pClient->GetSessionId());
+
+	for (auto iter = m_clients.begin(); iter != m_clients.end(); ++iter)
+	{
+		if (*iter == pClient)
+		{
+			m_clients.erase(iter);
+			break;
+		}
+	}
+
+	delete pClient;
+
+	m_ClientCount--;
+	printf("연결된 클라이언트 수 : %d \n", m_ClientCount);
+}
+
+void Server::onNetError(int errorCode, const char* errorMsg, WinSock* pSocket)
+{
+	if (errorMsg)
+	{
+		printf("\n onNetError %s \t", errorMsg);
+	}
+
+	if (pSocket)
+	{
+		printf("\n onNetError  %s : %d", pSocket->GetIP().c_str(), pSocket->GetPort());
+	}
+
+	printf("NetErrorCode  %d  \n", errorCode);
+
+	for (auto& session : m_sessions)
+	{
+		session.second->NetUpdate();
+	}
 }
 
 void Server::ServerLoop()
@@ -139,4 +222,5 @@ void Server::ServerLoop()
 	{
 		Update();
 	}
+	Stop();
 }

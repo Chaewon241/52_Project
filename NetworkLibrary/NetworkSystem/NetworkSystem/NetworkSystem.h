@@ -11,9 +11,9 @@ class NetworkSystem
 {
 public:
 	void Initialize(WinSock* socket);
-	void DestroyInstance();
+	void CleanUpSock();
 
-	void OnReceive();
+	void DestroyInstance();
 
 	void PostMsg(char* str, const int size);
 	PacketS2C_BroadcastMsg* PopMsg();
