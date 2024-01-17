@@ -3,16 +3,6 @@
 #include "Session.h"
 #include "WinSock.h"
 
-ServerSocket::ServerSocket(Server* sever)
-{
-	m_server = sever;
-}
-
-ServerSocket::~ServerSocket()
-{
-	delete m_server;
-}
-
 bool ServerSocket::OnAccept()
 {
 	SOCKADDR_IN clientAddr;

@@ -28,7 +28,7 @@ public:
 private:
 	NetworkSystem m_networkSystem;
 
-	ServerSocket* m_serverSocket;
+	ServerSocket* m_pServerSocket;
 
 	std::vector<ClientSocket*> m_clients;
 	std::unordered_map<SessionId, Session*> m_sessions;
