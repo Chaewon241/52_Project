@@ -127,12 +127,24 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="ClientNetworkSystem.cpp" />
+    <ClCompile Include="Client.cpp" />
+    <ClCompile Include="ClientSocket.cpp" />
+    <ClCompile Include="MainThread.cpp" />
     <ClCompile Include="NetworkSystem.cpp" />
+    <ClCompile Include="Server.cpp" />
+    <ClCompile Include="ServerSocket.cpp" />
+    <ClCompile Include="Session.cpp" />
+    <ClCompile Include="WinSock.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ClientNetworkSystem.h" />
+    <ClInclude Include="Client.h" />
+    <ClInclude Include="ClientSocket.h" />
     <ClInclude Include="MyProtocol.h" />
+    <ClInclude Include="NetworkSystem.h" />
+    <ClInclude Include="Server.h" />
+    <ClInclude Include="ServerSocket.h" />
+    <ClInclude Include="Session.h" />
+    <ClInclude Include="WinSock.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

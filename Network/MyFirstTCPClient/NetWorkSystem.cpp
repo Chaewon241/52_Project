@@ -57,6 +57,8 @@ void NetWorkSystem::DestroyInstance()
 
     delete m_SendQueue;
     m_SendQueue = nullptr;
+
+    // 클린업 하기
 }
 
 void NetWorkSystem::PostMsg(char* str, const int size)

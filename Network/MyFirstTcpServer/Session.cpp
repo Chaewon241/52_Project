@@ -144,7 +144,7 @@ namespace netfish
 
 	void Session::SetClient(Client* pClient)
 	{
-		m_sessionId = ++s_sessionIdCounter;
+		m_sessionId = s_sessionIdCounter++;
 
 		m_pClient = pClient;
 

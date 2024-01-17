@@ -13,20 +13,68 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="헤더 파일\Socket">
+      <UniqueIdentifier>{010c0e89-acb6-4cfd-a4ec-46f4d1ee634f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Socket">
+      <UniqueIdentifier>{956a46fd-2eb9-4ddc-a5eb-1510a44884d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\System">
+      <UniqueIdentifier>{0c278903-bff2-495b-a17f-411a3c1e2d54}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\System">
+      <UniqueIdentifier>{6a448047-090c-4327-ade4-94b3fd9e4fd3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Client.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Server.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="WinSock.cpp">
+      <Filter>소스 파일\Socket</Filter>
+    </ClCompile>
+    <ClCompile Include="ServerSocket.cpp">
+      <Filter>소스 파일\Socket</Filter>
+    </ClCompile>
+    <ClCompile Include="ClientSocket.cpp">
+      <Filter>소스 파일\Socket</Filter>
+    </ClCompile>
     <ClCompile Include="NetworkSystem.cpp">
+      <Filter>소스 파일\System</Filter>
+    </ClCompile>
+    <ClCompile Include="MainThread.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="ClientNetworkSystem.cpp">
+    <ClCompile Include="Session.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ClientNetworkSystem.h">
+    <ClInclude Include="MyProtocol.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="MyProtocol.h">
+    <ClInclude Include="Client.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Server.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="WinSock.h">
+      <Filter>헤더 파일\Socket</Filter>
+    </ClInclude>
+    <ClInclude Include="ServerSocket.h">
+      <Filter>헤더 파일\Socket</Filter>
+    </ClInclude>
+    <ClInclude Include="ClientSocket.h">
+      <Filter>헤더 파일\Socket</Filter>
+    </ClInclude>
+    <ClInclude Include="NetworkSystem.h">
+      <Filter>헤더 파일\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Session.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
