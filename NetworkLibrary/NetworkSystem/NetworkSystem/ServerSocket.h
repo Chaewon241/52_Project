@@ -1,6 +1,5 @@
 #pragma once
 #include "WinSock.h"
-#include "Server.h"
 
 class ServerSocket : public WinSock
 {

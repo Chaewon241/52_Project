@@ -19,12 +19,12 @@ void Client::Start()
     m_sendBuffer = new char[SND_BUF_SIZE];
     m_recvBuffer = new char[RCV_BUF_SIZE];
 
-    memcpy(m_sendBuffer, "aaa", 3);
-
-    m_SendQueue->enQueue(m_sendBuffer);
+    memcpy(m_sendBuffer, "aaa" + '\0', 4);
 
     m_RecvQueue = new Curtaincall::CircularQueue(100);
     m_SendQueue = new Curtaincall::CircularQueue(100);
+
+    m_SendQueue->enQueue(m_sendBuffer);
 }
 
 void Client::Update()
@@ -51,6 +51,7 @@ void Client::Update()
             OnNetError(networkEvents.iErrorCode[FD_WRITE_BIT], "Connect", m_clientSocket);
             return;
         }
+        return;
     }
 
     if (networkEvents.lNetworkEvents & FD_READ)
@@ -83,6 +84,23 @@ void Client::Update()
     }
 }
 
+void Client::NetUpdate()
+{
+    if (m_SendQueue->isEmpty())
+        return;
+    int nSent = m_clientSocket->Send(m_SendQueue->Peek(), strlen(m_sendBuffer) + 1);
+    if (nSent > 0)
+    {
+        m_SendQueue->deQueue();
+
+    }
+    else if (nSent == 0)
+    {
+        // send 할 수 없는 상태인지 아닌지 변수 만들기?
+        // 근데 이렇게 되면 서버가 언제 준비되는지 모름.
+    }
+}
+
 void Client::OnReceive()
 {
     char* recvBuffer = new char[RCV_BUF_SIZE];
@@ -98,23 +116,12 @@ void Client::OnReceive()
         return;
     }
     m_RecvQueue->enQueue(recvBuffer);
+    printf("readBuffer: %s \n", recvBuffer);
 }
 
 void Client::OnSend()
 {
-    if (m_SendQueue->isEmpty())
-        return;
-    int nSent = m_clientSocket->Send(m_sendBuffer, strlen(m_sendBuffer));
-    if (nSent > 0)
-    {
-        m_SendQueue->deQueue();
-
-    }
-    else if (nSent == 0)
-    {
-        // send 할 수 없는 상태인지 아닌지 변수 만들기?
-        // 근데 이렇게 되면 서버가 언제 준비되는지 모름.
-    }
+    
 }
 
 void Client::OnClose()
@@ -162,6 +169,7 @@ void Client::ClientLoop()
 	while(true)
 	{
         Update();
+        NetUpdate();
 	}
     Stop();
 }

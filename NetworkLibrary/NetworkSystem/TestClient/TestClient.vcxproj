@@ -19,10 +19,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <VCProjectVersion>16.0</VCProjectVersion>
+    <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{9786f0f4-b421-467c-abc7-8c710d9739f6}</ProjectGuid>
-    <RootNamespace>NetworkSystem</RootNamespace>
+    <ProjectGuid>{6b0e1fcb-f14c-45ea-a677-f84be63382cf}</ProjectGuid>
+    <RootNamespace>TestClient</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -128,29 +128,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CircularQueue.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="ClientSocket.cpp" />
-    <ClCompile Include="MainThread.cpp" />
-    <ClCompile Include="CircularQueue.cpp" />
-    <ClCompile Include="NetworkSystem.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="Server.cpp" />
-    <ClCompile Include="ServerSocket.cpp" />
-    <ClCompile Include="Session.cpp" />
+    <ClCompile Include="TestClient.cpp" />
     <ClCompile Include="WinSock.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CircularQueue.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="ClientSocket.h" />
-    <ClInclude Include="CircularQueue.h" />
     <ClInclude Include="MyProtocol.h" />
-    <ClInclude Include="NetworkSystem.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="Server.h" />
-    <ClInclude Include="ServerSocket.h" />
-    <ClInclude Include="Session.h" />
     <ClInclude Include="WinSock.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

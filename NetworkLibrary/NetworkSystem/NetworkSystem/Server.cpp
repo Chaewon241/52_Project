@@ -1,4 +1,5 @@
 #include "Server.h"
+#include "Client.h"
 #include "ClientSocket.h"
 #include "ServerSocket.h"
 #include "Session.h"
@@ -8,10 +9,13 @@ void Server::Start()
 {
 	m_pServerSocket = new ServerSocket;
 
-	m_networkSystem.Initialize(dynamic_cast<WinSock*>(m_pServerSocket));
+	WSAData wsaData;
+
+	if (::WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
+		return;
 
 	if (!m_pServerSocket->Create(SOCK_STREAM, FD_ACCEPT)
-		|| !m_pServerSocket->Bind(7777)
+		|| !m_pServerSocket->Bind(7777, "127.0.0.1")
 		|| !m_pServerSocket->Listen())
 		return;
 }
@@ -30,7 +34,8 @@ void Server::Stop()
 	{
 		delete pSession.second;
 	}
-	m_networkSystem.CleanUpSock();
+
+	::WSACleanup();
 }
 
 void Server::Update()
@@ -43,13 +48,12 @@ void Server::Update()
 	{
 		if (pClient == nullptr)
 		{
-			//std::cout << "nullptr " << std::endl;
+
 		}
 		else
 		{
-			//std::cout << "session id is " << pClient->GetSessionId() << std::endl;;
-
-			wsaEvents.push_back(pClient->GetEvent());
+			ClientSocket* soc = pClient->GetSocket();
+			wsaEvents.push_back(soc->GetEvent());
 		}
 	}
 
@@ -68,7 +72,7 @@ void Server::Update()
 	WinSock* pSocket = nullptr;
 
 	if (wsaEvents[index] == m_pServerSocket->GetEvent()) pSocket = m_pServerSocket;
-	else pSocket = m_clients[index - 1];
+	else pSocket = m_clients[index - 1]->GetSocket();
 
 	WSANETWORKEVENTS networkEvents;
 
@@ -123,12 +127,21 @@ void Server::Update()
 	}
 }
 
+void Server::NetUpdate()
+{
+	for (auto& session : m_sessions)
+	{
+		session.second->NetUpdate();
+	}
+}
+
 void Server::OnAccept()
 {
-	ClientSocket* pClient = new ClientSocket();
+	Client* pClient = new Client;
+	pClient->SetSocket(new ClientSocket);
 	Session* pSession = new Session();
 
-	if (m_pServerSocket->OnAccept(pClient))
+	if (m_pServerSocket->OnAccept(pClient->GetSocket()))
 	{
 		pSession->SetClient(pClient);
 
@@ -141,19 +154,17 @@ void Server::OnAccept()
 	{
 		delete pClient;
 		delete pSession;
-
-		printf("Accept Error %d\n", WSAGetLastError());
 	}
-
-	printf("연결된 클라이언트 수 : %d \n", m_ClientCount);
 }
 
 void Server::OnReceive(WinSock* pSocket)
 {
 	printf("onReceive  %s : %d\n", pSocket->GetIP().c_str(), pSocket->GetPort());
+	
+	Client* pClient = new Client;
+	pClient->SetSocket(dynamic_cast<ClientSocket*>(pSocket));
 
-	ClientSocket* pClient = dynamic_cast<ClientSocket*>(pSocket);
-	if (pClient == nullptr) return;
+	if (pClient->GetSocket() == nullptr) return;
 
 	Session* pSession = m_sessions[pClient->GetSessionId()];
 	if (pSession == nullptr) return;
@@ -173,8 +184,10 @@ void Server::OnClose(WinSock* pSocket)
 	printf("onClose  %s : %d", pSocket->GetIP().c_str(), pSocket->GetPort());
 
 	// todo : erase 고치기
-	ClientSocket* pClient = dynamic_cast<ClientSocket*>(pSocket);
-	if (pClient == nullptr) return;
+	Client* pClient = new Client;
+	pClient->SetSocket(dynamic_cast<ClientSocket*>(pSocket));
+
+	if (pClient->GetSocket() == nullptr) return;
 
 	m_sessions.erase(pClient->GetSessionId());
 
@@ -206,21 +219,15 @@ void Server::onNetError(int errorCode, const char* errorMsg, WinSock* pSocket)
 	}
 
 	printf("NetErrorCode  %d  \n", errorCode);
-
-	for (auto& session : m_sessions)
-	{
-		session.second->NetUpdate();
-	}
 }
 
 void Server::ServerLoop()
 {
 	Start();
-	m_networkSystem.Initialize(m_pServerSocket);
-
 	while (true)
 	{
 		Update();
+		NetUpdate();
 	}
 	Stop();
 }

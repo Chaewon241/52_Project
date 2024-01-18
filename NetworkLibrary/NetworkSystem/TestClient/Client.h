@@ -3,10 +3,10 @@
 #include "CircularQueue.h"
 #include "MyProtocol.h"
 
-typedef int SessionId;
-
 class ClientSocket;
 class WinSock;
+
+typedef int SessionId;
 
 class Client
 {
@@ -19,6 +19,7 @@ public:
 
 	void Start();
 	void Update();
+	void NetUpdate();
 	void Stop();
 
 	void OnNetError(int errorCode, const char* errorMsg, WinSock* pSocket);

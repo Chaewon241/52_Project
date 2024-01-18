@@ -1,4 +1,5 @@
 #include "Session.h"
+#include "Client.h"
 #include "ClientSocket.h"
 
 Session::Session()
@@ -13,43 +14,37 @@ Session::~Session()
 	delete m_readBuffer;
 }
 
+void Session::Write(char* pData, int len)
+{
+}
+
+PacketC2S_BroadcastMsg* Session::Read(char* pData, int len)
+{
+	return nullptr;
+}
+
 void Session::NetUpdate()
 {
-	PacketC2S_BroadcastMsg* msg = new PacketC2S_BroadcastMsg;
+	//PacketC2S_BroadcastMsg* msg = new PacketC2S_BroadcastMsg;
 	if (m_readBytes > 0)
 	{
 		// Read
-		msg = Read(m_readBuffer, strlen(m_readBuffer));
+		//msg = Read(m_readBuffer, strlen(m_readBuffer));
 
-		if (msg == nullptr)
-			return;
+		/*if (msg == nullptr)
+			return;*/
 
-		// 클라에서 보낸 메시지가 abc일 때
-		if (strcmp(msg->clientMessage, "abcd") == 0)
-		{
-			char destination[20];
-			const char* source = "Right";
-
-			strcpy_s(destination, sizeof(destination), source);
-
-			Write(destination, strlen(source));
-		}
-		else
-		{
-			char destination[20];
-			const char* source = "Wrong";
-
-			strcpy_s(destination, sizeof(destination), source);
-
-			Write(destination, strlen(source));
-		}
+		//Write(destination, strlen(source));
+		memcpy(m_writeBuffer, m_readBuffer, m_readBytes);
+		m_writeBytes += m_readBytes;
+		m_readBytes = 0;
 	}
 
 	if (m_writeBytes > 0)
 	{
 		// 클라에 보낼 메시지 m_writeBuffer에 복사
-
-		int nSent = m_pClient->Send(m_writeBuffer, m_writeBytes);
+		ClientSocket* soc = m_pClient->GetSocket();
+		int nSent = soc->Send(m_writeBuffer, m_writeBytes);
 
 		if (nSent > 0)
 		{
@@ -79,17 +74,17 @@ void Session::ReadUpdate()
 {
 	int buflen = BUF_SIZE - m_readBytes;
 
-	int nRead = m_pClient->Recv(m_readBuffer, RCV_BUF_SIZE);
+	ClientSocket* soc = m_pClient->GetSocket();
+	int nRead = soc->Recv(m_readBuffer, RCV_BUF_SIZE);
 
 	if (nRead == -1)
 	{
 		return;
 	}
-
 	m_readBytes += nRead;
 }
 
-void Session::SetClient(ClientSocket* pClient)
+void Session::SetClient(Client* pClient)
 {
 	m_sessionId = s_sessionIdCounter++;
 

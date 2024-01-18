@@ -46,7 +46,8 @@ bool WinSock::Connect(UINT nSocketPort, const char* nIP)
     serverAddr.sin_port = ::htons(7777);
     inet_pton(AF_INET, nIP, &(serverAddr.sin_addr));  // 여기 주소 바꾸기
 
-    if (::connect(m_hSocket, (SOCKADDR*)&serverAddr, sizeof(serverAddr)) == SOCKET_ERROR) return false;
+    if (::connect(m_hSocket, (SOCKADDR*)&serverAddr, sizeof(serverAddr)) == SOCKET_ERROR) 
+        return false;
 
     return true;
 }

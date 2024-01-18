@@ -1,6 +1,4 @@
 #pragma once
-#include "NetworkSystem.h"
-
 #include <unordered_map>
 #include <vector>
 
@@ -8,7 +6,7 @@ typedef int SessionId;
 
 class ServerSocket;
 class Session;
-class ClientSocket;
+class Client;
 class WinSock;
 
 class Server
@@ -20,6 +18,7 @@ public:
 	void Start();
 	void Stop();
 	void Update();
+	void NetUpdate();
 
 	void OnAccept();
 	void OnReceive(WinSock* pSocket);
@@ -30,10 +29,9 @@ public:
 	void ServerLoop();
 
 private:
-	NetworkSystem m_networkSystem;
 	ServerSocket* m_pServerSocket;
 
-	std::vector<ClientSocket*> m_clients;
+	std::vector<Client*> m_clients;
 	std::unordered_map<SessionId, Session*> m_sessions;
 
 	int m_ClientCount = 0;
