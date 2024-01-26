@@ -1,0 +1,138 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="0. pch">
+      <UniqueIdentifier>{8ad7a8e7-b1e4-42c6-8203-b06c9cd6bb0f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shader">
+      <UniqueIdentifier>{0f7db051-f712-4af8-be9a-e768155a2fe6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2. Resource">
+      <UniqueIdentifier>{c0347c5c-718e-4dc3-83e5-c9c64b81e9a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2. Resource\Bone">
+      <UniqueIdentifier>{cf12e53a-0cc9-4fa5-962b-8a6df1446001}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2. Resource\Material">
+      <UniqueIdentifier>{a3b5b1f9-6d78-4e3a-a742-57c3af9d3680}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2. Resource\Mesh">
+      <UniqueIdentifier>{d4ea2935-2d6b-449d-9076-e4749f1b7219}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="1. Manager">
+      <UniqueIdentifier>{f4b4337e-6b5b-48fd-b161-69c79c991e28}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="1. Manager\ImGUIRenderer">
+      <UniqueIdentifier>{416b1a5b-5065-4302-bfc6-7e44df522e93}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="1. Manager\D3DRendererManager">
+      <UniqueIdentifier>{2ea386bb-4141-4e92-aa49-aee7dbf8e811}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="1. Manager\ResourceManager">
+      <UniqueIdentifier>{1a964b60-ee43-4e98-83f8-d434f0c2cb4b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2. Resource\ModelResource">
+      <UniqueIdentifier>{461c3517-1d05-4d6a-98d9-ec9ed68e4267}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2. Resource\SkeletonResource">
+      <UniqueIdentifier>{f4c4f2f7-3483-4df1-ae6a-fe8de61e6b09}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="framework.h">
+      <Filter>0. pch</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>0. pch</Filter>
+    </ClInclude>
+    <ClInclude Include="Helper.h">
+      <Filter>0. pch</Filter>
+    </ClInclude>
+    <ClInclude Include="EnvironmentMeshComponent.h" />
+    <ClInclude Include="NodeAnimation.h" />
+    <ClInclude Include="SkeletalMeshModel.h" />
+    <ClInclude Include="SkeletalMeshInstance.h" />
+    <ClInclude Include="StaticMeshModel.h" />
+    <ClInclude Include="StaticMeshInstance.h" />
+    <ClInclude Include="Transform.h" />
+    <ClInclude Include="D3DRenderManager.h">
+      <Filter>1. Manager\D3DRendererManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Bone.h">
+      <Filter>2. Resource\Bone</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>2. Resource\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceManager.h">
+      <Filter>1. Manager\ResourceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Material.h">
+      <Filter>2. Resource\Material</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelResource.h">
+      <Filter>2. Resource\ModelResource</Filter>
+    </ClInclude>
+    <ClInclude Include="SkeletonResource.h">
+      <Filter>2. Resource\SkeletonResource</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="pch.cpp">
+      <Filter>0. pch</Filter>
+    </ClCompile>
+    <ClCompile Include="Helper.cpp">
+      <Filter>0. pch</Filter>
+    </ClCompile>
+    <ClCompile Include="EnvironmentMeshComponent.cpp" />
+    <ClCompile Include="NodeAnimation.cpp" />
+    <ClCompile Include="SkeletalMeshModel.cpp" />
+    <ClCompile Include="SkeletalMeshInstance.cpp" />
+    <ClCompile Include="StaticMeshModel.cpp" />
+    <ClCompile Include="StaticMeshInstance.cpp" />
+    <ClCompile Include="Transform.cpp" />
+    <ClCompile Include="D3DRenderManager.cpp">
+      <Filter>1. Manager\D3DRendererManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Bone.cpp">
+      <Filter>2. Resource\Bone</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>2. Resource\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Material.cpp">
+      <Filter>2. Resource\Material</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManager.cpp">
+      <Filter>1. Manager\ResourceManager</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelResource.cpp">
+      <Filter>2. Resource\ModelResource</Filter>
+    </ClCompile>
+    <ClCompile Include="SkeletonResource.cpp">
+      <Filter>2. Resource\SkeletonResource</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="..\Shader\BasicPixelShader.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Shader\BasicVertexShader.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Shader\PBR_PixelShader.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Shader\PS_Environment.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Shader\VS_Environment.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Shader\Shared.hlsli">
+      <Filter>Shader</Filter>
+    </None>
+  </ItemGroup>
+</Project>
