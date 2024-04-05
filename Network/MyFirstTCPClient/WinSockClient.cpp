@@ -24,7 +24,7 @@ bool WinSockClient::Connect()
     if (!m_ClientWinSock->CreateEventHandle())
         return false;
 
-    m_ClientWinSock->Connect(7777, "127.0.0.1");
+    m_ClientWinSock->Connect(7777, "125.132.177.11");
     wsaEvents.push_back(m_ClientWinSock->GetEventHandle());
 
     return true;

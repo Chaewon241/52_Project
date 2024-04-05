@@ -33,7 +33,7 @@ namespace netfish
 
 		m_pListener->Create(SOCK_STREAM, FD_ACCEPT);
 
-		m_pListener->Bind(7777, "127.0.0.1");
+		m_pListener->Bind(7777, "172.16.1.49");
 		
 		m_pListener->Listen();
 	}

@@ -119,7 +119,7 @@ void NetWorkSystem::DoUpdate()
         return;
     
     if (networkEvents.lNetworkEvents & FD_CONNECT)
-    {
+    { 
         if (networkEvents.iErrorCode[FD_CONNECT_BIT] != 0)
         {
             m_bConnected = false;
