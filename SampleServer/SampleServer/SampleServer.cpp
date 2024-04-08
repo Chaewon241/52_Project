@@ -1,20 +1,41 @@
 ﻿#include "pch.h"
 #include "CorePch.h"
+#include "ConcurrentStack.h"
+#include "ConcurrentQueue.h"
 
 #include <iostream>
 #include <thread>
 
-void HelloThread()
+LockQueue<int32> q;
+LockFreeStack<int32> s;
+
+void Push()
 {
-    cout << "Hello Thread" << endl;
+    while (true)
+    {
+        int32 value = rand() % 100;
+        s.Push(value);
+        this_thread::sleep_for(10ms);
+    }
+}
+
+void Pop()
+{
+    while (true)
+    {
+        int32 data = 0;
+        if (s.TryPop(data))
+            cout << data << endl;
+    }
 }
 
 int main()
 {
-    // 얘를 만들자마자 엔트리 포인트(실행할 함수)를 만들어줄 수 있음
-    std::thread t(HelloThread);
+    std::thread t1(Push);
+    std::thread t2(Pop);
+    std::thread t3(Pop);
 
-    cout << "Hello Main" << endl;
-
-    t.join();
+    t1.join();
+    t2.join();
+    t3.join();
 }
