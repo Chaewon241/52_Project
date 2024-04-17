@@ -23,14 +23,20 @@ void Pop()
 {
     while (true)
     {
-        int32 data = 0;
-        if (s.TryPop(data))
-            cout << data << endl;
+        auto data = s.TryPop();
+        if (data)
+        {
+            cout << (*data) << endl;
+        }
     }
 }
 
 int main()
 {
+    shared_ptr<int32> ptr;
+    //bool value = ;
+
+
     std::thread t1(Push);
     std::thread t2(Pop);
     std::thread t3(Pop);
