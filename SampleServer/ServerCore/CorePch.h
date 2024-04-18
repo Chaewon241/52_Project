@@ -1,5 +1,10 @@
 #pragma once
+
 #include "Types.h"
+#include "CoreGlobal.h"
+#include "CoreTLS.h"
+#include "CoreGlobal.h"
+
 #include <vector>
 #include <list>
 #include <queue>
@@ -9,12 +14,5 @@
 #include <unordered_map>
 #include <unordered_set>
 
-/// <summary>
-/// GameServer나 DummyClient에서도 참조할 수 있게 만드는 pch 파일
-/// </summary>
-
 #include <iostream>
-using namespace std;
-
-void HelloWorld();
-
+using namespace std;;
