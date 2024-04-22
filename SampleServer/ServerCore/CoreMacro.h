@@ -1,5 +1,7 @@
 #pragma once
 
+// 출력값
+#define OUT
 
 // 인위적으로 크래쉬내기
 // complie 단계에서 잡아버리지 않게 하기 위해 매크로 사용

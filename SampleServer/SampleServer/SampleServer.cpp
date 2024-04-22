@@ -9,8 +9,6 @@
 #include <iostream>
 #include <thread>
 
-CoreGlobal Core;
-
 void ThreadMain()
 {
 	while (true)
