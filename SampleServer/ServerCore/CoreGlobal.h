@@ -5,5 +5,3 @@
 /// </summary>
 
 extern class ThreadManager* GThreadManager;
-
-
