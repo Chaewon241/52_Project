@@ -8,6 +8,12 @@
 /// 하위 16비트는 ReadFlag -> 공유해서 사용하고 있는 Read Count
 /// </summary>
 
+
+// W -> W (O) 같은 쓰레드 내에서 Write할 때 Write 가능. 근데 다른 스레드는 안댐.
+// W -> R (O) Write한 상태에서 Read 가능
+// R -> W (X)
+// 
+
 class Lock
 {
 	enum : uint32
@@ -18,7 +24,7 @@ class Lock
 		MAX_SPIN_COUNT = 5000,
 		// Flag
 		WRITE_THREAD_MASK = 0xFFFF'0000,
-		READ_THREAD_MASK = 0x0000'FFFF,
+		READ_COUNT_MASK = 0x0000'FFFF,
 		EMPTY_FLAG = 0x0000'0000
 	};
 public:
@@ -33,3 +39,30 @@ private:
 	uint16 _writeCount = 0;
 };
 
+/*---------------
+	LockGuards
+----------------*/
+
+class ReadLockGuard
+{
+public:
+	// 객체가 만들어질때 Lock해줌
+	ReadLockGuard(Lock& lock) : _lock(lock) { _lock.ReadLock(); }
+	// 객체가 소멸될때 UnLock해줌
+	~ReadLockGuard() { _lock.ReadUnlock(); }
+
+private:
+	Lock& _lock;
+};
+
+class WriteLockGuard
+{
+public:
+	// 객체가 만들어질때 Lock해줌
+	WriteLockGuard(Lock& lock) : _lock(lock) { _lock.WriteLock(); }
+	// 객체가 소멸될때 UnLock해줌
+	~WriteLockGuard() { _lock.WriteUnlock(); }
+
+private:
+	Lock& _lock;
+};

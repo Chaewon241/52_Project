@@ -11,7 +11,7 @@ public:
 	CoreGlobal()
 	{
 		// 생성하고 소멸하는 순서가 정해져야할 수도 있어서 
-	// 컨텐츠(main)에서 생성하는게 아니라 생성자에서 생성해준다.
+		// 컨텐츠(main)에서 생성하는게 아니라 생성자에서 생성해준다.
 		GThreadManager = new ThreadManager();
 	}
 	~CoreGlobal()

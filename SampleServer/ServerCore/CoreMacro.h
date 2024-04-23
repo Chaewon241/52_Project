@@ -3,8 +3,23 @@
 // 출력값
 #define OUT
 
+/*----------
+	Lock
+-----------*/
+#define USE_MANY_LOCKS(count)	Lock _locks[count];
+#define USE_LOCK				USE_MANY_LOCKS(1)
+#define	READ_LOCK_IDX(idx)		ReadLockGuard readLockGuard_##idx(_locks[idx]);
+#define READ_LOCK				READ_LOCK_IDX(0)
+#define	WRITE_LOCK_IDX(idx)		WriteLockGuard writeLockGuard_##idx(_locks[idx]);
+#define WRITE_LOCK				WRITE_LOCK_IDX(0)
+
+/*-----------
+	Crash
+------------*/
+
 // 인위적으로 크래쉬내기
 // complie 단계에서 잡아버리지 않게 하기 위해 매크로 사용
+// 운빨로 크래쉬 만들지 말고 인위적으로 만들어서 확인해보자.
 //
 
 // CRASH(입력)
