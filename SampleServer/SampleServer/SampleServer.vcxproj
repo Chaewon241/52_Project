@@ -140,7 +140,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -189,11 +189,6 @@
     <ClInclude Include="AccountManager.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="PlayerManager.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ServerCore\ServerCore.vcxproj">
-      <Project>{8d88f70e-103d-400d-8157-5306d38b7cb2}</Project>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
