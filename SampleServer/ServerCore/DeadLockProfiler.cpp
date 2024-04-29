@@ -27,9 +27,13 @@ void DeadLockProfiler::PushLock(const char* name)
 	if (!_lockStack.empty())
 	{
 		// 기존에 발견되지 않은 케이스라면 데드락 여부를 다시 확인한다.
+		// 사이클이 있는지 확인
 		const int32 prevId = _lockStack.top();
+		// 같은 락을 잡았을 때는 재귀적으로 잡을 수 있게 허용해서
+		// 락이 다를 때만 판별해준다.
 		if (lockId != prevId)
 		{
+			// 처음 발견한다고 했을 때
 			// 다른 락을 잡았다면 히스토리 참고
 			set<int32>& history = _lockHistory[prevId];
 			if (history.find(lockId) == history.end())
@@ -82,6 +86,7 @@ void DeadLockProfiler::CheckCycle()
 
 void DeadLockProfiler::Dfs(int32 here)
 {
+	// 이미 방문이 됐다면 return
 	if (_discoveredOrder[here] != -1)
 		return;
 
