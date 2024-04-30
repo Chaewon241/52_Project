@@ -1,8 +1,8 @@
 #pragma once
 
-/*---------------
-   RefCountable
-----------------*/
+/// <summary>
+/// 참조 횟수 알아보는 클래스
+/// </summary>
 
 class RefCountable
 {
@@ -11,25 +11,26 @@ public:
 	virtual ~RefCountable() { }
 
 	int32 GetRefCount() { return _refCount; }
-
 	int32 AddRef() { return ++_refCount; }
 	int32 ReleaseRef()
 	{
 		int32 refCount = --_refCount;
 		if (refCount == 0)
 		{
+			// 나를 기억하는 애가 아무도 없다면
 			delete this;
 		}
 		return refCount;
 	}
 
 protected:
+	// 나를 참조 하고 있는 애들이 몇명인지
 	atomic<int32> _refCount;
 };
 
-/*---------------
-   SharedPtr
-----------------*/
+/// <summary>
+/// 스마트 포인터인 shared_ptr 구현.
+/// </summary>
 
 template<typename T>
 class TSharedPtr
