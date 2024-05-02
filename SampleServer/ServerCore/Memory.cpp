@@ -62,6 +62,9 @@ void* Memory::Allocate(int32 size)
 	if (allocSize > MAX_ALLOC_SIZE)
 	{
 		// 메모리 풀링 최대 크기를 벗어나면 일반 할당
+		// 기존에 만든 StompAllocator랑은 개념이 다름. 
+		// 왜냐하면 StompAllocator는 메모리 공간이 필요없어지면 아예 메모리를 해제시키는데
+		// 얘는 아예 메모리를 해제시키는 것이 아닌 임시 저장공간에 저장해두는 것이라서 다르다.
 		header = reinterpret_cast<MemoryHeader*>(::malloc(allocSize));
 	}
 	else
