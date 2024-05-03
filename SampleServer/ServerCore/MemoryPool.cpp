@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "MemoryPool.h"
 
-MemoryPool::MemoryPool(int32 allocSize)
+MemoryPool::MemoryPool(int32 allocSize): _allocSize(allocSize)
 {
 }
 

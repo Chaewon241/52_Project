@@ -49,5 +49,5 @@ template<typename Type>
 void xdelete(Type* obj)
 {
 	obj->~Type();
-	StompAllocator::Release(obj);
+	xRelease(obj);
 }

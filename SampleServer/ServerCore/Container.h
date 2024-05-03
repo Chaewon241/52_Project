@@ -1,7 +1,6 @@
 #pragma once
 #include "Types.h"
 #include "Allocator.h"
-
 #include <vector>
 #include <list>
 #include <queue>
@@ -10,7 +9,6 @@
 #include <set>
 #include <unordered_map>
 #include <unordered_set>
-
 using namespace std;
 
 template<typename Type>

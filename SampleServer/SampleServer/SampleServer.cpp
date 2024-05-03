@@ -47,6 +47,7 @@ int main()
 				while (true)
 				{
 					Vector<Knight> v(10);
+
 					Map<int32, Knight> m;
 					m[100] = Knight();
 
@@ -54,5 +55,6 @@ int main()
 				}
 			});
 	}
+
 	GThreadManager->Join();
 }
