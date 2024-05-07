@@ -2,10 +2,15 @@
 
 /// <summary>
 /// 각각의 메모리풀은 각각의 크기를 가지고 있다.
-/// 
 /// </summary>
 
-struct MemoryHeader
+enum
+{
+	SLIST_ALIGNMENT = 16
+};
+
+DECLSPEC_ALIGN(SLIST_ALIGNMENT)
+struct MemoryHeader : public SLIST_ENTRY
 {
 	// [MemoryHeader][Data]
 	MemoryHeader(int32 size) : allocSize(size) {}
@@ -27,6 +32,7 @@ struct MemoryHeader
 	int32 allocSize;
 };
 
+DECLSPEC_ALIGN(SLIST_ALIGNMENT)
 class MemoryPool
 {
 public:
@@ -37,11 +43,9 @@ public:
 	MemoryHeader* Pop();
 
 private:
+	SLIST_HEADER	_header;
 	// 각각 자신이 담당하고 있는 메모리 사이즈
 	int32 _allocSize = 0;
 	// 할당된 메모리 개수
 	atomic<int32> _allocCount = 0;
-
-	USE_LOCK;
-	queue<MemoryHeader*> _queue;
 };

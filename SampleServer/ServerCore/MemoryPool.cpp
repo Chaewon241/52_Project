@@ -3,56 +3,44 @@
 
 MemoryPool::MemoryPool(int32 allocSize): _allocSize(allocSize)
 {
+	::InitializeSListHead(&_header);
 }
 
 MemoryPool::~MemoryPool()
 {
-	while (_queue.empty() == false)
-	{
-		MemoryHeader* header = _queue.front();
-		_queue.pop();
-		::free(header);
-	}
+	// _aligned_malloc으로 만들었으면 _aligned_free로 해줘야한다.
+	// 메모리가 null이 아니면~
+	while (MemoryHeader* memory = static_cast<MemoryHeader*>(::InterlockedPopEntrySList(&_header)))
+		::_aligned_free(memory);
 }
 
 void MemoryPool::Push(MemoryHeader* ptr)
 {
-	WRITE_LOCK;
 	ptr->allocSize = 0;
 
 	// Pool에 메모리 반납
-	_queue.push(ptr);
+	::InterlockedPushEntrySList(&_header, static_cast<PSLIST_ENTRY>(ptr));
 
 	_allocCount.fetch_sub(1);
 }
 
 MemoryHeader* MemoryPool::Pop()
 {
-	MemoryHeader* header = nullptr;
-
-	{
-		WRITE_LOCK;
-		// Pool에 여분이 있는지?
-		if (_queue.empty() == false)
-		{
-			// 있으면 하나 꺼내온다
-			header = _queue.front();
-			_queue.pop();
-		}
-	}
+	// 원래는 여분이 있는지 확인하고 있으면 새로 만들어주는 방식이었는데
+	MemoryHeader* memory = static_cast<MemoryHeader*>(::InterlockedPopEntrySList(&_header));
 
 	// 없으면 새로 만들다
-	if (header == nullptr)
+	if (memory == nullptr)
 	{
-		header = reinterpret_cast<MemoryHeader*>(::malloc(_allocSize));
+		// _aligned_malloc으로 원하는 정렬된 malloc을 할 수 있다.
+		memory = reinterpret_cast<MemoryHeader*>(::_aligned_malloc(_allocSize, SLIST_ALIGNMENT));
 	}
 	else
 	{
-		ASSERT_CRASH(header->allocSize == 0);
+		ASSERT_CRASH(memory->allocSize == 0);
 	}
 
-	// 데이터를 하나 꺼내 왔으니까 늘려준다.
 	_allocCount.fetch_add(1);
 
-	return header;
+	return memory;
 }

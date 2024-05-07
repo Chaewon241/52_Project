@@ -1,67 +1,87 @@
 ﻿#include "pch.h"
+#include <iostream>
 #include "CorePch.h"
 #include <atomic>
 #include <mutex>
 #include <windows.h>
 #include <future>
-
 #include "ThreadManager.h"
-#include "Memory.h"
-#include "Allocator.h"
-#include "LockFreeStack.h"
 
-DECLSPEC_ALIGN(16)
-class Data // : public SListEntry
-{
-public:
-	SListEntry _entry;
-	int64 _rand = rand() % 1000;
-};
-
-SListHeader* GHeader;
+#include <winsock2.h>
+#include <mswsock.h>
+#include <ws2tcpip.h>
+#pragma comment(lib, "ws2_32.lib")
 
 int main()
 {
-	GHeader = new SListHeader();
-	ASSERT_CRASH(((uint64)GHeader % 16) == 0);
-	InitializeHead(GHeader);
+	// 윈속 초기화 (ws2_32 라이브러리 초기화)
+	// 관련 정보가 wsaData에 채워짐
+	WSAData wsaData;
+	if (::WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
+		return 0;
 
-	for (int32 i = 0; i < 3; i++)
+	// ad : Address Family (AF_INET = IPv4, AF_INET6 = IPv6)
+	// type : TCP(SOCK_STREAM) vs UDP(SOCK_DGRAM)
+	// protocol : 0
+	// return : descriptor
+	SOCKET listenSocket = ::socket(AF_INET, SOCK_STREAM, 0);
+	if (listenSocket == INVALID_SOCKET)
 	{
-		GThreadManager->Launch([]()
-			{
-				while (true)
-				{
-					Data* data = new Data();
-					ASSERT_CRASH(((uint64)data % 16) == 0);
-
-					PushEntrySList(GHeader, (SListEntry*)data);
-					this_thread::sleep_for(10ms);
-				}
-			});
+		int32 errCode = ::WSAGetLastError();
+		cout << "Socket ErrorCode : " << errCode << endl;
+		return 0;
 	}
 
-	for (int32 i = 0; i < 2; i++)
-	{
-		GThreadManager->Launch([]()
-			{
-				while (true)
-				{
-					Data* pop = nullptr;
-					pop = (Data*)PopEntrySList(GHeader);
+	// 나의 주소는? (IP주소 + Port)->XX 아파트 YY 호
+	SOCKADDR_IN serverAddr; // IPv4
+	::memset(&serverAddr, 0, sizeof(serverAddr));
+	serverAddr.sin_family = AF_INET;
+	serverAddr.sin_addr.s_addr = ::htonl(INADDR_ANY); //< 니가 알아서 해줘
+	serverAddr.sin_port = ::htons(7777); // 80 : HTTP
 
-					if (pop)
-					{
-						cout << pop->_rand << endl;
-						delete pop;
-					}
-					else
-					{
-						cout << "NONE" << endl;
-					}
-				}
-			});
+	// 안내원 폰 개통! 식당의 대표 번호
+	if (::bind(listenSocket, (SOCKADDR*)&serverAddr, sizeof(serverAddr)) == SOCKET_ERROR)
+	{
+		int32 errCode = ::WSAGetLastError();
+		cout << "Bind ErrorCode : " << errCode << endl;
+		return 0;
 	}
 
-	GThreadManager->Join();
+	// 영업 시작!
+	if (::listen(listenSocket, 10) == SOCKET_ERROR)
+	{
+		int32 errCode = ::WSAGetLastError();
+		cout << "Listen ErrorCode : " << errCode << endl;
+		return 0;
+	}
+
+	// -----------------------------
+
+	while (true)
+	{
+		SOCKADDR_IN clientAddr; // IPv4
+		::memset(&clientAddr, 0, sizeof(clientAddr));
+		int32 addrLen = sizeof(clientAddr);
+
+		SOCKET clientSocket = ::accept(listenSocket, (SOCKADDR*)&clientAddr, &addrLen);
+		if (clientSocket == INVALID_SOCKET)
+		{
+			int32 errCode = ::WSAGetLastError();
+			cout << "Accept ErrorCode : " << errCode << endl;
+			return 0;
+		}
+
+		// 손님 입장!
+		char ipAddress[16];
+		::inet_ntop(AF_INET, &clientAddr.sin_addr, ipAddress, sizeof(ipAddress));
+		cout << "Client Connected! IP = " << ipAddress << endl;
+
+		// TODO
+	}
+
+	// -----------------------------
+
+
+	// 윈속 종료
+	::WSACleanup();
 }
