@@ -31,13 +31,14 @@ int main()
 	serverAddr.sin_family = AF_INET;
 	::inet_pton(AF_INET, "127.0.0.1", &serverAddr.sin_addr);
 	serverAddr.sin_port = ::htons(7777);
-
+	this_thread::sleep_for(1s);
 	// Connect
 	while (true)
 	{
 		if (::connect(clientSocket, (SOCKADDR*)&serverAddr, sizeof(serverAddr)) == SOCKET_ERROR)
 		{
 			// 원래 블록했어야 했는데... 너가 논블로킹으로 하라며?
+			// 계속 커넥트 시도
 			if (::WSAGetLastError() == WSAEWOULDBLOCK)
 				continue;
 			// 이미 연결된 상태라면 break
@@ -48,7 +49,7 @@ int main()
 		}
 	}
 
-	cout << "Connected to Server!" << endl;
+	//cout << "Connected to Server!" << endl;
 
 	char sendBuffer[100] = "Hello World";
 
@@ -82,6 +83,7 @@ int main()
 			}
 			else if (recvLen == 0)
 			{
+				cout << "연결 끊김" << recvLen << endl;
 				// 연결 끊김
 				break;
 			}
