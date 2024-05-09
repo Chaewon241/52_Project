@@ -3,6 +3,7 @@
 #include "ThreadManager.h"
 #include "Memory.h"
 #include "DeadLockProfiler.h"
+#include "SocketUtils.h"
 
 // 전역으로 사용할 매니저
 ThreadManager*		GThreadManager = nullptr;
@@ -19,12 +20,15 @@ public:
 		GThreadManager = new ThreadManager();
 		GMemory = new Memory();
 		GDeadLockProfiler = new DeadLockProfiler();
+		// 윈속 초기화
+		SocketUtils::Init();
 	}
 	~CoreGlobal()
 	{
 		delete GThreadManager;
 		delete GMemory;
 		delete GDeadLockProfiler;
+		SocketUtils::Clear();
 	}
 }GCoreGlobal;
 // 전역객체로 만들기
