@@ -31,7 +31,7 @@ int main()
 	serverAddr.sin_family = AF_INET;
 	::inet_pton(AF_INET, "127.0.0.1", &serverAddr.sin_addr);
 	serverAddr.sin_port = ::htons(7777);
-	this_thread::sleep_for(1s);
+
 	// Connect
 	while (true)
 	{
