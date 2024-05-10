@@ -37,6 +37,7 @@ bool IocpCore::Dispatch(uint32 timeoutMs)
 	IocpObject* iocpObject = nullptr;
 	IocpEvent* iocpEvent = nullptr;
 
+	// TODO 채원 여기 아까 바꿔놔서 작동 안 됨.
 	if (::GetQueuedCompletionStatus(_iocpHandle, OUT & numOfBytes, OUT & key, OUT reinterpret_cast<LPOVERLAPPED*>(&iocpEvent), timeoutMs))
 	{
 		// 성공했을 때
