@@ -34,13 +34,13 @@ bool IocpCore::Dispatch(uint32 timeoutMs)
 	// 참조카운팅을 통해 얘가 recv send할 때 절대로 삭제되지 않게 해야한다.
 	DWORD numOfBytes = 0;
 	ULONG_PTR key = 0;
-	IocpObject* iocpObject = nullptr;
 	IocpEvent* iocpEvent = nullptr;
 
-	// TODO 채원 여기 아까 바꿔놔서 작동 안 됨.
 	if (::GetQueuedCompletionStatus(_iocpHandle, OUT & numOfBytes, OUT & key, OUT reinterpret_cast<LPOVERLAPPED*>(&iocpEvent), timeoutMs))
 	{
 		// 성공했을 때
+		// 주인님을 디스패치
+		IocpObjectRef iocpObject = iocpEvent->owner;
 		iocpObject->Dispatch(iocpEvent, numOfBytes);
 	}
 	else
@@ -55,6 +55,7 @@ bool IocpCore::Dispatch(uint32 timeoutMs)
 			return false;
 		default:
 			// TODO : 로그 찍기
+			IocpObjectRef iocpObject = iocpEvent->owner;
 			iocpObject->Dispatch(iocpEvent, numOfBytes);
 			break;
 		}

@@ -38,11 +38,8 @@ class AcceptEvent : public IocpEvent
 public:
 	AcceptEvent() : IocpEvent(EventType::Accept) { }
 
-	void		SetSession(Session* session) { _session = session; }
-	Session*	GetSession() { return _session; }
-
 public:
-	Session*	_session = nullptr;
+	SessionRef	session = nullptr;
 };
 
 class RecvEvent : public IocpEvent
