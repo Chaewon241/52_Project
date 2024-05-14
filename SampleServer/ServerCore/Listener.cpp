@@ -17,14 +17,17 @@ Listener::~Listener()
 	}
 }
 
-bool Listener::StartAccept(NetAddress netAddress)
+bool Listener::StartAccept(ServerServiceRef service)
 {
+	_service = service;
+	if (_service == nullptr)
+		return false;
+
 	_socket = SocketUtils::CreateSocket();
 	if (_socket == INVALID_SOCKET)
 		return false;
 
-	// 소켓도 우리가 관찰해야하는 대상이기 때문에 등록해준다.
-	if (GIocpCore.Register(this) == false)
+	if (_service->GetIocpCore()->Register(shared_from_this()) == false)
 		return false;
 
 	// 나머지 소켓 설정들
@@ -35,7 +38,7 @@ bool Listener::StartAccept(NetAddress netAddress)
 	if (SocketUtils::SetLinger(_socket, 0, 0) == false)
 		return false;
 
-	if (SocketUtils::Bind(_socket, netAddress) == false)
+	if (SocketUtils::Bind(_socket, _service->GetNetAddress()) == false)
 		return false;
 
 	if (SocketUtils::Listen(_socket) == false)
@@ -51,8 +54,7 @@ bool Listener::StartAccept(NetAddress netAddress)
 		_acceptEvents.push_back(acceptEvent);
 		RegisterAccept(acceptEvent);
 	}
-
-	return false;
+	return true;
 }
 
 void Listener::CloseSocket()
@@ -74,7 +76,12 @@ void Listener::Dispatch(IocpEvent* iocpEvent, int32 numOfBytes)
 
 void Listener::RegisterAccept(AcceptEvent* acceptEvent)
 {
-	SessionRef session = MakeShared<Session>();
+	// 세션은 서버코어라이브러리에서 관리하고 있는 클래스로
+	// 나중가면 컨텐츠단에서 활용해야하는데 정해지지 않았으므로 이렇게 해주는 것은
+	// 별로 좋지 않다.
+	//SessionRef session = MakeShared<Session>();
+
+	SessionRef session = _service->CreateSession(); // Register IOCP
 
 	acceptEvent->Init();
 	acceptEvent->session = session;

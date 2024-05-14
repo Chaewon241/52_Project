@@ -3,14 +3,12 @@
 #include "Session.h"
 #include "Listener.h"
 
-/*-------------
-	Service
---------------*/
-
 Service::Service(ServiceType type, NetAddress address, IocpCoreRef core, SessionFactory factory, int32 maxSessionCount)
 	: _type(type), _netAddress(address), _iocpCore(core), _sessionFactory(factory), _maxSessionCount(maxSessionCount)
 {
-
+	// _netAddress -> 이게 서버라면 자기 자신의 어드레스고 클라이언트라면 상대방쪽(내가 붙어야할) 어드레스
+	// _iocpCore -> 어떤 iocp에 일감을 등록시킬지
+	// _sessionFactory -> 세션 만드는거
 }
 
 Service::~Service()
@@ -60,6 +58,10 @@ bool ClientService::Start()
 	// TODO
 	return true;
 }
+
+/*-----------------
+	ServerService
+------------------*/
 
 ServerService::ServerService(NetAddress address, IocpCoreRef core, SessionFactory factory, int32 maxSessionCount)
 	: Service(ServiceType::Server, address, core, factory, maxSessionCount)

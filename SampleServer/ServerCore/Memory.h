@@ -53,8 +53,8 @@ void xdelete(Type* obj)
 }
 
 // 기본적으로 new delete를 사용하기 때문에 이걸 사용하면 안됨.
-template<typename Type>
-shared_ptr<Type> MakeShared()
+template<typename Type, typename... Args>
+shared_ptr<Type> MakeShared(Args&&... args)
 {
-	return shared_ptr<Type>{ xnew<Type>(), xdelete<Type> };
+	return shared_ptr<Type>{ xnew<Type>(forward<Args>(args)...), xdelete<Type> };
 }

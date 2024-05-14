@@ -10,10 +10,12 @@ enum class ServiceType : uint8
 	Client
 };
 
-/*-------------
-	Service
---------------*/
+/// <summary>
+/// 서버랑 클라 역할을 하는 기본적인 서비스.
+/// 예를 들어 세션을 생성하고 소멸시키는 등 세션을 관리해준다.
+/// </summary>
 
+// 세션을 만들어주는 함수.
 using SessionFactory = function<SessionRef(void)>;
 
 class Service : public enable_shared_from_this<Service>
@@ -64,7 +66,6 @@ public:
 	virtual bool	Start() override;
 };
 
-
 /*-----------------
 	ServerService
 ------------------*/
@@ -79,5 +80,6 @@ public:
 	virtual void	CloseService() override;
 
 private:
+	// 서버는 리스너가 필요함(accpet 해줘야항게)
 	ListenerRef		_listener = nullptr;
 };

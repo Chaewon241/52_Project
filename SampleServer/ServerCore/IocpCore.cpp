@@ -2,9 +2,6 @@
 #include "IocpCore.h"
 #include "IocpEvent.h"
 
-// TEMP
-IocpCore GIocpCore;
-
 IocpCore::IocpCore()
 {
 	// 처음에 CP 만드는거.
@@ -17,7 +14,7 @@ IocpCore::~IocpCore()
 	::CloseHandle(_iocpHandle);
 }
 
-bool IocpCore::Register(IocpObject* iocpObject)
+bool IocpCore::Register(IocpObjectRef iocpObject)
 {
 	// 원래는 소켓, 세션을 받아서 등록을 시켜서 관찰을 시킨다.
 	// 근데 얘가 꼭 세션만 받아서 등록시키는게 아니다.

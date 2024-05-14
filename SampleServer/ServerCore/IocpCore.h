@@ -25,13 +25,10 @@ public:
 	HANDLE		GetHandle() { return _iocpHandle; }
 
 	// 소켓이나 세션을 만들었을 때 등록을 시킨다.
-	bool		Register(class IocpObject* iocpObject);
+	bool		Register(IocpObjectRef iocpObject);
 	// worker 쓰레드에 일감이 없나 두리번 거리는 함수.
 	bool		Dispatch(uint32 timeoutMs = INFINITE);
 
 private:
 	HANDLE		_iocpHandle;
 };
-
-// TEMP
-extern IocpCore GIocpCore;
