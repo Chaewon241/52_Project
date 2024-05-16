@@ -13,7 +13,7 @@
 
 #define DEFAULT_PORT        "5001"
 #define MAX_BUFF_SIZE       8192
-#define MAX_WORKER_THREAD   16
+#define MAX_WORKER_THREAD   128
 
 typedef enum _IO_OPERATION {
     ClientIoAccept,
