@@ -9,6 +9,7 @@
 #include <winsock2.h>
 #include <ws2tcpip.h>
 #include <strsafe.h>
+#include <iostream>
 
 // 라이브러리 링크 (Visual Studio 등에서 필요)
 #pragma comment(lib, "Ws2_32.lib")
@@ -82,7 +83,7 @@ int __cdecl main(int argc, char* argv[]) {
 	}
 
 	//
-	// be able to gracefully handle CTRL-C and close handles
+	// CTRL-C를 눌렀을 때 종료되게 하는 핸들러
 	//
 	if (!SetConsoleCtrlHandler(CtrlHandler, TRUE)) {
 		myprintf("SetConsoleCtrlHandler() failed: %d\n", GetLastError());
@@ -130,7 +131,7 @@ int __cdecl main(int argc, char* argv[]) {
 		// wait for the threads to exit
 		//
 		dwRet = WaitForMultipleObjects(g_Options.nTotalThreads, g_ThreadInfo.hThread, TRUE, INFINITE);
-		if (dwRet == WAIT_FAILED)
+ 		if (dwRet == WAIT_FAILED)
 			myprintf("WaitForMultipleObject(): %d\n", GetLastError());
 	}
 
@@ -295,8 +296,10 @@ static BOOL SendBuffer(int nThreadNum, char* outbuf) {
 			break;
 		}
 		else {
+			// send
 			nTotalSend += nSend;
 			bufp += nSend;
+			//std::cout << "send" << std::endl;
 		}
 	}
 
@@ -483,25 +486,8 @@ static BOOL WINAPI CtrlHandler(DWORD dwEvent) {
 static int myprintf(const char* lpFormat, ...) {
 
 	int nLen = 0;
-	int nRet = 0;
-	char cBuffer[512] = { '\0' };
-	va_list arglist;
-	HANDLE hOut = NULL;
-	HRESULT hRet;
-
-	ZeroMemory(cBuffer, sizeof(cBuffer));
-
-	va_start(arglist, lpFormat);
-
-	nLen = lstrlenA(lpFormat);
-
-	hRet = StringCchVPrintfA(cBuffer, 512, lpFormat, arglist);
-
-	if (nRet >= nLen || GetLastError() == 0) {
-		hOut = GetStdHandle(STD_OUTPUT_HANDLE);
-		if (hOut != INVALID_HANDLE_VALUE)
-			WriteConsole(hOut, cBuffer, lstrlenA(cBuffer), (LPDWORD)&nLen, NULL);
-	}
+	
+	std::cout << lpFormat << GetLastError() << std::endl;
 
 	return nLen;
 }

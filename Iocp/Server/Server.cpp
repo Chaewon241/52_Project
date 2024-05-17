@@ -16,30 +16,28 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <strsafe.h>
+#include <iostream>
 
 #include "Server.h"
 
 const char* g_Port = DEFAULT_PORT;
-BOOL g_bEndServer = FALSE;			// set to TRUE on CTRL-C
-BOOL g_bRestart = TRUE;				// set to TRUE to CTRL-BRK
+BOOL g_bEndServer = FALSE;
+BOOL g_bRestart = TRUE;
 BOOL g_bVerbose = FALSE;
-DWORD g_dwThreadCount = 0;		//worker thread count
+DWORD g_dwThreadCount = 0;					// worker thread 개수
 HANDLE g_hIOCP = INVALID_HANDLE_VALUE;
-SOCKET g_sdListen = INVALID_SOCKET;
-HANDLE g_ThreadHandles[MAX_WORKER_THREAD];
-PPER_SOCKET_CONTEXT g_pCtxtList = NULL;		// linked list of context info structures
-// maintained to allow the the cleanup 
-// handler to cleanly close all sockets and 
-// free resources.
+SOCKET g_sdListen = INVALID_SOCKET;			// listen 소켓
+HANDLE g_ThreadHandles[MAX_WORKER_THREAD];	// thread 핸들
+PPER_SOCKET_CONTEXT g_pCtxtList = NULL;		// 컨텍스트 정보를 담은 연결리스트 구조체
 
-CRITICAL_SECTION g_CriticalSection;		// guard access to the global context list
+CRITICAL_SECTION g_CriticalSection;			// 컨텍스트 리스트에 접근을 막는 전역변수
 
 int myprintf(const char* lpFormat, ...);
 
 void __cdecl main(int argc, char* argv[]) {
 
-	SYSTEM_INFO systemInfo;
-	WSADATA wsaData;
+	SYSTEM_INFO systemInfo;								// 현재 컴퓨터 시스템에 대한 정보
+	WSADATA wsaData;									// Windows 소켓 구현에 대한 정보
 	SOCKET sdAccept = INVALID_SOCKET;
 	PPER_SOCKET_CONTEXT lpPerSocketContext = NULL;
 	DWORD dwRecvNumBytes = 0;
@@ -115,6 +113,9 @@ void __cdecl main(int argc, char* argv[]) {
 			if (!CreateListenSocket())
 				__leave;
 
+			
+
+
 			while (TRUE) {
 
 				//
@@ -131,6 +132,7 @@ void __cdecl main(int argc, char* argv[]) {
 					myprintf("WSAAccept() failed: %d\n", WSAGetLastError());
 					__leave;
 				}
+				
 
 				//
 				// we add the just returned socket descriptor to the IOCP along with its
@@ -218,9 +220,7 @@ void __cdecl main(int argc, char* argv[]) {
 	SetConsoleCtrlHandler(CtrlHandler, FALSE);
 } //main      
 
-//
-//  Just validate the command line options.
-//
+
 BOOL ValidOptions(int argc, char* argv[]) {
 
 	BOOL bRet = TRUE;
@@ -859,13 +859,16 @@ int myprintf(const char* lpFormat, ...) {
 
 	va_start(arglist, lpFormat);
 
+
 	nLen = strlen(lpFormat);
 	hRet = StringCchPrintfA(cBuffer, 512, lpFormat, arglist);
 
 	if (nRet >= nLen || GetLastError() == 0) {
 		hOut = GetStdHandle(STD_OUTPUT_HANDLE);
 		if (hOut != INVALID_HANDLE_VALUE)
+		{
 			WriteConsole(hOut, cBuffer, lstrlenA(cBuffer), (LPDWORD)&nLen, NULL);
+		}
 	}
 
 	return nLen;

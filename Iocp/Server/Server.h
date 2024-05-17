@@ -47,8 +47,8 @@ typedef struct _PER_IO_CONTEXT {
 //
 typedef struct _PER_SOCKET_CONTEXT {
     SOCKET                      Socket;
-
-    LPFN_ACCEPTEX               fnAcceptEx;
+    
+    LPFN_ACCEPTEX               fnAcceptEx;             // AcceptEx 함수의 포인터
 
     //
     //linked list for all outstanding i/o on the socket
