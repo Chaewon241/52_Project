@@ -16,6 +16,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <strsafe.h>
+#include <process.h>
 #include <iostream>
 
 #include "Server.h"
@@ -51,6 +52,7 @@ void __cdecl main(int argc, char* argv[]) {
 	if (!ValidOptions(argc, argv))
 		return;
 
+	// 처리기 함수
 	if (!SetConsoleCtrlHandler(CtrlHandler, TRUE)) {
 		myprintf("SetConsoleCtrlHandler() failed to install console handler: %d\n",
 			GetLastError());
@@ -58,6 +60,7 @@ void __cdecl main(int argc, char* argv[]) {
 	}
 
 	GetSystemInfo(&systemInfo);
+	// 현재 논리프로세서 * 2개를 쓰레드개수로 둔다.
 	g_dwThreadCount = systemInfo.dwNumberOfProcessors * 2;
 
 	if ((nRet = WSAStartup(MAKEWORD(2, 2), &wsaData)) != 0) {
@@ -66,16 +69,8 @@ void __cdecl main(int argc, char* argv[]) {
 		return;
 	}
 
-	__try
-	{
-		InitializeCriticalSection(&g_CriticalSection);
-	}
-	__except (EXCEPTION_EXECUTE_HANDLER)
-	{
-		myprintf("InitializeCriticalSection raised exception.\n");
-		return;
+	InitializeCriticalSection(&g_CriticalSection);
 
-	}
 
 	while (g_bRestart) {
 		g_bRestart = FALSE;
@@ -100,7 +95,7 @@ void __cdecl main(int argc, char* argv[]) {
 				HANDLE hThread = INVALID_HANDLE_VALUE;
 				DWORD dwThreadId = 0;
 
-				hThread = CreateThread(NULL, 0, WorkerThread, g_hIOCP, 0, &dwThreadId);
+				hThread = (HANDLE)_beginthreadex(NULL, 0, WorkerThread, g_hIOCP, 0, NULL);
 				if (hThread == NULL) {
 					myprintf("CreateThread() failed to create worker thread: %d\n",
 						GetLastError());
@@ -112,9 +107,6 @@ void __cdecl main(int argc, char* argv[]) {
 
 			if (!CreateListenSocket())
 				__leave;
-
-			
-
 
 			while (TRUE) {
 
@@ -324,8 +316,7 @@ BOOL CreateListenSocket(void) {
 		return(FALSE);
 	}
 
-	g_sdListen = WSASocket(addrlocal->ai_family, addrlocal->ai_socktype, addrlocal->ai_protocol,
-		NULL, 0, WSA_FLAG_OVERLAPPED);
+	g_sdListen = ::WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, 0, WSA_FLAG_OVERLAPPED);
 	if (g_sdListen == INVALID_SOCKET) {
 		myprintf("WSASocket(g_sdListen) failed: %d\n", WSAGetLastError());
 		return(FALSE);
@@ -344,17 +335,12 @@ BOOL CreateListenSocket(void) {
 	}
 
 	//
-	// Disable send buffering on the socket.  Setting SO_SNDBUF
-	// to 0 causes winsock to stop buffering sends and perform
-	// sends directly from our buffers, thereby reducing CPU usage.
-	//
-	// However, this does prevent the socket from ever filling the
-	// send pipeline. This can lead to packets being sent that are
-	// not full (i.e. the overhead of the IP and TCP headers is 
-	// great compared to the amount of data being carried).
-	//
-	// Disabling the send buffer has less serious repercussions 
-	// than disabling the receive buffer.
+	// 소켓에서 send 버퍼링을 비활성화합니다. SO_SNBUF를 0으로 설정하면 
+	// winsock이 send 버퍼링을 중지하고 버퍼에서 직접 send를 수행하여 CPU 사용량을 줄입니다.
+	// 그러나, 이것은 소켓이 송신 파이프라인을 채우는 것을 방지합니다.
+	// 이것은 가득 차지 않은 패킷이 송신되는 것으로 이어질 수 있습니다
+	// (즉, IP 및 TCP 헤더의 오버헤드는 운반되는 데이터의 양에 비해 큽니다).	
+	// 전송 버퍼를 비활성화하면 수신 버퍼를 비활성화하는 것보다 심각한 영향을 덜 받습니다.
 	//
 	nZero = 0;
 	nRet = setsockopt(g_sdListen, SOL_SOCKET, SO_SNDBUF, (char*)&nZero, sizeof(nZero));
@@ -405,7 +391,8 @@ BOOL CreateListenSocket(void) {
 //
 // Worker thread that handles all I/O requests on any socket handle added to the IOCP.
 //
-DWORD WINAPI WorkerThread(LPVOID WorkThreadContext) {
+unsigned int WINAPI WorkerThread(LPVOID WorkThreadContext)
+{
 
 	HANDLE hIOCP = (HANDLE)WorkThreadContext;
 	BOOL bSuccess = FALSE;
@@ -438,7 +425,7 @@ DWORD WINAPI WorkerThread(LPVOID WorkThreadContext) {
 			// CTRL-C handler used PostQueuedCompletionStatus to post an I/O packet with
 			// a NULL CompletionKey (or if we get one for any reason).  It is time to exit.
 			//
-			return(0);
+			return(0); 
 		}
 
 		if (g_bEndServer) {
@@ -570,6 +557,7 @@ PPER_SOCKET_CONTEXT UpdateCompletionPort(SOCKET sd, IO_OPERATION ClientIo,
 	//The listening socket context (bAddToList is FALSE) is not added to the list.
 	//All other socket contexts are added to the list.
 	//
+	// 얜 뭐지..
 	if (bAddToList) CtxtListAddTo(lpPerSocketContext);
 
 	if (g_bVerbose)
@@ -627,21 +615,13 @@ VOID CloseClient(PPER_SOCKET_CONTEXT lpPerSocketContext,
 }
 
 //
-// Allocate a socket context for the new connection.  
+// 소켓 컨텍스트 정보에 새로운 연결을 위해 할당해주는 함수
 //
 PPER_SOCKET_CONTEXT CtxtAllocate(SOCKET sd, IO_OPERATION ClientIO) {
 
 	PPER_SOCKET_CONTEXT lpPerSocketContext;
 
-	__try
-	{
-		EnterCriticalSection(&g_CriticalSection);
-	}
-	__except (EXCEPTION_EXECUTE_HANDLER)
-	{
-		myprintf("EnterCriticalSection raised an exception.\n");
-		return NULL;
-	}
+	EnterCriticalSection(&g_CriticalSection);
 
 	lpPerSocketContext = (PPER_SOCKET_CONTEXT)xmalloc(sizeof(PER_SOCKET_CONTEXT));
 	if (lpPerSocketContext) {
@@ -687,17 +667,10 @@ VOID CtxtListAddTo(PPER_SOCKET_CONTEXT lpPerSocketContext) {
 
 	PPER_SOCKET_CONTEXT     pTemp;
 
-	__try
-	{
-		EnterCriticalSection(&g_CriticalSection);
-	}
-	__except (EXCEPTION_EXECUTE_HANDLER)
-	{
-		myprintf("EnterCriticalSection raised an exception.\n");
-		return;
-	}
+	EnterCriticalSection(&g_CriticalSection);
 
-	if (g_pCtxtList == NULL) {
+	if (g_pCtxtList == NULL) 
+	{
 
 		//
 		// add the first node to the linked list
@@ -706,7 +679,8 @@ VOID CtxtListAddTo(PPER_SOCKET_CONTEXT lpPerSocketContext) {
 		lpPerSocketContext->pCtxtForward = NULL;
 		g_pCtxtList = lpPerSocketContext;
 	}
-	else {
+	else 
+	{
 
 		//
 		// add node to head of list

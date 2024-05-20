@@ -15,16 +15,17 @@
 #define MAX_BUFF_SIZE       8192
 #define MAX_WORKER_THREAD   128
 
-typedef enum _IO_OPERATION {
+// client 상태
+typedef enum _IO_OPERATION 
+{
     ClientIoAccept,
     ClientIoRead,
     ClientIoWrite
 } IO_OPERATION, * PIO_OPERATION;
 
-//
-// data to be associated for every I/O operation on a socket
-//
-typedef struct _PER_IO_CONTEXT {
+// 소켓에 연결되는 컨텍스트정보
+typedef struct _PER_IO_CONTEXT 
+{
     WSAOVERLAPPED               Overlapped;
     char                        Buffer[MAX_BUFF_SIZE];
     WSABUF                      wsabuf;
@@ -40,12 +41,15 @@ typedef struct _PER_IO_CONTEXT {
 // For AcceptEx, the IOCP key is the PER_SOCKET_CONTEXT for the listening socket,
 // so we need to another field SocketAccept in PER_IO_CONTEXT. When the outstanding
 // AcceptEx completes, this field is our connection socket handle.
+// 
+// AcceptEx의 경우 IOCP 키는 듣기 소켓의 PER_SOKET_CONTEX이므로
+// PER_IO_CONTEXT에서 다른 SocketAccept 필드를 입력해야 합니다.
+// 해결되지 않은 AcceptEx가 완료되면 이 필드가 연결 소켓 핸들입니다.
 //
 
-//
-// data to be associated with every socket added to the IOCP
-//
-typedef struct _PER_SOCKET_CONTEXT {
+// 리스닝 소켓을 위한 IOCP key
+typedef struct _PER_SOCKET_CONTEXT 
+{
     SOCKET                      Socket;
     
     LPFN_ACCEPTEX               fnAcceptEx;             // AcceptEx 함수의 포인터
@@ -58,6 +62,7 @@ typedef struct _PER_SOCKET_CONTEXT {
     struct _PER_SOCKET_CONTEXT* pCtxtForward;
 } PER_SOCKET_CONTEXT, * PPER_SOCKET_CONTEXT;
 
+// 명령행 인자를 분석하여 프로그램의 옵션을 설정하고, 올바른 옵션이 제공되었는지 확인하는 함수
 BOOL ValidOptions(int argc, char* argv[]);
 
 BOOL WINAPI CtrlHandler(
@@ -66,13 +71,7 @@ BOOL WINAPI CtrlHandler(
 
 BOOL CreateListenSocket(void);
 
-BOOL CreateAcceptSocket(
-    BOOL fUpdateIOCP
-);
-
-DWORD WINAPI WorkerThread(
-    LPVOID WorkContext
-);
+unsigned int WINAPI WorkerThread(LPVOID WorkContext);
 
 PPER_SOCKET_CONTEXT UpdateCompletionPort(
     SOCKET s,

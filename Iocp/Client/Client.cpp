@@ -190,8 +190,8 @@ static DWORD WINAPI EchoThread(LPVOID lpParameter) {
 			// just continually send and wait for the server to echo the data
 			// back.  Just do a simple minded comparison.
 			//
-			if (SendBuffer(nThreadNum, outbuf) &&
-				RecvBuffer(nThreadNum, inbuf)) {
+			if (SendBuffer(nThreadNum, outbuf) && RecvBuffer(nThreadNum, inbuf)) 
+			{
 				if ((inbuf[0] == outbuf[0]) &&
 					(inbuf[g_Options.nBufSize - 1] == outbuf[g_Options.nBufSize - 1])) {
 					if (g_Options.bVerbose)
@@ -279,7 +279,7 @@ static BOOL CreateConnectedSocket(int nThreadNum) {
 static BOOL SendBuffer(int nThreadNum, char* outbuf) {
 
 	BOOL bRet = TRUE;
-	char* bufp = outbuf;
+	const char* bufp = outbuf;
 	int nTotalSend = 0;
 	int nSend = 0;
 
