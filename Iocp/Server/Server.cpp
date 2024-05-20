@@ -413,6 +413,7 @@ unsigned int WINAPI WorkerThread(LPVOID WorkThreadContext)
 		// continually loop to service io completion packets
 		//
 		bSuccess = GetQueuedCompletionStatus(hIOCP, &dwIoSize,
+			// 얘네 둘 분석하기
 			(PDWORD_PTR)&lpPerSocketContext,
 			(LPOVERLAPPED*)&lpOverlapped,
 			INFINITE);
@@ -474,7 +475,6 @@ unsigned int WINAPI WorkerThread(LPVOID WorkThreadContext)
 					GetCurrentThreadId(), lpPerSocketContext->Socket, dwIoSize);
 			}
 			break;
-
 		case ClientIoWrite:
 
 			//
