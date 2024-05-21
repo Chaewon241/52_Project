@@ -90,6 +90,7 @@ unsigned int __stdcall CompletionThread(LPVOID pComPort)
 
 	while (1) 
 	{
+		// 서버가 걸어놓은 비동기가 완료되었을 때 반환 되는 함수
 		GetQueuedCompletionStatus(
 			hCompletionPort,
 			&BytesTransferred,

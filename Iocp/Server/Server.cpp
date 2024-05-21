@@ -147,7 +147,9 @@ void __cdecl main(int argc, char* argv[]) {
 					break;
 
 				//
-				// accept할 때 무조건 recv함.
+				// accept 후에 해당 클라이언트 소켓에 recv를 비동기적으로 걸어놔서
+				// 클라이언트에서 뭘 보냈고 네트워크에서 뭘 받았을 때(서버에서 작업이 완료 됐을때)
+				// wsarecv가 반환이 될 것이고 비동기 호출이 끝났으니 getqueuedcompletionstatus가 반환될 것이다.
 				//
 				nRet = WSARecv(sdAccept, &(lpPerSocketContext->pIOContext->wsabuf),
 					1, &dwRecvNumBytes, &dwFlags,
@@ -414,6 +416,7 @@ unsigned int WINAPI WorkerThread(LPVOID WorkThreadContext)
 		//
 		// continually loop to service io completion packets
 		//
+		// 서버에서 걸어놓은 비동기들이 처리가 완료되었을 때
 		bSuccess = GetQueuedCompletionStatus(hIOCP, &dwIoSize,
 			// 얘네 둘 분석하기
 			(PDWORD_PTR)&lpPerSocketContext,

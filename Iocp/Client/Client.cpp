@@ -270,7 +270,6 @@ static BOOL CreateConnectedSocket(int nThreadNum) {
 	return(bRet);
 }
 
-
 //
 // Abstract:
 //     Send a buffer - keep send'ing until the requested amount of
