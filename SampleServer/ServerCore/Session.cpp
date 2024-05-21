@@ -66,8 +66,12 @@ void Session::RegisterRecv()
 	wsaBuf.buf = reinterpret_cast<char*>(_recvBuffer);
 	wsaBuf.len = len32(_recvBuffer);
 
+	cout << wsaBuf.buf << endl;
+
 	DWORD numOfBytes = 0;
 	DWORD flags = 0;
+	// 여기서 recv 해주는 이유는 register했다는 것을 recv 하는 것
+	// WSARecv는 pending 상황이라서 언젠가는 완료될 때 통지가 오게 됨.
 	if (SOCKET_ERROR == ::WSARecv(_socket, &wsaBuf, 1, OUT & numOfBytes, OUT & flags, &_recvEvent, nullptr))
 	{
 		int32 errorCode = ::WSAGetLastError();
