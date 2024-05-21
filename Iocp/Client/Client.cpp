@@ -14,7 +14,7 @@
 // 라이브러리 링크 (Visual Studio 등에서 필요)
 #pragma comment(lib, "Ws2_32.lib")
 
-#define MAXTHREADS 64
+#define MAXTHREADS 128
 
 #define xmalloc(s) HeapAlloc(GetProcessHeap(),HEAP_ZERO_MEMORY,(s))
 #define xfree(p)   {HeapFree(GetProcessHeap(),0,(p)); p = NULL;}

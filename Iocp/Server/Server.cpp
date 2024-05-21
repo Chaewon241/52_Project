@@ -71,7 +71,6 @@ void __cdecl main(int argc, char* argv[]) {
 
 	InitializeCriticalSection(&g_CriticalSection);
 
-
 	while (g_bRestart) {
 		g_bRestart = FALSE;
 		g_bEndServer = FALSE;
@@ -84,6 +83,7 @@ void __cdecl main(int argc, char* argv[]) {
 				__leave;
 			}
 
+			// 논리 프로세서 개수만큼 beginthread 해주기
 			for (DWORD dwCPU = 0; dwCPU < g_dwThreadCount; dwCPU++) {
 
 				//
@@ -131,6 +131,8 @@ void __cdecl main(int argc, char* argv[]) {
 				// associated key data.  Also the global list of context structures
 				// (the key data) gets added to a global list.
 				//
+				// connect를 요청한 client에서 받은 클라이언트 소켓을 IOCP에 등록시킨다.
+				// 그리고 key를 반환받는다.
 				lpPerSocketContext = UpdateCompletionPort(sdAccept, ClientIoRead, TRUE);
 				if (lpPerSocketContext == NULL)
 					__leave;
@@ -145,7 +147,7 @@ void __cdecl main(int argc, char* argv[]) {
 					break;
 
 				//
-				// post initial receive on this socket
+				// accept할 때 무조건 recv함.
 				//
 				nRet = WSARecv(sdAccept, &(lpPerSocketContext->pIOContext->wsabuf),
 					1, &dwRecvNumBytes, &dwFlags,
@@ -249,8 +251,8 @@ BOOL ValidOptions(int argc, char* argv[]) {
 }
 
 //
-//  Intercept CTRL-C or CTRL-BRK events and cause the server to initiate shutdown.
-//  CTRL-BRK resets the restart flag, and after cleanup the server restarts.
+//  CTRL-C 또는 CTRL-BRK 이벤트를 차단하고 서버가 종료를 시작하도록 합니다.
+//  CTRL-BRK가 재시작 플래그를 재설정하고 정리 후 서버가 재시작됩니다.
 //
 BOOL WINAPI CtrlHandler(DWORD dwEvent) {
 
@@ -539,11 +541,13 @@ PPER_SOCKET_CONTEXT UpdateCompletionPort(SOCKET sd, IO_OPERATION ClientIo,
 	BOOL bAddToList) {
 
 	PPER_SOCKET_CONTEXT lpPerSocketContext;
+	
 
 	lpPerSocketContext = CtxtAllocate(sd, ClientIo);
 	if (lpPerSocketContext == NULL)
 		return(NULL);
 
+	// 등록 시키기
 	g_hIOCP = CreateIoCompletionPort((HANDLE)sd, g_hIOCP, (DWORD_PTR)lpPerSocketContext, 0);
 	if (g_hIOCP == NULL) {
 		myprintf("CreateIoCompletionPort() failed: %d\n", GetLastError());
@@ -572,23 +576,18 @@ PPER_SOCKET_CONTEXT UpdateCompletionPort(SOCKET sd, IO_OPERATION ClientIo,
 //  any context data associated with that socket is free'd.
 //
 VOID CloseClient(PPER_SOCKET_CONTEXT lpPerSocketContext,
-	BOOL bGraceful) {
+	BOOL bGraceful) 
+{
 
-	__try
-	{
-		EnterCriticalSection(&g_CriticalSection);
-	}
-	__except (EXCEPTION_EXECUTE_HANDLER)
-	{
-		myprintf("EnterCriticalSection raised an exception.\n");
-		return;
-	}
+	EnterCriticalSection(&g_CriticalSection);
 
-	if (lpPerSocketContext) {
+	if (lpPerSocketContext) 
+	{
 		if (g_bVerbose)
 			myprintf("CloseClient: Socket(%d) connection closing (graceful=%s)\n",
 				lpPerSocketContext->Socket, (bGraceful ? "TRUE" : "FALSE"));
-		if (!bGraceful) {
+		if (!bGraceful) 
+		{
 
 			//
 			// force the subsequent closesocket to be abortative.
