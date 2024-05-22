@@ -1,97 +1,75 @@
 ﻿#include <stdio.h>
 #include <stdlib.h>
-#include <winsock2.h>
-#include <mswsock.h>
-#include <ws2tcpip.h>
+#include <string>
 #include <iostream>
-
-void ErrorHandling(const char* message);
+#include <winsock2.h>
+#include <windows.h>
+#include <ws2tcpip.h>
 
 #pragma comment(lib, "ws2_32.lib")
 
-int main()
+#define BUF_SIZE 1024
+void ErrorHandling(std::string message);
+
+int main(int argc, char* argv[])
 {
 	WSADATA wsaData;
+	SOCKET hSocket;
+
+	char message[BUF_SIZE];
+	int strLen, readLen;
+
+	if (argc != 3) {
+		printf("Usage: %s <IP> <port>\n", argv[0]);
+		exit(1);
+	}
 	if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
-		ErrorHandling("WSAStartup() error!");
+		ErrorHandling("WSAStartup() error!");
 
-	// 소켓 생성
-	SOCKET hSocket = WSASocket(PF_INET, SOCK_STREAM, 0, NULL, 0, WSA_FLAG_OVERLAPPED);
+	hSocket = socket(PF_INET, SOCK_STREAM, 0);
 	if (hSocket == INVALID_SOCKET)
-		ErrorHandling("socket() error");
+		ErrorHandling("socket() error");
 
-	SOCKADDR_IN recvAddr;
-	memset(&recvAddr, 0, sizeof(recvAddr));
-	recvAddr.sin_family = AF_INET;
-	::inet_pton(AF_INET, "127.0.0.1", &recvAddr.sin_addr);
-	recvAddr.sin_port = ::htons(2738);
+	SOCKADDR_IN serverAddr;
+	::memset(&serverAddr, 0, sizeof(serverAddr));
+	serverAddr.sin_family = AF_INET;
+	::inet_pton(AF_INET, "127.0.0.1", &serverAddr.sin_addr);
+	serverAddr.sin_port = ::htons(7777);
 
-	if (connect(hSocket, (SOCKADDR*)&recvAddr, sizeof(recvAddr)) == SOCKET_ERROR)
-		ErrorHandling("connect() error!");
+	if (connect(hSocket, (SOCKADDR*)&serverAddr, sizeof(serverAddr)) == SOCKET_ERROR)
+		ErrorHandling("connect() error!");
+	else
+		puts("Connected...........");
 
-	WSAEVENT event = WSACreateEvent();
-
-	WSAOVERLAPPED overlapped;
-	memset(&overlapped, 0, sizeof(overlapped));
-
-	overlapped.hEvent  = event;
-
-	WSABUF dataBuf;
-	char message[1024] = { 0, };
-	DWORD sendBytes = 0;
-	int recvBytes = 0;
-	DWORD flags = 0;
-
-	while (true)
+	while (1)
 	{
-		flags = 0;
-		printf("전송할데이터(종료를원할시exit)\n");
+		fputs("Input message(Q to quit): ", stdout);
+		fgets(message, BUF_SIZE, stdin);
+		if (!strcmp(message, "q\n") || !strcmp(message, "Q\n"))
+			break;
 
-		std::cin >> message;
+		strLen = strlen(message);
+		send(hSocket, message, strLen, 0);
 
-		if (!strcmp(message, "exit")) break;
-
-		dataBuf.len = strlen(message);
-		dataBuf.buf = message;
-		
-		std::cout << "client send : " << message << std::endl;
-
-		if (WSASend(hSocket, &dataBuf, 1, (LPDWORD)&sendBytes, 0, &overlapped, NULL) == SOCKET_ERROR)
+		readLen = 0;
+		while (1)
 		{
-			if (WSAGetLastError() != WSA_IO_PENDING)
-				ErrorHandling("WSASend() error");
-		}
-
-		std::cout << "전송된바이트수: " << sendBytes << std::endl;
-
-		if (WSARecv(hSocket, &dataBuf, 1, (LPDWORD)&recvBytes, (LPDWORD)&flags, &overlapped, NULL) == SOCKET_ERROR)
-		{
-			if (WSAGetLastError() == WSA_IO_PENDING)
-			{
-				::WSAWaitForMultipleEvents(1, &event, TRUE, WSA_INFINITE, FALSE);
-				::WSAGetOverlappedResult(hSocket, &overlapped, (LPDWORD)&recvBytes, FALSE, &flags);
-			}
-			else
-			{
-				ErrorHandling("WSASend() error");
+			// TCP의 특성상 데이터에 경계가 없음. 그래서 보낸거 다 받고 Read를 해야한다.
+			readLen += recv(hSocket, &message[readLen], BUF_SIZE - 1, 0);
+			if (readLen >= strLen)
 				break;
-			}
 		}
-		dataBuf.buf[recvBytes] = '\0';
-		printf("Recv[%s]\n", dataBuf.buf);
+		message[strLen] = 0;
+		printf("Message from server: %s", message);
 	}
 
 	closesocket(hSocket);
-
 	WSACleanup();
-
 	return 0;
 }
 
-void ErrorHandling(const char* message)
+void ErrorHandling(std::string msg)
 {
-	fputs(message, stderr);
-	fputc('\n', stderr);
-
+	std::cout << msg << std::endl;
 	exit(1);
 }
