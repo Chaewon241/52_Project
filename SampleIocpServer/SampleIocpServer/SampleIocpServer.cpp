@@ -75,6 +75,7 @@ int main(int argc, char* argv[])
 		if (hClntSock == SOCKET_ERROR)
 			continue;
 
+		// 소켓 정보 저장하기
 		handleInfo = (LPPER_HANDLE_DATA)malloc(sizeof(PER_HANDLE_DATA));
 		if (handleInfo == NULL)
 			ErrorHandling("malloc() error");
@@ -84,6 +85,7 @@ int main(int argc, char* argv[])
 
 		CreateIoCompletionPort((HANDLE)hClntSock, hComPort, (DWORD_PTR)handleInfo, 0);
 
+		// 버퍼 정보 저장하기
 		ioInfo = (LPPER_IO_DATA)malloc(sizeof(PER_IO_DATA));
 		if (ioInfo == NULL)
 			ErrorHandling("malloc() error");
@@ -93,7 +95,8 @@ int main(int argc, char* argv[])
 		ioInfo->rwMode = READ;
 
 		// 에코 서버기 때문에 Recv 걸어둔다!
-		if (WSARecv(handleInfo->hClntSock, &(ioInfo->wsaBuf), 1, &recvBytes, &flags, &(ioInfo->overlapped), NULL) == SOCKET_ERROR)
+		if (WSARecv(handleInfo->hClntSock, &(ioInfo->wsaBuf), 1, 
+			&recvBytes, &flags, &(ioInfo->overlapped), NULL) == SOCKET_ERROR)
 		{
 			if (WSAGetLastError() != WSA_IO_PENDING)
 			{
@@ -119,6 +122,7 @@ unsigned int WINAPI EchoThreadMain(LPVOID pComPort)
 	while (1)
 	{
 		// 소켓 정보와 overlapped 정보(버퍼 정보)를 추출
+		// IO가 완료가 되면 소켓과 cp오브젝트가 연결되었으면, 소켓에 일어나는 IO 작업들은 여기에 다 옴.
 		BOOL result = GetQueuedCompletionStatus(hComPort, &bytesTrans, 
 			(PULONG_PTR)&handleInfo, (LPOVERLAPPED*)&ioInfo, INFINITE);
 		if (result == 0)
@@ -159,7 +163,9 @@ unsigned int WINAPI EchoThreadMain(LPVOID pComPort)
 		}
 		else
 		{
-			puts("message sent!");
+			ioInfo->buffer[bytesTrans] = '\0';
+			printf("Message to client : %s", ioInfo->buffer);
+			puts("sent!");
 			free(ioInfo);
 		}
 	}
