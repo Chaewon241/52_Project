@@ -24,7 +24,7 @@
 const char* g_Port = DEFAULT_PORT;
 BOOL g_bEndServer = FALSE;
 BOOL g_bRestart = TRUE;
-BOOL g_bVerbose = FALSE;
+BOOL g_bVerbose = TRUE;
 DWORD g_dwThreadCount = 0;					// worker thread 개수
 HANDLE g_hIOCP = INVALID_HANDLE_VALUE;
 SOCKET g_sdListen = INVALID_SOCKET;			// listen 소켓
@@ -33,7 +33,7 @@ PPER_SOCKET_CONTEXT g_pCtxtList = NULL;		// 컨텍스트 정보를 담은 연결
 
 CRITICAL_SECTION g_CriticalSection;			// 컨텍스트 리스트에 접근을 막는 전역변수
 
-int myprintf(const char* lpFormat, ...);
+//int myprintf(const char* lpFormat, ...);
 
 void __cdecl main(int argc, char* argv[]) {
 
@@ -54,7 +54,7 @@ void __cdecl main(int argc, char* argv[]) {
 
 	// 처리기 함수
 	if (!SetConsoleCtrlHandler(CtrlHandler, TRUE)) {
-		myprintf("SetConsoleCtrlHandler() failed to install console handler: %d\n",
+		printf("SetConsoleCtrlHandler() failed to install console handler: %d\n",
 			GetLastError());
 		return;
 	}
@@ -64,7 +64,7 @@ void __cdecl main(int argc, char* argv[]) {
 	g_dwThreadCount = systemInfo.dwNumberOfProcessors * 2;
 
 	if ((nRet = WSAStartup(MAKEWORD(2, 2), &wsaData)) != 0) {
-		myprintf("WSAStartup() failed: %d\n", nRet);
+		printf("WSAStartup() failed: %d\n", nRet);
 		SetConsoleCtrlHandler(CtrlHandler, FALSE);
 		return;
 	}
@@ -78,7 +78,7 @@ void __cdecl main(int argc, char* argv[]) {
 		__try {
 			g_hIOCP = CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, 0, 0);
 			if (g_hIOCP == NULL) {
-				myprintf("CreateIoCompletionPort() failed to create I/O completion port: %d\n",
+				printf("CreateIoCompletionPort() failed to create I/O completion port: %d\n",
 					GetLastError()); 
 				__leave;
 			}
@@ -97,7 +97,7 @@ void __cdecl main(int argc, char* argv[]) {
 
 				hThread = (HANDLE)_beginthreadex(NULL, 0, WorkerThread, g_hIOCP, 0, NULL);
 				if (hThread == NULL) {
-					myprintf("CreateThread() failed to create worker thread: %d\n",
+					printf("CreateThread() failed to create worker thread: %d\n",
 						GetLastError());
 					__leave;
 				}
@@ -121,7 +121,7 @@ void __cdecl main(int argc, char* argv[]) {
 					// handler will close the g_sdListen socket. The above WSAAccept call will 
 					// fail and we thus break out the loop,
 					//
-					myprintf("WSAAccept() failed: %d\n", WSAGetLastError());
+					printf("WSAAccept() failed: %d\n", WSAGetLastError());
 					__leave;
 				}
 				
@@ -155,7 +155,7 @@ void __cdecl main(int argc, char* argv[]) {
 					1, &dwRecvNumBytes, &dwFlags,
 					&(lpPerSocketContext->pIOContext->Overlapped), NULL);
 				if (nRet == SOCKET_ERROR && (ERROR_IO_PENDING != WSAGetLastError())) {
-					myprintf("WSARecv() Failed: %d\n", WSAGetLastError());
+					printf("WSARecv() Failed: %d\n", WSAGetLastError());
 					CloseClient(lpPerSocketContext, FALSE);
 				}
 			} //while
@@ -177,7 +177,7 @@ void __cdecl main(int argc, char* argv[]) {
 			//Make sure worker threads exits.
 			//
 			if (WAIT_OBJECT_0 != WaitForMultipleObjects(g_dwThreadCount, g_ThreadHandles, TRUE, 1000))
-				myprintf("WaitForMultipleObjects() failed: %d\n", GetLastError());
+				printf("WaitForMultipleObjects() failed: %d\n", GetLastError());
 			else
 				for (DWORD i = 0; i < g_dwThreadCount; i++) {
 					if (g_ThreadHandles[i] != INVALID_HANDLE_VALUE) CloseHandle(g_ThreadHandles[i]);
@@ -204,10 +204,10 @@ void __cdecl main(int argc, char* argv[]) {
 		} //finally
 
 		if (g_bRestart) {
-			myprintf("\niocpserver is restarting...\n");
+			printf("\niocpserver is restarting...\n");
 		}
 		else
-			myprintf("\niocpserver is exiting...\n");
+			printf("\niocpserver is exiting...\n");
 
 	} //while (g_bRestart)
 
@@ -234,15 +234,15 @@ BOOL ValidOptions(int argc, char* argv[]) {
 				break;
 
 			case '?':
-				myprintf("Usage:\n  iocpserver [-p:port] [-v] [-?]\n");
-				myprintf("  -e:port\tSpecify echoing port number\n");
-				myprintf("  -v\t\tVerbose\n");
-				myprintf("  -?\t\tDisplay this help\n");
+				printf("Usage:\n  iocpserver [-p:port] [-v] [-?]\n");
+				printf("  -e:port\tSpecify echoing port number\n");
+				printf("  -v\t\tVerbose\n");
+				printf("  -?\t\tDisplay this help\n");
 				bRet = FALSE;
 				break;
 
 			default:
-				myprintf("Unknown options flag %s\n", argv[i]);
+				printf("Unknown options flag %s\n", argv[i]);
 				bRet = FALSE;
 				break;
 			}
@@ -268,7 +268,7 @@ BOOL WINAPI CtrlHandler(DWORD dwEvent) {
 	case CTRL_SHUTDOWN_EVENT:
 	case CTRL_CLOSE_EVENT:
 		if (g_bVerbose)
-			myprintf("CtrlHandler: closing listening socket\n");
+			printf("CtrlHandler: closing listening socket\n");
 
 		//
 		// cause the accept in the main thread loop to fail
@@ -311,30 +311,30 @@ BOOL CreateListenSocket(void) {
 	hints.ai_protocol = IPPROTO_IP;
 
 	if (getaddrinfo(NULL, g_Port, &hints, &addrlocal) != 0) {
-		myprintf("getaddrinfo() failed with error %d\n", WSAGetLastError());
+		printf("getaddrinfo() failed with error %d\n", WSAGetLastError());
 		return(FALSE);
 	}
 
 	if (addrlocal == NULL) {
-		myprintf("getaddrinfo() failed to resolve/convert the interface\n");
+		printf("getaddrinfo() failed to resolve/convert the interface\n");
 		return(FALSE);
 	}
 
 	g_sdListen = ::WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, 0, WSA_FLAG_OVERLAPPED);
 	if (g_sdListen == INVALID_SOCKET) {
-		myprintf("WSASocket(g_sdListen) failed: %d\n", WSAGetLastError());
+		printf("WSASocket(g_sdListen) failed: %d\n", WSAGetLastError());
 		return(FALSE);
 	}
 
 	nRet = bind(g_sdListen, addrlocal->ai_addr, (int)addrlocal->ai_addrlen);
 	if (nRet == SOCKET_ERROR) {
-		myprintf("bind() failed: %d\n", WSAGetLastError());
+		printf("bind() failed: %d\n", WSAGetLastError());
 		return(FALSE);
 	}
 
 	nRet = listen(g_sdListen, 5);
 	if (nRet == SOCKET_ERROR) {
-		myprintf("listen() failed: %d\n", WSAGetLastError());
+		printf("listen() failed: %d\n", WSAGetLastError());
 		return(FALSE);
 	}
 
@@ -349,7 +349,7 @@ BOOL CreateListenSocket(void) {
 	nZero = 0;
 	nRet = setsockopt(g_sdListen, SOL_SOCKET, SO_SNDBUF, (char*)&nZero, sizeof(nZero));
 	if (nRet == SOCKET_ERROR) {
-		myprintf("setsockopt(SNDBUF) failed: %d\n", WSAGetLastError());
+		printf("setsockopt(SNDBUF) failed: %d\n", WSAGetLastError());
 		return(FALSE);
 	}
 
@@ -423,7 +423,7 @@ unsigned int WINAPI WorkerThread(LPVOID WorkThreadContext)
 			(LPOVERLAPPED*)&lpOverlapped,
 			INFINITE);
 		if (!bSuccess)
-			myprintf("GetQueuedCompletionStatus() failed: %d\n", GetLastError());
+			printf("GetQueuedCompletionStatus() failed: %d\n", GetLastError());
 
 		if (lpPerSocketContext == NULL) {
 
@@ -472,11 +472,12 @@ unsigned int WINAPI WorkerThread(LPVOID WorkThreadContext)
 			nRet = WSASend(lpPerSocketContext->Socket, &lpIOContext->wsabuf, 1,
 				&dwSendNumBytes, dwFlags, &(lpIOContext->Overlapped), NULL);
 			if (nRet == SOCKET_ERROR && (ERROR_IO_PENDING != WSAGetLastError())) {
-				myprintf("WSASend() failed: %d\n", WSAGetLastError());
+				printf("WSASend() failed: %d\n", WSAGetLastError());
 				CloseClient(lpPerSocketContext, FALSE);
 			}
-			else if (g_bVerbose) {
-				myprintf("WorkerThread %d: Socket(%d) Recv completed (%d bytes), Send posted\n",
+			else if (g_bVerbose) 
+			{
+				printf("WorkerThread %d: Socket(%d) Recv completed (%d bytes), Send posted\n",
 					GetCurrentThreadId(), lpPerSocketContext->Socket, dwIoSize);
 			}
 			break;
@@ -500,11 +501,11 @@ unsigned int WINAPI WorkerThread(LPVOID WorkThreadContext)
 				nRet = WSASend(lpPerSocketContext->Socket, &buffSend, 1,
 					&dwSendNumBytes, dwFlags, &(lpIOContext->Overlapped), NULL);
 				if (nRet == SOCKET_ERROR && (ERROR_IO_PENDING != WSAGetLastError())) {
-					myprintf("WSASend() failed: %d\n", WSAGetLastError());
+					printf("WSASend() failed: %d\n", WSAGetLastError());
 					CloseClient(lpPerSocketContext, FALSE);
 				}
 				else if (g_bVerbose) {
-					myprintf("WorkerThread %d: Socket(%d) Send partially completed (%d bytes), Recv posted\n",
+					printf("WorkerThread %d: Socket(%d) Send partially completed (%d bytes), Recv posted\n",
 						GetCurrentThreadId(), lpPerSocketContext->Socket, dwIoSize);
 				}
 			}
@@ -521,11 +522,11 @@ unsigned int WINAPI WorkerThread(LPVOID WorkThreadContext)
 				nRet = WSARecv(lpPerSocketContext->Socket, &buffRecv, 1,
 					&dwRecvNumBytes, &dwFlags, &lpIOContext->Overlapped, NULL);
 				if (nRet == SOCKET_ERROR && (ERROR_IO_PENDING != WSAGetLastError())) {
-					myprintf("WSARecv() failed: %d\n", WSAGetLastError());
+					printf("WSARecv() failed: %d\n", WSAGetLastError());
 					CloseClient(lpPerSocketContext, FALSE);
 				}
 				else if (g_bVerbose) {
-					myprintf("WorkerThread %d: Socket(%d) Send completed (%d bytes), Recv posted\n",
+					printf("WorkerThread %d: Socket(%d) Send completed (%d bytes), Recv posted\n",
 						GetCurrentThreadId(), lpPerSocketContext->Socket, dwIoSize);
 				}
 			}
@@ -553,7 +554,7 @@ PPER_SOCKET_CONTEXT UpdateCompletionPort(SOCKET sd, IO_OPERATION ClientIo,
 	// 등록 시키기
 	g_hIOCP = CreateIoCompletionPort((HANDLE)sd, g_hIOCP, (DWORD_PTR)lpPerSocketContext, 0);
 	if (g_hIOCP == NULL) {
-		myprintf("CreateIoCompletionPort() failed: %d\n", GetLastError());
+		printf("CreateIoCompletionPort() failed: %d\n", GetLastError());
 		if (lpPerSocketContext->pIOContext)
 			xfree(lpPerSocketContext->pIOContext);
 		xfree(lpPerSocketContext);
@@ -568,7 +569,7 @@ PPER_SOCKET_CONTEXT UpdateCompletionPort(SOCKET sd, IO_OPERATION ClientIo,
 	if (bAddToList) CtxtListAddTo(lpPerSocketContext);
 
 	if (g_bVerbose)
-		myprintf("UpdateCompletionPort: Socket(%d) added to IOCP\n", lpPerSocketContext->Socket);
+		printf("UpdateCompletionPort: Socket(%d) added to IOCP\n", lpPerSocketContext->Socket);
 
 	return(lpPerSocketContext);
 }
@@ -587,7 +588,7 @@ VOID CloseClient(PPER_SOCKET_CONTEXT lpPerSocketContext,
 	if (lpPerSocketContext) 
 	{
 		if (g_bVerbose)
-			myprintf("CloseClient: Socket(%d) connection closing (graceful=%s)\n",
+			printf("CloseClient: Socket(%d) connection closing (graceful=%s)\n",
 				lpPerSocketContext->Socket, (bGraceful ? "TRUE" : "FALSE"));
 		if (!bGraceful) 
 		{
@@ -608,7 +609,7 @@ VOID CloseClient(PPER_SOCKET_CONTEXT lpPerSocketContext,
 		lpPerSocketContext = NULL;
 	}
 	else {
-		myprintf("CloseClient: lpPerSocketContext is NULL\n");
+		printf("CloseClient: lpPerSocketContext is NULL\n");
 	}
 
 	LeaveCriticalSection(&g_CriticalSection);
@@ -649,12 +650,12 @@ PPER_SOCKET_CONTEXT CtxtAllocate(SOCKET sd, IO_OPERATION ClientIO) {
 		}
 		else {
 			xfree(lpPerSocketContext);
-			myprintf("HeapAlloc() PER_IO_CONTEXT failed: %d\n", GetLastError());
+			printf("HeapAlloc() PER_IO_CONTEXT failed: %d\n", GetLastError());
 		}
 
 	}
 	else {
-		myprintf("HeapAlloc() PER_SOCKET_CONTEXT failed: %d\n", GetLastError());
+		printf("HeapAlloc() PER_SOCKET_CONTEXT failed: %d\n", GetLastError());
 	}
 
 	LeaveCriticalSection(&g_CriticalSection);
@@ -717,7 +718,7 @@ VOID CtxtListDeleteFrom(PPER_SOCKET_CONTEXT lpPerSocketContext) {
 	}
 	__except (EXCEPTION_EXECUTE_HANDLER)
 	{
-		myprintf("EnterCriticalSection raised an exception.\n");
+		printf("EnterCriticalSection raised an exception.\n");
 		return;
 	}
 
@@ -783,7 +784,7 @@ VOID CtxtListDeleteFrom(PPER_SOCKET_CONTEXT lpPerSocketContext) {
 
 	}
 	else {
-		myprintf("CtxtListDeleteFrom: lpPerSocketContext is NULL\n");
+		printf("CtxtListDeleteFrom: lpPerSocketContext is NULL\n");
 	}
 
 	LeaveCriticalSection(&g_CriticalSection);
@@ -803,7 +804,7 @@ VOID CtxtListFree() {
 	}
 	__except (EXCEPTION_EXECUTE_HANDLER)
 	{
-		myprintf("EnterCriticalSection raised an exception.\n");
+		printf("EnterCriticalSection raised an exception.\n");
 		return;
 	}
 
@@ -822,30 +823,31 @@ VOID CtxtListFree() {
 // Our own printf. This is done because calling printf from multiple
 // threads can AV. The standard out for WriteConsole is buffered...
 //
-int myprintf(const char* lpFormat, ...) {
-
-	int nLen = 0;
-	int nRet = 0;
-	char cBuffer[512];
-	va_list arglist;
-	HANDLE hOut = NULL;
-	HRESULT hRet;
-
-	ZeroMemory(cBuffer, sizeof(cBuffer));
-
-	va_start(arglist, lpFormat);
-
-
-	nLen = strlen(lpFormat);
-	hRet = StringCchPrintfA(cBuffer, 512, lpFormat, arglist);
-
-	if (nRet >= nLen || GetLastError() == 0) {
-		hOut = GetStdHandle(STD_OUTPUT_HANDLE);
-		if (hOut != INVALID_HANDLE_VALUE)
-		{
-			WriteConsole(hOut, cBuffer, lstrlenA(cBuffer), (LPDWORD)&nLen, NULL);
-		}
-	}
-
-	return nLen;
-}
+//int myprintf(const char* lpFormat, ...) {
+//
+//	int nLen = 0;
+//	int nRet = 0;
+//	char cBuffer[512];
+//	va_list arglist;
+//	HANDLE hOut = NULL;
+//	HRESULT hRet;
+//
+//	ZeroMemory(cBuffer, sizeof(cBuffer));
+//
+//	va_start(arglist, lpFormat);
+//
+//
+//	nLen = strlen(lpFormat);
+//	hRet = StringCchPrintfA(cBuffer, 512, lpFormat, arglist);
+//
+//	if (nRet >= nLen || GetLastError() == 0) {
+//		hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+//		if (hOut != INVALID_HANDLE_VALUE)
+//		{
+//			std::cout << hOut <<
+//			WriteConsole(hOut, cBuffer, lstrlenA(cBuffer), (LPDWORD)&nLen, NULL);
+//		}
+//	}
+//
+//	return nLen;
+//}
