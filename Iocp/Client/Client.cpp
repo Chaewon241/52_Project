@@ -284,6 +284,7 @@ static BOOL SendBuffer(int nThreadNum, char* outbuf) {
 
 	while (nTotalSend < g_Options.nBufSize) {
 		nSend = send(g_ThreadInfo.sd[nThreadNum], bufp, g_Options.nBufSize - nTotalSend, 0);
+		printf("sent!\n");
 		if (nSend == SOCKET_ERROR) {
 			myprintf("send(thread=%d) failed: %d\n", nThreadNum, WSAGetLastError());
 			bRet = FALSE;
