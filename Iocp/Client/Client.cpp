@@ -348,7 +348,7 @@ static BOOL ValidOptions(char* argv[], int argc) {
 	g_Options = default_options;
 	HRESULT hRet;
 
-	for (int i = 1; i < argc; i++) {
+	/*for (int i = 1; i < argc; i++) {
 		if ((argv[i][0] == '-') || (argv[i][0] == '/')) {
 			switch (tolower(argv[i][1])) {
 			case 'b':
@@ -394,7 +394,7 @@ static BOOL ValidOptions(char* argv[], int argc) {
 			Usage(argv[0], &default_options);
 			return(FALSE);
 		}
-	}
+	}*/
 
 	return(TRUE);
 }
