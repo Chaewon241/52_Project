@@ -275,8 +275,9 @@ static BOOL CreateConnectedSocket(int nThreadNum) {
 //     Send a buffer - keep send'ing until the requested amount of
 //     data has been sent or the socket has been closed or error.
 //
-static BOOL SendBuffer(int nThreadNum, char* outbuf) {
-
+static BOOL SendBuffer(int nThreadNum, char* outbuf) 
+{
+	// todo 왜 계속 send하는지 알아보기
 	BOOL bRet = TRUE;
 	const char* bufp = outbuf;
 	int nTotalSend = 0;
