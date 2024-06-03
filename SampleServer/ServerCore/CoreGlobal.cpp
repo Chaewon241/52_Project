@@ -4,10 +4,13 @@
 #include "Memory.h"
 #include "DeadLockProfiler.h"
 #include "SocketUtils.h"
+#include "SendBuffer.h"
 
 // 전역으로 사용할 매니저
 ThreadManager*		GThreadManager = nullptr;
 Memory*				GMemory = nullptr;
+SendBufferManager*	GSendBufferManager = nullptr;
+
 DeadLockProfiler*	GDeadLockProfiler = nullptr;
 
 class CoreGlobal
@@ -19,6 +22,7 @@ public:
 		// 컨텐츠(main)에서 생성하는게 아니라 생성자에서 생성해준다.
 		GThreadManager = new ThreadManager();
 		GMemory = new Memory();
+		GSendBufferManager = new SendBufferManager();
 		GDeadLockProfiler = new DeadLockProfiler();
 		// 윈속 초기화
 		SocketUtils::Init();
@@ -27,6 +31,7 @@ public:
 	{
 		delete GThreadManager;
 		delete GMemory;
+		delete GSendBufferManager;
 		delete GDeadLockProfiler;
 		SocketUtils::Clear();
 	}

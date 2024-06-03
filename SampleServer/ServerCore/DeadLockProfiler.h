@@ -26,8 +26,6 @@ private:
 	unordered_map<const char*, int32>	_nameToId;
 	// 아이디랑 이름을 매핑하는 맵, 위에랑 서로 왔다갔다할 수 있게
 	unordered_map<int32, const char*>	_idToName;
-	// Lock이 실행되는걸 스택으로 추적해주기.
-	stack<int32>						_lockStack;
 	// Lock 히스토리, 간선 관리
 	map<int32, set<int32>>				_lockHistory;
 

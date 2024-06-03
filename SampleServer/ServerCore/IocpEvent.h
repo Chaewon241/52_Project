@@ -9,6 +9,7 @@ class Session;
 enum class EventType : uint8
 {
 	Connect,
+	Disconnect,
 	Accept,
 	//PreRecv,
 	Recv,
@@ -33,6 +34,12 @@ public:
 	ConnectEvent() : IocpEvent(EventType::Connect) { }
 };
 
+class DisconnectEvent : public IocpEvent
+{
+public:
+	DisconnectEvent() : IocpEvent(EventType::Disconnect) { }
+};
+
 class AcceptEvent : public IocpEvent
 {
 public:
@@ -52,4 +59,6 @@ class SendEvent : public IocpEvent
 {
 public:
 	SendEvent() : IocpEvent(EventType::Send) { }
+
+	Vector<SendBufferRef> sendBuffers;
 };
