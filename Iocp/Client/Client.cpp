@@ -49,8 +49,9 @@ static BOOL SendBuffer(int nThreadNum, char* outbuf);
 static BOOL RecvBuffer(int nThreadNum, char* inbuf);
 static int myprintf(const char* lpFormat, ...);
 
-int __cdecl main(int argc, char* argv[]) {
-
+int __cdecl main(int argc, char* argv[]) 
+{
+	// 여기부터
 	WSADATA WSAData;
 	DWORD dwThreadId = 0;
 	DWORD dwRet = 0;
@@ -155,6 +156,8 @@ int __cdecl main(int argc, char* argv[]) {
 	//
 	SetConsoleCtrlHandler(CtrlHandler, FALSE);
 	SetConsoleCtrlHandler(NULL, FALSE);
+
+	// 여기까지 래핑
 
 	return(0);
 }

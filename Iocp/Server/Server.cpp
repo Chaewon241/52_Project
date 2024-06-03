@@ -35,8 +35,9 @@ CRITICAL_SECTION g_CriticalSection;			// 컨텍스트 리스트에 접근을 막
 
 //int myprintf(const char* lpFormat, ...);
 
-void __cdecl main(int argc, char* argv[]) {
-
+void __cdecl main(int argc, char* argv[]) 
+{
+	// 여기부터
 	SYSTEM_INFO systemInfo;								// 현재 컴퓨터 시스템에 대한 정보
 	WSADATA wsaData;									// Windows 소켓 구현에 대한 정보
 	SOCKET sdAccept = INVALID_SOCKET;
@@ -214,6 +215,9 @@ void __cdecl main(int argc, char* argv[]) {
 	DeleteCriticalSection(&g_CriticalSection);
 	WSACleanup();
 	SetConsoleCtrlHandler(CtrlHandler, FALSE);
+
+	// 여기까지 래핑
+
 } //main      
 
 
