@@ -43,7 +43,7 @@ public:
 
 protected:
 	USE_LOCK;
-	ServiceType			_type;
+	ServiceType			_type;	// 서버 서비스인지 클라 서비스인지
 	NetAddress			_netAddress = {};
 	IocpCoreRef			_iocpCore;
 

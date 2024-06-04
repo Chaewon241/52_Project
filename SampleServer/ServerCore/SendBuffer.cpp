@@ -37,6 +37,7 @@ void SendBufferChunk::Reset()
 
 SendBufferRef SendBufferChunk::Open(uint32 allocSize)
 {
+	// Session에 버퍼를 할당한다.
 	ASSERT_CRASH(allocSize <= SEND_BUFFER_CHUNK_SIZE);
 	ASSERT_CRASH(_open == false);
 
@@ -49,6 +50,7 @@ SendBufferRef SendBufferChunk::Open(uint32 allocSize)
 
 void SendBufferChunk::Close(uint32 writeSize)
 {
+	// 할당한 만큼 _usedSize 초기화
 	ASSERT_CRASH(_open == true);
 	_open = false;
 	_usedSize += writeSize;

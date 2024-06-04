@@ -12,12 +12,13 @@ public:
 	SendBuffer(SendBufferChunkRef owner, BYTE* buffer, int32 allocSize);
 	~SendBuffer();
 
-	BYTE* Buffer() { return _buffer; }
+	BYTE*		Buffer() { return _buffer; }
+	uint32		AllocSize() { return _allocSize; }
 	int32		WriteSize() { return _writeSize; }
 	void		Close(uint32 writeSize);
 
 private:
-	BYTE* _buffer;
+	BYTE*				_buffer;
 	uint32				_allocSize = 0;
 	uint32				_writeSize = 0;
 	SendBufferChunkRef	_owner;
@@ -44,11 +45,12 @@ public:
 	~SendBufferChunk();
 
 	void				Reset();
+	// Session에 버퍼를 할당한다.
 	SendBufferRef		Open(uint32 allocSize);
 	void				Close(uint32 writeSize);
 
 	bool				IsOpen() { return _open; }
-	BYTE* Buffer() { return &_buffer[_usedSize]; }
+	BYTE*				Buffer() { return &_buffer[_usedSize]; }
 	uint32				FreeSize() { return static_cast<uint32>(_buffer.size()) - _usedSize; }
 
 private:
@@ -62,7 +64,7 @@ private:
 ----------------------*/
 
 /// <summary>
-/// 전역으로 사용하여
+/// SendBuffer의 Push/Pop 기능을 제공
 /// </summary>
 
 class SendBufferManager
