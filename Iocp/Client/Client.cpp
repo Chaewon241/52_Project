@@ -60,7 +60,8 @@ int __cdecl main(int argc, char* argv[])
 	int i = 0;
 	int nRet = 0;
 
-	for (i = 0; i < MAXTHREADS; i++) {
+	for (i = 0; i < MAXTHREADS; i++) 
+	{
 		g_ThreadInfo.sd[i] = INVALID_SOCKET;
 		g_ThreadInfo.hThread[i] = INVALID_HANDLE_VALUE;
 		nThreadNum[i] = 0;
@@ -83,9 +84,6 @@ int __cdecl main(int argc, char* argv[])
 		return(1);
 	}
 
-	//
-	// CTRL-C를 눌렀을 때 종료되게 하는 핸들러
-	//
 	if (!SetConsoleCtrlHandler(CtrlHandler, TRUE)) {
 		myprintf("SetConsoleCtrlHandler() failed: %d\n", GetLastError());
 		if (g_hCleanupEvent[0] != WSA_INVALID_EVENT) {
@@ -96,26 +94,13 @@ int __cdecl main(int argc, char* argv[])
 		return(1);
 	}
 
-	//
-	// spawn the threads 
-	//
-	for (i = 0; i < g_Options.nTotalThreads && !bInitError; i++) {
+	for (i = 0; i < g_Options.nTotalThreads && !bInitError; i++) 
+	{
 
-		//
-		// if CTRL-C is pressed before all the sockets have connected, closure of
-		// the program could take a little while, especially if the server is 
-		// down and we have to wait for connect to fail.  Checking for this
-		// global flag allows us to shortcircuit that.
-		//
 		if (g_bEndClient)
 			break;
-		else if (CreateConnectedSocket(i)) {
-
-			//
-			// a unique memory location needs to be passed into each thread, 
-			// otherwise the value would change by the time all the threads 
-			// get a chance to run.
-			//
+		else if (CreateConnectedSocket(i)) 
+		{
 			nThreadNum[i] = i;
 			g_ThreadInfo.hThread[i] = CreateThread(NULL, 0, EchoThread, (LPVOID)&nThreadNum[i], 0, &dwThreadId);
 			if (g_ThreadInfo.hThread[i] == NULL) {
@@ -126,11 +111,8 @@ int __cdecl main(int argc, char* argv[])
 		}
 	}
 
-	if (!bInitError) {
-
-		//
-		// wait for the threads to exit
-		//
+	if (!bInitError) 
+	{
 		dwRet = WaitForMultipleObjects(g_Options.nTotalThreads, g_ThreadInfo.hThread, TRUE, INFINITE);
  		if (dwRet == WAIT_FAILED)
 			myprintf("WaitForMultipleObject(): %d\n", GetLastError());
@@ -151,9 +133,6 @@ int __cdecl main(int argc, char* argv[])
 
 	WSACleanup();
 
-	//
-	// Restores default processing of CTRL signals.
-	//
 	SetConsoleCtrlHandler(CtrlHandler, FALSE);
 	SetConsoleCtrlHandler(NULL, FALSE);
 
@@ -162,12 +141,6 @@ int __cdecl main(int argc, char* argv[])
 	return(0);
 }
 
-//
-// Abstract:
-//     This is the thread that continually sends and receives a specific size
-//     buffer to the server.  Upon receipt of the echo from the server, a
-//     simple check is performed to check the integrity of the transfer.
-//
 static DWORD WINAPI EchoThread(LPVOID lpParameter) {
 
 	char* inbuf = NULL;
@@ -180,19 +153,12 @@ static DWORD WINAPI EchoThread(LPVOID lpParameter) {
 	inbuf = (char*)xmalloc(g_Options.nBufSize);
 	outbuf = (char*)xmalloc(g_Options.nBufSize);
 
-	if ((inbuf) && (outbuf)) {
-
-		//
-		// NOTE data possible data loss with INT conversion to BYTE
-		//
+	if ((inbuf) && (outbuf)) 
+	{
 		FillMemory(outbuf, g_Options.nBufSize, (BYTE)nThreadNum);
 
-		while (TRUE) {
-
-			//
-			// just continually send and wait for the server to echo the data
-			// back.  Just do a simple minded comparison.
-			//
+		while (TRUE) 
+		{
 			if (SendBuffer(nThreadNum, outbuf) && RecvBuffer(nThreadNum, inbuf)) 
 			{
 				if ((inbuf[0] == outbuf[0]) &&
@@ -222,45 +188,44 @@ static DWORD WINAPI EchoThread(LPVOID lpParameter) {
 	return(TRUE);
 }
 
-//
-// Abstract:
-//     Create a socket and connect to the server process.
-//
-static BOOL CreateConnectedSocket(int nThreadNum) {
+static BOOL CreateConnectedSocket(int nThreadNum) 
+{
 
 	BOOL bRet = TRUE;
 	int nRet = 0;
 	struct addrinfo hints = { 0 };
 	struct addrinfo* addr_srv = NULL;
 
-	//
-	// Resolve the interface
-	//
 	hints.ai_flags = 0;
 	hints.ai_family = AF_INET;
 	hints.ai_socktype = SOCK_STREAM;
 	hints.ai_protocol = IPPROTO_TCP;
 
-	if (getaddrinfo(g_Options.szHostname, g_Options.port, &hints, &addr_srv) != 0) {
+	if (getaddrinfo(g_Options.szHostname, g_Options.port, &hints, &addr_srv) != 0) 
+	{
 		myprintf("getaddrinfo() failed with error %d\n", WSAGetLastError());
 		bRet = FALSE;
 	}
 
-	if (addr_srv == NULL) {
+	if (addr_srv == NULL) 
+	{
 		myprintf("getaddrinfo() failed to resolve/convert the interface\n");
 		bRet = FALSE;
 	}
 	else {
 		g_ThreadInfo.sd[nThreadNum] = socket(addr_srv->ai_family, addr_srv->ai_socktype, addr_srv->ai_protocol);
-		if (g_ThreadInfo.sd[nThreadNum] == INVALID_SOCKET) {
+		if (g_ThreadInfo.sd[nThreadNum] == INVALID_SOCKET) 
+		{
 			myprintf("socket() failed: %d\n", WSAGetLastError());
 			bRet = FALSE;
 		}
 	}
 
-	if (bRet != FALSE) {
+	if (bRet != FALSE) 
+	{
 		nRet = connect(g_ThreadInfo.sd[nThreadNum], addr_srv->ai_addr, (int)addr_srv->ai_addrlen);
-		if (nRet == SOCKET_ERROR) {
+		if (nRet == SOCKET_ERROR) 
+		{
 			myprintf("connect(thread %d) failed: %d\n", nThreadNum, WSAGetLastError());
 			bRet = FALSE;
 		}
@@ -273,11 +238,6 @@ static BOOL CreateConnectedSocket(int nThreadNum) {
 	return(bRet);
 }
 
-//
-// Abstract:
-//     Send a buffer - keep send'ing until the requested amount of
-//     data has been sent or the socket has been closed or error.
-//
 static BOOL SendBuffer(int nThreadNum, char* outbuf) 
 {
 	// todo 왜 계속 send하는지 알아보기
@@ -310,19 +270,15 @@ static BOOL SendBuffer(int nThreadNum, char* outbuf)
 	return(bRet);
 }
 
-//
-// Abstract:
-//     Receive a buffer - keep recv'ing until the requested amount of
-//     data has been received or the socket has been closed or error.
-//
-static BOOL RecvBuffer(int nThreadNum, char* inbuf) {
-
+static BOOL RecvBuffer(int nThreadNum, char* inbuf) 
+{
 	BOOL bRet = TRUE;
 	char* bufp = inbuf;
 	int nTotalRecv = 0;
 	int nRecv = 0;
 
-	while (nTotalRecv < g_Options.nBufSize) {
+	while (nTotalRecv < g_Options.nBufSize) 
+	{
 		nRecv = recv(g_ThreadInfo.sd[nThreadNum], bufp, g_Options.nBufSize - nTotalRecv, 0);
 		if (nRecv == SOCKET_ERROR) {
 			myprintf("recv(thread=%d) failed: %d\n", nThreadNum, WSAGetLastError());
@@ -343,72 +299,16 @@ static BOOL RecvBuffer(int nThreadNum, char* inbuf) {
 	return(bRet);
 }
 
-//
-// Abstract:
-//      Verify options passed in and set options structure accordingly.
-//
-static BOOL ValidOptions(char* argv[], int argc) {
-
+static BOOL ValidOptions(char* argv[], int argc) 
+{
 	g_Options = default_options;
 	HRESULT hRet;
-
-	/*for (int i = 1; i < argc; i++) {
-		if ((argv[i][0] == '-') || (argv[i][0] == '/')) {
-			switch (tolower(argv[i][1])) {
-			case 'b':
-				if (lstrlenA(argv[i]) > 3)
-					g_Options.nBufSize = 1024 * atoi(&argv[i][3]);
-				break;
-
-			case 'e':
-				if (lstrlenA(argv[i]) > 3)
-					g_Options.port = &argv[i][3];
-				break;
-
-			case 'n':
-				if (lstrlenA(argv[i]) > 3)
-				{
-					hRet = StringCbCopyNA(g_Options.szHostname, 64, &argv[i][3], 64);
-				}
-				break;
-
-			case 't':
-				if (lstrlenA(argv[i]) > 3)
-					g_Options.nTotalThreads = min(MAXTHREADS, atoi(&argv[i][3]));
-				break;
-
-			case 'v':
-				g_Options.bVerbose = TRUE;
-				break;
-
-			case '?':
-				Usage(argv[0], &default_options);
-				return(FALSE);
-				break;
-
-			default:
-				myprintf("  unknown options flag %s\n", argv[i]);
-				Usage(argv[0], &default_options);
-				return(FALSE);
-				break;
-			}
-		}
-		else {
-			myprintf("  unknown option %s\n", argv[i]);
-			Usage(argv[0], &default_options);
-			return(FALSE);
-		}
-	}*/
 
 	return(TRUE);
 }
 
-//
-// Abstract:
-//      Print out usage table for the program
-//
-static VOID Usage(char* szProgramname, OPTIONS* pOptions) {
-
+static VOID Usage(char* szProgramname, OPTIONS* pOptions) 
+{
 	myprintf("usage:\n%s [-b:#] [-e:#] [-n:host] [-t:#] [-v]\n",
 		szProgramname);
 	myprintf("%s -?\n", szProgramname);
@@ -424,12 +324,13 @@ static VOID Usage(char* szProgramname, OPTIONS* pOptions) {
 	return;
 }
 
-static BOOL WINAPI CtrlHandler(DWORD dwEvent) {
-
+static BOOL WINAPI CtrlHandler(DWORD dwEvent) 
+{
 	int i = 0;
 	DWORD dwRet = 0;
 
-	switch (dwEvent) {
+	switch (dwEvent) 
+	{
 	case CTRL_C_EVENT:
 	case CTRL_BREAK_EVENT:
 	case CTRL_LOGOFF_EVENT:
@@ -438,19 +339,14 @@ static BOOL WINAPI CtrlHandler(DWORD dwEvent) {
 
 		myprintf("Closing handles and sockets\n");
 
-		//
-		// Temporarily disables processing of CTRL_C_EVENT signal.
-		//
 		SetConsoleCtrlHandler(NULL, TRUE);
 
 		g_bEndClient = TRUE;
 
-		for (i = 0; i < g_Options.nTotalThreads; i++) {
-			if (g_ThreadInfo.sd[i] != INVALID_SOCKET) {
-
-				//
-				// force the subsequent closesocket to be abortative.
-				//
+		for (i = 0; i < g_Options.nTotalThreads; i++) 
+		{
+			if (g_ThreadInfo.sd[i] != INVALID_SOCKET) 
+			{
 				LINGER  lingerStruct;
 
 				lingerStruct.l_onoff = 1;
@@ -475,10 +371,6 @@ static BOOL WINAPI CtrlHandler(DWORD dwEvent) {
 		break;
 
 	default:
-
-		//
-		// unknown type--better pass it on.
-		//
 		return(FALSE);
 	}
 
@@ -487,11 +379,9 @@ static BOOL WINAPI CtrlHandler(DWORD dwEvent) {
 	return(TRUE);
 }
 
-static int myprintf(const char* lpFormat, ...) {
-
+static int myprintf(const char* lpFormat, ...) 
+{
 	int nLen = 0;
-	
 	std::cout << lpFormat << GetLastError() << std::endl;
-
 	return nLen;
 }
