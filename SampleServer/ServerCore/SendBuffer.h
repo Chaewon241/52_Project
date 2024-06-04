@@ -45,7 +45,6 @@ public:
 	~SendBufferChunk();
 
 	void				Reset();
-	// Session에 버퍼를 할당한다.
 	SendBufferRef		Open(uint32 allocSize);
 	void				Close(uint32 writeSize);
 
@@ -63,7 +62,7 @@ private:
 	SendBufferManager
 ----------------------*/
 
-/// <summary>
+/// <summary> 
 /// SendBuffer의 Push/Pop 기능을 제공
 /// </summary>
 
