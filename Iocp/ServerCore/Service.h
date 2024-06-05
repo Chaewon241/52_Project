@@ -43,7 +43,6 @@ private:
 class ClientService : public Service
 {
 public:
-	ClientService() {};
 	ClientService(NetAddress targetAddress);
 	virtual ~ClientService() {}
 

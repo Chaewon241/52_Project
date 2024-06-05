@@ -44,7 +44,7 @@ static int myprintf(const char* lpFormat, ...);
 
 int main(int argc, char* argv[]) 
 {
-	shared_ptr<ClientService> service = make_shared<ClientService>();
+	shared_ptr<ClientService> service = make_shared<ClientService>(NetAddress(L"127.0.0.1", 7777));
 
 	if (!service->Start())
 	{
