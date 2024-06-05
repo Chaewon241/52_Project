@@ -1,18 +1,11 @@
 ﻿#pragma warning (disable:4127)
-
 #ifdef _IA64_
 #pragma warning(disable:4706 4267)
 #endif 
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <winsock2.h>
-#include <ws2tcpip.h>
-#include <strsafe.h>
-#include <iostream>
+#include "pch.h"
 
-// 라이브러리 링크 (Visual Studio 등에서 필요)
-#pragma comment(lib, "Ws2_32.lib")
+#include "Service.h"
 
 #define MAXTHREADS 128
 
@@ -49,8 +42,16 @@ static BOOL SendBuffer(int nThreadNum, char* outbuf);
 static BOOL RecvBuffer(int nThreadNum, char* inbuf);
 static int myprintf(const char* lpFormat, ...);
 
-int __cdecl main(int argc, char* argv[]) 
+int main(int argc, char* argv[]) 
 {
+	shared_ptr<ClientService> service = make_shared<ClientService>();
+
+	if (!service->Start())
+	{
+		cout << "connect 이상" << endl;
+		return 0;
+	}
+	
 	// 여기부터
 	WSADATA WSAData;
 	DWORD dwThreadId = 0;
@@ -96,7 +97,6 @@ int __cdecl main(int argc, char* argv[])
 
 	for (i = 0; i < g_Options.nTotalThreads && !bInitError; i++) 
 	{
-
 		if (g_bEndClient)
 			break;
 		else if (CreateConnectedSocket(i)) 
@@ -190,7 +190,6 @@ static DWORD WINAPI EchoThread(LPVOID lpParameter) {
 
 static BOOL CreateConnectedSocket(int nThreadNum) 
 {
-
 	BOOL bRet = TRUE;
 	int nRet = 0;
 	struct addrinfo hints = { 0 };

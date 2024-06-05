@@ -46,7 +46,8 @@ void __cdecl main(int argc, char* argv[])
 	DWORD dwFlags = 0;
 	int nRet = 0;
 
-	for (int i = 0; i < MAX_WORKER_THREAD; i++) {
+	for (int i = 0; i < MAX_WORKER_THREAD; i++) 
+	{
 		g_ThreadHandles[i] = INVALID_HANDLE_VALUE;
 	}
 
@@ -54,7 +55,8 @@ void __cdecl main(int argc, char* argv[])
 		return;
 
 	// 처리기 함수
-	if (!SetConsoleCtrlHandler(CtrlHandler, TRUE)) {
+	if (!SetConsoleCtrlHandler(CtrlHandler, TRUE)) 
+	{
 		printf("SetConsoleCtrlHandler() failed to install console handler: %d\n",
 			GetLastError());
 		return;
@@ -72,7 +74,8 @@ void __cdecl main(int argc, char* argv[])
 
 	InitializeCriticalSection(&g_CriticalSection);
 
-	while (g_bRestart) {
+	while (g_bRestart) 
+	{
 		g_bRestart = FALSE;
 		g_bEndServer = FALSE;
 
