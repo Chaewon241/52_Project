@@ -16,13 +16,13 @@ def main():
     parser.parse_proto(args.path)
     
     # jinja2
-    # 폴더 찾기
+    # find folder
     file_loader = jinja2.FileSystemLoader('Templates')
     env = jinja2.Environment(loader=file_loader)
 
     template = env.get_template('PacketHandler.h')
-    # 얘가 진짜 작업하는 애임.
-    # 우리가 안에서 사용할 데이터들을 매핑
+    # this works real
+    # data mapping
     output = template.render(parser=parser, output=args.output)
 
     f = open(args.output+'.h', 'w+')
