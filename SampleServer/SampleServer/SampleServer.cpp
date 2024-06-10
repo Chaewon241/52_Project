@@ -4,13 +4,99 @@
 #include "GameSession.h"
 #include "GameSessionManager.h"
 #include "BufferWriter.h"
-#include "ServerPacketHandler.h"
+#include "ClientPacketHandler.h"
 #include <tchar.h>
 #include "Protocol.pb.h"
+#include "DBConnectionPool.h"
+
 
 int main()
 {
-	ServerPacketHandler::Init();
+	// 필요한 개수만큼 만들어주기
+	// 나중에는 스레드 개수만큼 충분하게 만들어둠.
+	//ASSERT_CRASH(GDBConnectionPool->Connect(1, L"Driver={SQL Server Native Client 11.0};Server=(localdb)\\MSSQLLocalDB;Database=ServerDb;Trusted_Connection=Yes;"));
+	ASSERT_CRASH(GDBConnectionPool->Connect(1, L"Driver={ODBC Driver 17 for SQL Server};Server=(localdb)\\MSSQLLocalDB;Database=ServerDb;Trusted_Connection=yes;"));
+
+	// Create Table
+	// Gold라는 정보를 저장할 것이다.
+	// dbo 골드라는게 있으면 날려라
+	// 그리고 create해줘라
+	// 어떤 유저가 골드를 얼마나 들고 있는지
+	//
+	{
+		auto query = L"									\
+			DROP TABLE IF EXISTS [dbo].[Gold];			\
+			CREATE TABLE [dbo].[Gold]					\
+			(											\
+				[id] INT NOT NULL PRIMARY KEY IDENTITY, \
+				[gold] INT NULL							\
+			);";
+
+		// DBConnection을 빼와서 execute 해준다.
+		DBConnection* dbConn = GDBConnectionPool->Pop();
+		ASSERT_CRASH(dbConn->Execute(query));
+		GDBConnectionPool->Push(dbConn);
+	}
+
+	// Add Data
+	for (int32 i = 0; i < 3; i++)
+	{
+		DBConnection* dbConn = GDBConnectionPool->Pop();
+		// 기존에 바인딩 된 정보 날림
+		dbConn->Unbind();
+
+		// 넘길 인자 바인딩
+		int32 gold = 100;
+		SQLLEN len = 0;
+
+		// 넘길 인자 바인딩
+		ASSERT_CRASH(dbConn->BindParam(1, SQL_C_LONG, SQL_INTEGER, sizeof(gold), &gold, &len));
+
+		// SQL 실행
+		// 물음표는 우리가 넘겨줄 부분(인자 바인딩해줘서 넘겨줌)
+		ASSERT_CRASH(dbConn->Execute(L"INSERT INTO [dbo].[Gold]([gold]) VALUES(?)"));
+
+		GDBConnectionPool->Push(dbConn);
+	}
+
+	// Read
+	{
+		DBConnection* dbConn = GDBConnectionPool->Pop();
+		// 기존에 바인딩 된 정보 날림
+		dbConn->Unbind();
+
+		int32 gold = 100;
+		SQLLEN len = 0;
+		// 넘길 인자 바인딩
+		ASSERT_CRASH(dbConn->BindParam(1, SQL_C_LONG, SQL_INTEGER, sizeof(gold), &gold, &len));
+
+		int32 outId = 0;
+		SQLLEN outIdLen = 0;
+		// 첫번째 컬럼 바인딩
+		// outid에다가 결과 저장
+		ASSERT_CRASH(dbConn->BindCol(1, SQL_C_LONG, sizeof(outId), &outId, &outIdLen));
+
+		int32 outGold = 0;
+		SQLLEN outGoldLen = 0;
+		// 두번째 컬럼 바인딩
+		// outid에다가 결과 저장
+		ASSERT_CRASH(dbConn->BindCol(2, SQL_C_LONG, sizeof(outGold), &outGold, &outGoldLen));
+
+		// SQL 실행
+		// SELECT문으로 시작
+		// 골드가 100인 애들만 보여라
+		ASSERT_CRASH(dbConn->Execute(L"SELECT id, gold FROM [dbo].[Gold] WHERE gold = (?)"));
+
+		// SELECT문이 뱉어줄 결과물은 3개이기 때문에 while문으로 fetch
+		while (dbConn->Fetch())
+		{
+			cout << "Id: " << outId << " Gold : " << outGold << endl;
+		}
+
+		GDBConnectionPool->Push(dbConn);
+	}
+
+	ClientPacketHandler::Init();
 
 	ServerServiceRef service = MakeShared<ServerService>(
 		NetAddress(L"127.0.0.1", 7777),
@@ -29,37 +115,6 @@ int main()
 					service->GetIocpCore()->Dispatch();
 				}
 			});
-	}
-
-	WCHAR sendData3[1000] = L"가"; // UTF16 = Unicode (한글/로마 2바이트)
-
-	while (true)
-	{
-		// 임시객체 만들어서 채워주기
-		Protocol::S_TEST pkt;
-		pkt.set_id(1000);
-		pkt.set_hp(100);
-		pkt.set_attack(10);
-
-		{
-			Protocol::BuffData* buf = pkt.add_buffs();
-			buf->set_buffid(100);
-			buf->set_remaintime(1.2f);
-			buf->add_victims(4000);
-		}
-
-		{
-			Protocol::BuffData* buf = pkt.add_buffs();
-			buf->set_buffid(200);
-			buf->set_remaintime(2.5f);
-			buf->add_victims(1000);
-			buf->add_victims(2000);
-		}
-
-		SendBufferRef sendBuffer = ServerPacketHandler::MakeSendBuffer(pkt);
-		GSessionManager.Broadcast(sendBuffer);
-
-		this_thread::sleep_for(250ms);
 	}
 
 	GThreadManager->Join();

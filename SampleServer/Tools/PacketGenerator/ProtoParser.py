@@ -11,7 +11,7 @@ class ProtoParser():
 
 
 	def parse_proto(self, path):
-		f = open(path, 'r', encoding='utf-8')
+		f = open(path, 'r')
 		lines = f.readlines()
 
 		for line in lines:
