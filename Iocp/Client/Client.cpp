@@ -44,6 +44,17 @@ static int myprintf(const char* lpFormat, ...);
 
 int main(int argc, char* argv[]) 
 {
+	WSADATA wsaData;
+	ASSERT_CRASH(::WSAStartup(MAKEWORD(2, 2), OUT & wsaData) == 0);
+
+	/* 런타임에 주소 얻어오는 API */
+	SOCKET dummySocket = CreateSocket();
+	ASSERT_CRASH(BindWindowsFunction(dummySocket, WSAID_CONNECTEX, reinterpret_cast<LPVOID*>(&ConnectEx)));
+	ASSERT_CRASH(BindWindowsFunction(dummySocket, WSAID_DISCONNECTEX, reinterpret_cast<LPVOID*>(&DisconnectEx)));
+	ASSERT_CRASH(BindWindowsFunction(dummySocket, WSAID_ACCEPTEX, reinterpret_cast<LPVOID*>(&AcceptEx)));
+	Close(dummySocket);
+
+
 	shared_ptr<ClientService> service = make_shared<ClientService>(NetAddress(L"127.0.0.1", 7777));
 
 	if (!service->Start())

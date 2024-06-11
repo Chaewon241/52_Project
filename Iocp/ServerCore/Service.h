@@ -52,16 +52,16 @@ public:
 /*-----------------
 	ServerService
 ------------------*/
-
-class ServerService : public Service
-{
-public:
-	ServerService(NetAddress targetAddress);
-	virtual ~ServerService() {}
-
-	virtual bool	Start() override;
-	virtual void	CloseService() override;
-
-private:
-	//ListenerRef		_listener = nullptr;
-};
+//
+//class ServerService : public Service
+//{
+//public:
+//	ServerService(NetAddress targetAddress);
+//	virtual ~ServerService() {}
+//
+//	virtual bool	Start() override;
+//	virtual void	CloseService() override;
+//
+//private:
+//	//ListenerRef		_listener = nullptr;
+//};

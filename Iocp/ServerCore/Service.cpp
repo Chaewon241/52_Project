@@ -19,6 +19,10 @@ Service::~Service()
 	::CloseHandle(m_IocpHandle);
 }
 
+void Service::CloseService()
+{
+}
+
 bool Service::DisPatch(uint32 timeoutMs)
 {
 	DWORD numOfBytes = 0;
