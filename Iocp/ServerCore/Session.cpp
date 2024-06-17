@@ -27,6 +27,7 @@ bool Session::Connect()
 	if (SOCKET_ERROR == ::setsockopt(m_Socket, SOL_SOCKET, SO_REUSEADDR, reinterpret_cast<char*>(flag), sizeof(flag)))
 		return false;
 
+	// connectex를 쓰기 위한 bind
 	SOCKADDR_IN myAddress;
 	myAddress.sin_family = AF_INET;
 	// INADDR_ANY : 아무거나 연결해줘
