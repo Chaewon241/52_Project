@@ -3,6 +3,10 @@
 // 출력값
 #define OUT
 
+// namespace 설정해주기
+#define NAMESPACE_BEGIN(name)	namespace name {
+#define NAMESPACE_END			}
+
 /*----------
 	Lock
 -----------*/
