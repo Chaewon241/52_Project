@@ -53,6 +53,7 @@ void DBConnection::Clear()
 bool DBConnection::Execute(const WCHAR* query)
 {
 	// sql 쿼리를 받아주는 함수
+	// 일회성 실행
 	SQLRETURN ret = ::SQLExecDirectW(_statement, (SQLWCHAR*)query, SQL_NTSL);
 	if (ret == SQL_SUCCESS || ret == SQL_SUCCESS_WITH_INFO)
 		return true;

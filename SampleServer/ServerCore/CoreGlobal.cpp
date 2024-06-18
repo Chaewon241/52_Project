@@ -6,6 +6,7 @@
 #include "SocketUtils.h"
 #include "SendBuffer.h"
 #include "DBConnectionPool.h"
+#include "ConsoleLog.h"
 
 // 전역으로 사용할 매니저
 ThreadManager*		GThreadManager = nullptr;
@@ -14,6 +15,7 @@ SendBufferManager*	GSendBufferManager = nullptr;
 
 DeadLockProfiler*	GDeadLockProfiler = nullptr;
 DBConnectionPool*	GDBConnectionPool = nullptr;
+ConsoleLog*			GConsoleLogger = nullptr;
 
 class CoreGlobal
 {
@@ -27,6 +29,8 @@ public:
 		GSendBufferManager = new SendBufferManager();
 		GDeadLockProfiler = new DeadLockProfiler();
 		GDBConnectionPool = new DBConnectionPool();
+		GConsoleLogger = new ConsoleLog();
+
 		// 윈속 초기화
 		SocketUtils::Init();
 	}
@@ -37,6 +41,8 @@ public:
 		delete GSendBufferManager;
 		delete GDeadLockProfiler;
 		delete GDBConnectionPool;
+		delete GConsoleLogger;
+
 		SocketUtils::Clear();
 	}
 }GCoreGlobal;
