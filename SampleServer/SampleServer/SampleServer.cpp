@@ -35,6 +35,11 @@ int main()
 	}
 
 	{
+		SP::DeleteAllGold deleteAllGold(*dbConn);
+		deleteAllGold.Execute();
+	}
+
+	{
 		SP::GetGold getGold(*dbConn);
 		getGold.In_Gold(100);
 

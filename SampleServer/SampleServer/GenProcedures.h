@@ -39,6 +39,25 @@ namespace SP
     	int32 _gold = {};
     };
 
+    class DeleteGoldById : public DBBind<1,0>
+    {
+    public:
+    	DeleteGoldById(DBConnection& conn) : DBBind(conn, L"{CALL dbo.spDeleteGoldById(?)}") { }
+    	void In_Id(int32& v) { BindParam(0, v); };
+    	void In_Id(int32&& v) { _id = std::move(v); BindParam(0, _id); };
+
+    private:
+    	int32 _id = {};
+    };
+
+    class DeleteAllGold : public DBBind<0,0>
+    {
+    public:
+    	DeleteAllGold(DBConnection& conn) : DBBind(conn, L"{CALL dbo.spDeleteAllGold}") { }
+
+    private:
+    };
+
 
      
 };

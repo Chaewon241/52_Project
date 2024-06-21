@@ -31,7 +31,7 @@ String FileUtils::Convert(string str)
 
 	const int32 retLen = ::MultiByteToWideChar(CP_UTF8, 0, reinterpret_cast<char*>(&str[0]), srcLen, NULL, 0);
 	ret.resize(retLen);
-	::MultiByteToWideChar(CP_UTF8, 0, reinterpret_cast<char*>(&str[0]), srcLen, static_cast<LPWSTR>(&ret[0]), retLen);
+	::MultiByteToWideChar(CP_UTF8, 0, reinterpret_cast<char*>(&str[0]), srcLen, &ret[0], retLen);
 
 	return ret;
 }
