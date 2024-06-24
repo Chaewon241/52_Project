@@ -247,7 +247,7 @@ bool DBSynchronizer::GatherDBTables()
 		else
 		{
 			table = *findTable;
-		}
+		} 
 
 		DBModel::ColumnRef column = MakeShared<DBModel::Column>();
 		{

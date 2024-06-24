@@ -31,5 +31,22 @@
 			]]>
 		</Body>
 	</Procedure>
+
+  <Procedure name="spDeleteGoldById">
+    <Param name="@id" type="int"/>
+    <Body>
+      <![CDATA[
+        DELETE FROM [dbo].[Gold] WHERE [id] = @id;
+        ]]>
+    </Body>
+  </Procedure>
+
+  <Procedure name="spDeleteAllGold">
+    <Body>
+      <![CDATA[
+        DELETE FROM [dbo].[Gold];
+        ]]>
+    </Body>
+  </Procedure>
 	
 </GameDB>

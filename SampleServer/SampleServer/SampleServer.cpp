@@ -35,6 +35,11 @@ int main()
 	}
 
 	{
+		SP::DeleteAllGold deleteAllGold(*dbConn);
+		deleteAllGold.Execute();
+	}
+
+	{
 		SP::GetGold getGold(*dbConn);
 		getGold.In_Gold(100);
 
@@ -76,6 +81,18 @@ int main()
 					service->GetIocpCore()->Dispatch();
 				}
 			});
+	}
+
+	// Part5 추가
+	// 이렇게 하면 언리얼 Output Log에 recv 됐다고 나옴. 꺆
+	while (true)
+	{
+		Protocol::S_CHAT chatPkt;
+		chatPkt.set_msg(u8"Hello World !");
+		auto sendBuffer = ClientPacketHandler::MakeSendBuffer(chatPkt);
+
+		GSessionManager.Broadcast(sendBuffer);
+		this_thread::sleep_for(1s);
 	}
 
 	GThreadManager->Join();
