@@ -2499,6 +2499,12 @@
     <Filter Include="Source\S1">
       <UniqueIdentifier>{4CAEE792-1802-3053-AB97-E84B9516D67A}</UniqueIdentifier>
     </Filter>
+    <ClCompile Include="..\..\Source\S1\MyActor.cpp">
+      <Filter>Source\S1</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\S1\MyActor.h">
+      <Filter>Source\S1</Filter>
+    </ClInclude>
     <None Include="..\..\Source\S1\S1.Build.cs">
       <Filter>Source\S1</Filter>
     </None>

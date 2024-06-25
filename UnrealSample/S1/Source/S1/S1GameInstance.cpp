@@ -45,8 +45,9 @@ void US1GameInstance::DisconnectFromGameServer()
 		SocketSubsystem->DestroySocket(Socket);
 		Socket = nullptr;
 	}
-}
 
+
+}
 
 void US1GameInstance::HandleRecvPackets()
 {
