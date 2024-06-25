@@ -43,7 +43,26 @@ static BOOL RecvBuffer(int nThreadNum, char* inbuf);
 static int myprintf(const char* lpFormat, ...);
 
 int main(int argc, char* argv[]) 
-{	
+{
+	WSADATA wsaData;
+	ASSERT_CRASH(::WSAStartup(MAKEWORD(2, 2), OUT & wsaData) == 0);
+
+	/* 런타임에 주소 얻어오는 API */
+	SOCKET dummySocket = CreateSocket();
+	ASSERT_CRASH(BindWindowsFunction(dummySocket, WSAID_CONNECTEX, reinterpret_cast<LPVOID*>(&ConnectEx)));
+	ASSERT_CRASH(BindWindowsFunction(dummySocket, WSAID_DISCONNECTEX, reinterpret_cast<LPVOID*>(&DisconnectEx)));
+	ASSERT_CRASH(BindWindowsFunction(dummySocket, WSAID_ACCEPTEX, reinterpret_cast<LPVOID*>(&AcceptEx)));
+	Close(dummySocket);
+
+
+	shared_ptr<ClientService> service = make_shared<ClientService>(NetAddress(L"127.0.0.1", 7777));
+
+	if (!service->Start())
+	{
+		cout << "connect 이상" << endl;
+		return 0;
+	}
+	
 	// 여기부터
 	WSADATA WSAData;
 	DWORD dwThreadId = 0;
@@ -53,17 +72,21 @@ int main(int argc, char* argv[])
 	int i = 0;
 	int nRet = 0;
 
+	for (i = 0; i < MAXTHREADS; i++) 
+	{
+		g_ThreadInfo.sd[i] = INVALID_SOCKET;
+		g_ThreadInfo.hThread[i] = INVALID_HANDLE_VALUE;
+		nThreadNum[i] = 0;
+	}
+
+	g_hCleanupEvent[0] = WSA_INVALID_EVENT;
+
+	if (!ValidOptions(argv, argc))
+		return(1);
+
 	if ((nRet = WSAStartup(MAKEWORD(2, 2), &WSAData)) != 0) {
 		myprintf("WSAStartup() failed: %d", nRet);
 		return(1);
-	}
-
-	shared_ptr<ClientService> service = make_shared<ClientService>(NetAddress(L"127.0.0.1", 7777));
-
-	if (!service->Start())
-	{
-		cout << "connect 이상" << endl;
-		return 0;
 	}
 
 	if (WSA_INVALID_EVENT == (g_hCleanupEvent[0] = WSACreateEvent()))

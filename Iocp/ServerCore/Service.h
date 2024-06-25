@@ -52,7 +52,7 @@ public:
 /*-----------------
 	ServerService
 ------------------*/
-
+//
 //class ServerService : public Service
 //{
 //public:
